@@ -1,0 +1,203 @@
+{% style %}
+  footer{
+      background-color: {{ section.settings.footer_bg }}
+  }
+{% endstyle %}
+{% if template contains 'index'
+  or template contains 'collection'
+  or template contains 'product'
+  or template contains 'cart'
+  or template contains '404'
+  or template contains 'static-page-v2'
+  or template contains 'delivery-v2'
+  or template contains 'faq-v2'
+  or template contains 'about-us-v2'
+  or template contains 'contact-v2'
+  or template contains 'our-services-v2'
+  or template contains 'careers-v2'
+  or template contains 'search'
+%}
+  <footer>
+    <div class="m-container:max-w-[1660px] m-container:mx-auto">
+      <div class="container pt-[56px] pb-[60px] md:pb-[71px] px-6 md:px-10">
+        <div class="">
+          <div class="mb-10">
+            {% if section.settings.logo != blank %}
+              {{ section.settings.logo }}
+            {% else %}
+              {% render 'icon-v2', icon: 'icon-desktop-logo' %}
+            {% endif %}
+          </div>
+          <div class="flex flex-col md:flex-row gap-8">
+            {% for block in section.blocks %}
+              {% if block.type == 'link' %}
+                <ul class="md:min-w-[200px]">
+                  {% for link in block.settings.nav.links %}
+                    <li>
+                      <a class="font-shape text-[11px] font-normal leading-[13px] mb-3 uppercase" href="{{ link.url }}">
+                        {{- link.title -}}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="mt-[60px] md:mt-[75px]">
+            <ul class="flex gap-6 flex-wrap">
+              {% for block in section.blocks %}
+                {% if block.type == 'icon' %}
+                  <li>
+                    <a href="{{ block.settings.url }}">{{ block.settings.icon_svg }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+{% else %}
+  {% style %}
+    .footer-wrapper {
+      padding: 56px 38px 24px;
+    }
+    .footer_logo {
+      margin-bottom: 40px;
+    }
+    .footer-link_wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-bottom: 60px;
+    }
+    .footer-link_wrapper a {
+      font-size: 11px;
+      line-height: 13px;
+      text-transform: uppercase;
+      font-weight: 400;
+      font-family: var(--secondary-font);
+    }
+    .footer-link_wrapper ul {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-icon_content {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    @media (min-width: 768px) {
+      .footer-wrapper {
+        padding: 56px 43px 71px;
+      }
+      .footer-link_wrapper {
+        flex-direction: row;
+        min-width: 200px;
+        gap: 32px;
+      }
+      .footer-link_wrapper {
+        margin-bottom: 75px;
+      }
+      .footer-link_wrapper ul {
+        min-width: 200px;
+      }
+    }
+    @media (min-width: 1660px) {
+      .container-page_width {
+        max-width: 1660px;
+        margin: 0 auto;
+      }
+    }
+  {% endstyle %}
+  <footer>
+    <div class="container-page_width">
+      <div class="footer-wrapper">
+        <div class="">
+          <div class="footer_logo">
+            {% if section.settings.logo != blank %}
+              {{ section.settings.logo }}
+            {% else %}
+              {% render 'icon-v2', icon: 'icon-desktop-logo' %}
+            {% endif %}
+          </div>
+          <div class="footer-link_wrapper">
+            {% for block in section.blocks %}
+              {% if block.type == 'link' %}
+                <ul class="">
+                  {% for link in block.settings.nav.links %}
+                    <li>
+                      <a class="footer_link" href="{{ link.url }}">
+                        {{- link.title -}}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="footer-icon_wrapper">
+            <ul class="footer-icon_content">
+              {% for block in section.blocks %}
+                {% if block.type == 'icon' %}
+                  <li>
+                    <a href="{{ block.settings.url }}">{{ block.settings.icon_svg }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+{% endif %}
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "color",
+      "label": "Choose Footer Background",
+      "id": "footer_bg",
+      "default": "#FAFAFA"
+    },
+    {
+      "type": "html",
+      "label": "Logo Svg",
+      "id": "logo"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        {
+          "type": "link_list",
+          "label": "Choose Navigation",
+          "id": "nav"
+        }
+      ]
+    },
+    {
+      "type": "icon",
+      "name": "Icon",
+      "settings": [
+        {
+          "type": "url",
+          "label": "Redirection Link",
+          "id": "url"
+        },
+        {
+          "type": "html",
+          "label": "Icons Svg",
+          "id": "icon_svg"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

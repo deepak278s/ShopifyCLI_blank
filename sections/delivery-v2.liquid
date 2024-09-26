@@ -1,0 +1,277 @@
+{% stylesheet %}
+   #delivery-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_mob }}px;
+     margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+   }
+   #delivery-{{ section.id }}{
+       padding-left:{{ section.settings.horizontal_padding_mobile }}px;
+   }
+   @media(min-width:768px){
+     #delivery-{{ section.id }}{
+         margin-top:{{ section.settings.margin_top_desktop }}px;
+         margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+     }
+     #delivery-{{ section.id }}{
+         padding-left:{{ section.settings.horizontal_padding_desktop }}px;
+     }
+   }
+   .delivery-wrapper p{
+     font-family: var(--font-light);
+     font-size: 16px;
+     font-style: normal;
+     font-weight: 300;
+     line-height: 150%;
+     color: #222222;
+   }
+  .section-inner p{
+     font-size:16px;
+   }
+   details[open] summary span svg {
+    transform: rotate(360deg);
+  }
+{% endstylesheet %}
+
+<section class="relative" id="delivery-{{ section.id }}">
+  <div class="w-full max-w-[1600px] mx-auto lg:px-[40px] flex gap-12 lg:gap-[60px]  flex-col lg:flex-row pb-[44px] md:pb-[49px] lg:md:pb-[49px] md:py-7 lg:pt-8">
+    <div class="w-full min-w-[220px] lg:w-1/4 lg:max-w-[325px]">
+      {% render 'legal-nav-cms' %}
+    </div>
+
+    <div class="delivery-wrapper flex flex-col w-full gap-6 md:gap-[39px] px-5 lg:w-[calc(75%_-_40px)] xl:w-[calc(75%_-_75px)] lg:max-w-[820px] md:px-[22px] lg:px-0">
+      <div class="flex flex-col md:px-[62px] lg:px-0 gap-[31px] md:gap-[28px]">
+        <!-- Start customer information section -->
+        <div class="flex flex-col gap-7 md:max-w-[476px] lg:max-w-[820px]">
+          <div class="section-inner flex flex-col gap-3 ">
+            <div class="relative md:bg-[#D5D5D5] md:overflow-hidden md:aspect-[820/258]">
+              <picture>
+                <img
+                  srcset="
+                    {%- if section.settings.banner.width >= 375 -%}{{ section.settings.banner | image_url: width: 375 }} 375w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 750 -%}{{ section.settings.banner | image_url: width: 750 }} 750w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 1100 -%}{{ section.settings.banner | image_url: width: 1100 }} 1100w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 1500 -%}{{ section.settings.banner | image_url: width: 1500 }} 1500w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 1780 -%}{{ section.settings.banner | image_url: width: 1780 }} 1780w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 2000 -%}{{ section.settings.banner | image_url: width: 2000 }} 2000w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 3000 -%}{{ section.settings.banner | image_url: width: 3000 }} 3000w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 3840 -%}{{ section.settings.banner | image_url: width: 3840 }} 3840w,{%- endif -%}
+                    {{ section.settings.banner | image_url }} {{ section.settings.banner.width }}w
+                  "
+                  sizes="100vw"
+                  src="{{ section.settings.banner | image_url: width: 1500 }}"
+                  loading="lazy"
+                  alt="{{ section.settings.banner.alt | escape }}"
+                  width="{{ section.settings.banner.width }}"
+                  class="w-full hidden md:!block"
+                  height="{{ section.settings.banner.width | divided_by: section.settings.banner.aspect_ratio }}"
+                >
+              </picture>
+              {% if section.settings.main_heading != blank %}
+                <h1 class="text-[46px] leading-[110%] font-gascogne-serial font-light capitalize text-[#222222] m-0 mb-4 md:absolute md:bottom-0 md:pl-6 md:text-white md:pb-[14px] md:m-0">
+                  {{ section.settings.main_heading }}
+                </h1>
+              {% endif %}
+            </div>
+            {% if section.settings.top_content != blank %}
+              <div class="font-shape text-[16px] leading-[24px] font-light mb-8">
+                {{ section.settings.top_content }}
+              </div>
+            {% endif %}
+            {% if section.settings.button_chat != blank %}
+              <a
+                href="{{ section.settings.button_link }}"
+                class="font-shape text-[13px] leading-[16px] font-normal inline-block px-6 py-3 border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max"
+              >
+                {{- section.settings.button_chat -}}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="delivery flex-1 text-[12px] leading-[20.4px] font-normal">
+          <div class="lg:max-w-[1234px] m-auto flex flex-col ">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'accordion-view' %}
+                  <div class="my-12 lg:my-10">
+                    <h4 class="text-[24px] font-light leading-[32px] font-gascogne-serial text-[#222222 mb-4">
+                      {{ block.settings.heading }}
+                    </h4>
+                    {{ block.settings.title_content }}
+                  </div>
+
+                {% when 'accordion' %}
+                  <div class="flex-1 accordian">
+                    <!-- medium screen link set -->
+                    <accordion-item>
+                      <details class="accordian-panel border-b border-[#d8d8d8]  overflow-hidden appearance-none group/details">
+                        <!-- Accordian Btn -->
+                        <summary
+                          class="flex flex-row items-center justify-between w-full py-5 accordian-trigger appearance-none outline-none cursor-pointer"
+                        >
+                          <h4 class="text-[14px] uppercase font-normal leading-[21px] font-shape text-[#222222">
+                            {{ block.settings.accordion_title }}
+                          </h4>
+                          <!-- icon -->
+                          <span class="flex items-center justify-center w-6 h-6 mt-[-0.8px]">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              class="p-[1px]"
+                            >
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M18.4519 8.55205C18.8494 8.95477 18.8494 9.60773 18.4519 10.0105L12.3447 16.198C11.9472 16.6007 11.3028 16.6007 10.9053 16.198L4.79812 10.0105C4.40062 9.60773 4.40062 8.95477 4.79812 8.55205C5.19562 8.14932 5.84009 8.14932 6.23759 8.55205L11.625 14.0103L17.0124 8.55205C17.4099 8.14932 18.0544 8.14932 18.4519 8.55205Z" fill="#222222"/>
+                            </svg>
+                          </span>
+                        </summary>
+                        <!-- Accordian Content -->
+                        <div class="accordion-content">
+                          <div
+                            class="text-[14px] font-light leading-[21px] font-shape text-[#222222]"
+                            aria-hidden="true"
+                          >
+                            <div class="pb-4 pr-6">
+                              {{ block.settings.content_accordion }}
+                            </div>
+                          </div>
+                        </div>
+                      </details>
+                    </accordion-item>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- End Faq question and Answers -->
+      </div>
+    </div>
+  </div>
+</section>
+
+{% render 'vite-tag' with '@modules/tabbing-v2.js' %}
+
+{% schema %}
+{
+  "name": "accordions section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "spacing setting"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "link_list",
+      "label": "Menu Links",
+      "id": "menu_links"
+    },
+    {
+      "type": "header",
+      "content": "top section"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner",
+      "label": "Select Banner"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "top_content",
+      "label": "Enter top section content"
+    },
+    {
+      "type": "text",
+      "id": "button_chat",
+      "label": "Chat to a personal shopper"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "add button link here"
+    }
+  ],
+
+  "blocks": [
+    {
+      "name": "section content",
+      "type": "accordion-view",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "title_content",
+          "label": "content of section"
+        }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "accordion_title",
+          "label": "accordion Title",
+          "default": "accordion Title"
+        },
+        {
+          "type": "textarea",
+          "id": "content_accordion",
+          "label": "accordion content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "accordions section",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

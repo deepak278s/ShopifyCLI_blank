@@ -1,0 +1,109 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:42+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            f5eb5869cdf5472fcc7d3ddd966d9569
+//      Signature:      eyJpdiI6IktaMk50QlB3RVFrTWJlYWdRRlVJVFE9PSIsInZhbHVlIjoib0JxNVJUd2pUS1kzdU9rYWtoMVIrVDdtQUFzdE5TUWJhXC9FT2orenZBQmdiRmxRN1wvMW9nRDhiS252dmYyOHcwRGN1bkRVTE5EQkpFTTJRQzVqdXBJUElJcStxXC9ZR1RCNlwvMzhMejZCcHdlSVpGbVwvRmpCSjNBU1l0UG1BTTdHQ2p6Y2FlN01VT1pjQWcyTWF5dkoxYUxHNUdiM2UxYSs2d2p0cU9FWmZlM3R5Q1M2RHBJQmZhSE5rK0lIeHl5N1pyU3hnZkZKYmRjSFFKVlwvQkU2SFZPOFNuRk82bVA2OG1RUXhhMEl0cDBpQUpOaE5YY0F4MGRaVFkrNWh2T3Q3NW1sUlNCcUlzZTRoSGRJNFQ5bHUwRWJQTUkxc0NLaUlWRjQxOFlUc1kweHRNZVQyZzJUQSs0VlQzTWNSbGYyTFo2NVwvbFM5R3pHUHFRbXgxQ2UxdmF6VktiZ3lSeHZMbCtoUjVCXC93VTlQcllmU1lRTFZyUW40OGd4aEI0SEhoZDVNQ2Q0Vmc0OTV3SVRGVTJHcE1QSk1BPT0iLCJtYWMiOiI2NGFkMDA4MGU0YTgzYzMzNmU4ZTVlNDBmZTdhOWEwNTNhMGFkYmUxNzgwZmE5ZTYxNmMyYjFhN2JiZTBkZTM5In0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign gradient_blocks = section.blocks | where: 'type', 'gradient'
+    capture gradient_style
+        for block in gradient_blocks
+            echo block.settings.color | append: ' ' | append: block.settings.position | append: '%, '
+        endfor
+    endcapture
+    assign gradient_style = gradient_style | split: ', ' | join: ', '
+    assign column_blocks = section.blocks | where: 'type', 'column'
+    assign youtube_id = collection.metafields.brand.youtube_id
+    assign video_url = collection.metafields.media.video
+-%}
+
+{% if collection.metafields.brand.show_video %}
+    <div id="brand-video" class="brand-video flex">
+        <div class="brand-video__content flex f-dir-column f-vertical-center">
+            <div class="brand-video__content-container">
+                {% if collection.metafields.brand.video_title != blank %}
+                    <h2 class="brand-video__title title--lg sal-animate" data-sal="slide-up">{{collection.metafields.brand.video_title}}</h2>
+                {% endif %}
+                {% if collection.metafields.brand.video_text != blank %}
+                    <div class="brand-video__text rte sal-animate" data-sal="slide-up">
+                        {{collection.metafields.brand.video_text}}
+                    </div>
+                {% endif %}
+            </div>
+        </div> 
+        <div class="brand-video__video">
+            {% if youtube_id != blank %}
+                <div class="brand-video__video-container" data-deferred-media='{ "media_id": "{{ youtube_id }}", "media_type": "youtube" }'>
+                    <a target="_blank" href="https://www.youtube.com/watch?v={{youtube_id}}" class="brand-video__video-trigger">
+                        {% if collection.metafields.brand.video_placeholder != blank %}
+                            <div class="brand-video__video-placeholder" style="background-image: url({{collection.metafields.brand.video_placeholder | img_url: '700x'}})"></div>
+                        {% endif %}
+                    </a>
+                </div>
+            {% elsif video_url != blank %}
+                <div class="brand-video__video-container" data-deferred-media='{ "media_url": "{{ video_url | file_url }}", "media_type": "local" }'>
+                    <a target="_blank" class="brand-video__video-trigger"></a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+{%- style -%}
+    #shopify-section-{{ section.id }} .brand-video__video-container::before {
+        {%- liquid
+            if gradient_style != ''
+                echo 'background: linear-gradient(to left,' | append: gradient_style | append: ');'
+            endif
+        -%}
+    }
+{%- endstyle -%}
+
+{% schema %}
+    {
+        "name": "Brand Video",
+        "settings":[
+          {
+            "type": "paragraph",
+            "content": "Please use the collection's metafields to set section content"
+          }
+        ],
+        "blocks": [
+            {
+                "name": "Gradient colour",
+                "type": "gradient",
+                "limit": 3,
+                "settings": [
+                    {
+                        "type": "color",
+                        "id": "color",
+                        "label": "Colour"
+                    },
+                    {
+                        "type": "range",
+                        "id": "position",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "label": "Position",
+                        "default": 50
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

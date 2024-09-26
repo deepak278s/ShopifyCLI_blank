@@ -1,0 +1,153 @@
+{% style %}
+  #about-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+  #about-{{ section.id }} .wrapper{
+    padding:0 {{ section.settings.horizontal_padding_mobile }}px;
+  }
+  #about-{{ section.id }} .text-container{
+    background-color:{{ section.settings.text_bg }}
+  }
+
+  @media(min-width:768px){
+    #about-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_desktop }}px;
+    margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+    #about-{{ section.id }} .wrapper{
+    padding:0 {{ section.settings.horizontal_padding_desktop }}px;
+  }
+  }
+{% endstyle %}
+
+<section class="about-us" id="about-{{ section.id }}">
+  <div class="m-container:max-w-[1600px] mx-auto wrapper">
+    <div class="flex flex-col md:flex-row">
+      <div class="bg-[#D5D5D5] overflow-hidden aspect-[375/578] md:aspect-[678/738] md:w-1/2">
+        <picture>
+          <source
+            media="(min-width:767px)"
+            srcset="
+              {%- if section.settings.desk_image_url.width >= 1100 -%}{{ section.settings.desk_image_url | image_url: width: 1100 }} 1100w,{%- endif -%}
+              {%- if section.settings.desk_image_url.width >= 1500 -%}{{ section.settings.desk_image_url | image_url: width: 1500 }} 1500w,{%- endif -%}
+              {%- if section.settings.desk_image_url.width >= 1780 -%}{{ section.settings.desk_image_url | image_url: width: 1780 }} 1780w,{%- endif -%}
+              {%- if section.settings.desk_image_url.width >= 2000 -%}{{ section.settings.desk_image_url | image_url: width: 2000 }} 2000w,{%- endif -%}
+              {%- if section.settings.desk_image_url.width >= 3000 -%}{{ section.settings.desk_image_url | image_url: width: 3000 }} 3000w,{%- endif -%}
+              {%- if section.settings.desk_image_url.width >= 3840 -%}{{ section.settings.desk_image_url | image_url: width: 3840 }} 3840w,{%- endif -%}
+              {{ section.settings.desk_image_url | image_url }} {{ section.settings.desk_image_url.width }}w
+            "
+          >
+          <img
+            srcset="
+              {%- if section.settings.Mob_image_url.width >= 375 -%}{{ section.settings.Mob_image_url | image_url: width: 375 }} 375w,{%- endif -%}
+              {%- if section.settings.Mob_image_url.width >= 750 -%}{{ section.settings.Mob_image_url | image_url: width: 750 }} 750w,{%- endif -%}
+            "
+            sizes="100vw"
+            src="{{ section.settings.Mob_image_url | image_url: width: 1500 }}"
+            loading="lazy"
+            alt="{{ section.settings.Mob_image_url.alt | escape }}"
+            width="{{ section.settings.Mob_image_url.width }}"
+            class="w-full"
+            height="{{ section.settings.Mob_image_url.width | divided_by: section.settings.Mob_image_url.aspect_ratio }}"
+          >
+        </picture>
+      </div>
+      <div class="px-5 py-[39px] pb-[45px] lg:px-[54px] lg:pb-[82px] md:w-1/2 md:flex md:items-end text-container">
+        <h2 class="font-gascogne-serial text-[#222222] text-[46px] lg:text-[58px] font-light leading-[50.6px] lg:leading-[110%] capitalize line-clamp-4 lg:line-clamp-2">
+          {{ section.settings.heading }}
+        </h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Banner v2",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_mobile",
+      "label": "Horizontal Padding Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_desktop",
+      "label": "Horizontal Padding Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "image_picker",
+      "id": "Mob_image_url",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image_url",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover our personal Shopping experience!"
+    },
+    {
+      "type": "color",
+      "label": "Choose Text Background Color",
+      "id": "text_bg",
+      "default": "#F6F3EC"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Banner V2",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

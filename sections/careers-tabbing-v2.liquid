@@ -1,0 +1,1003 @@
+{% stylesheet %}
+     #faq-{{ section.id }}{
+       margin-top:{{ section.settings.margin_top_mob }}px;
+       margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+     }
+     #faq-{{ section.id }}{
+         padding-left:{{ section.settings.horizontal_padding_mobile }}px;
+     }
+     @media(min-width:768px){
+       #faq-{{ section.id }}{
+           margin-top:{{ section.settings.margin_top_desktop }}px;
+           margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+       }
+       #faq-{{ section.id }}{
+           padding-left:{{ section.settings.horizontal_padding_desktop }}px;
+       }
+     }
+     details[open] summary span svg {
+    transform: rotate(180deg);
+  }
+  .top_title .active{
+    border-bottom: 2px solid #121212;
+  }
+  .need_help p{
+    font-size:16px;
+  }
+  .need_help a{
+    border-bottom:1px solid #121212;
+  }
+{% endstylesheet %}
+<section class="relative" id="faq-{{ section.id }}">
+  <div class="w-full max-w-[1600px] mx-auto lg:px-[40px] flex gap-12 lg:gap-[60px]  flex-col lg:flex-row py-6 pb-[44px] md:pb-[49px] lg:md:pb-[49px] md:py-7 lg:pt-8">
+    <div class="w-full min-w-[220px] lg:w-1/4 lg:max-w-[325px]">
+      {% render 'legal-nav-cms' %}
+    </div>
+
+    <div class="delivery-wrapper flex flex-col w-full gap-6 md:gap-[39px] px-5 lg:w-[calc(75%_-_40px)] xl:w-[calc(75%_-_75px)] lg:max-w-[820px] md:px-[22px] lg:px-0">
+      <div class="flex flex-col md:px-[62px] lg:px-0 gap-12 md:gap-10">
+        <!-- Start customer information section -->
+        <div class="flex flex-col gap-6 lg:gap-10 lg:max-w-[820px]">
+          <div class="section-inner flex flex-col gap-4">
+            {% if section.settings.main_heading != blank %}
+              <h1 class="text-[46px] lg:text-[58px] leading-[50.6px] md:leading-[63.8px] md:pr-4 font-gascogne-serial font-light capitalize text-[#222222] m-0 line-clamp-2">
+                {{ section.settings.main_heading }}
+              </h1>
+            {% endif %}
+            {% if section.settings.top_content != blank %}
+              <div class="font-shape text-[16px] leading-[24px] font-light line-clamp-15 lg:line-clamp-6">
+                {{ section.settings.top_content }}
+              </div>
+            {% endif %}
+          </div>
+          <div class="flex flex-row gap-[6px] lg:gap-[14.58px]">
+            <div class="flex flex-col gap-[6px] lg:gap-[14.58px] w-1/2">
+              <div class="flex flex-col order-1 md:order-2 bg-[#D5D5D5] overflow-hidden aspect-[402.71/365.58]">
+                <picture>
+                  <img
+                    srcset="
+                      {%- if section.settings.desk_image_one.width >= 375 -%}{{ section.settings.desk_image_one | image_url: width: 375 }} 375w,{%- endif -%}
+                      {%- if section.settings.desk_image_one.width >= 750 -%}{{ section.settings.desk_image_one | image_url: width: 750 }} 750w,{%- endif -%}
+                    "
+                    sizes="100vw"
+                    src="{{ section.settings.desk_image_one | image_url: width: 1500 }}"
+                    loading="lazy"
+                    alt="{{ section.settings.desk_image_one.alt | escape }}"
+                    width="{{ section.settings.desk_image_one.width }}"
+                    class="w-full"
+                    height="{{ section.settings.desk_image_one.width | divided_by: section.settings.desk_image_one.aspect_ratio }}"
+                  >
+                </picture>
+              </div>
+              <div class="flex flex-col order-1 md:order-2 bg-[#D5D5D5] overflow-hidden aspect-[402.71/299.11]">
+                <picture>
+                  <img
+                    srcset="
+                      {%- if section.settings.desk_image_two.width >= 375 -%}{{ section.settings.desk_image_two | image_url: width: 375 }} 375w,{%- endif -%}
+                      {%- if section.settings.desk_image_two.width >= 750 -%}{{ section.settings.desk_image_two | image_url: width: 750 }} 750w,{%- endif -%}
+                    "
+                    sizes="100vw"
+                    src="{{ section.settings.desk_image_two | image_url: width: 1500 }}"
+                    loading="lazy"
+                    alt="{{ section.settings.desk_image_two.alt | escape }}"
+                    width="{{ section.settings.desk_image_two.width }}"
+                    class="w-full"
+                    height="{{ section.settings.desk_image_two.width | divided_by: section.settings.desk_image_two.aspect_ratio }}"
+                  >
+                </picture>
+              </div>
+            </div>
+            <div class="flex flex-col gap-[6px] lg:gap-[14.58px] w-1/2">
+              <div class="flex flex-col order-1 md:order-2 bg-[#D5D5D5] overflow-hidden aspect-[402.71/299.11]">
+                <picture>
+                  <img
+                    srcset="
+                      {%- if section.settings.desk_image_three.width >= 375 -%}{{ section.settings.desk_image_three | image_url: width: 375 }} 375w,{%- endif -%}
+                      {%- if section.settings.desk_image_three.width >= 750 -%}{{ section.settings.desk_image_three | image_url: width: 750 }} 750w,{%- endif -%}
+                    "
+                    sizes="100vw"
+                    src="{{ section.settings.desk_image_three | image_url: width: 1500 }}"
+                    loading="lazy"
+                    alt="{{ section.settings.desk_image_three.alt | escape }}"
+                    width="{{ section.settings.desk_image_three.width }}"
+                    class="w-full"
+                    height="{{ section.settings.desk_image_three.width | divided_by: section.settings.desk_image_three.aspect_ratio }}"
+                  >
+                </picture>
+              </div>
+              <div class="flex flex-col order-1 md:order-2 bg-[#D5D5D5] overflow-hidden aspect-[402.71/365.58]">
+                <picture>
+                  <img
+                    srcset="
+                      {%- if section.settings.desk_image_four.width >= 375 -%}{{ section.settings.desk_image_four | image_url: width: 375 }} 375w,{%- endif -%}
+                      {%- if section.settings.desk_image_four.width >= 750 -%}{{ section.settings.desk_image_four | image_url: width: 750 }} 750w,{%- endif -%}
+                    "
+                    sizes="100vw"
+                    src="{{ section.settings.desk_image_four | image_url: width: 1500 }}"
+                    loading="lazy"
+                    alt="{{ section.settings.desk_image_four.alt | escape }}"
+                    width="{{ section.settings.desk_image_four.width }}"
+                    class="w-full"
+                    height="{{ section.settings.desk_image_four.width | divided_by: section.settings.desk_image_four.aspect_ratio }}"
+                  >
+                </picture>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="delivery flex flex-col flex-1 text-[12px] leading-[20.4px] font-normal gap-6">
+          <div class="text-[36px] leading-[110%] font-gascogne-serial font-light capitalize text-[#222222]">
+            {{ section.settings.avaliable_roles }}
+          </div>
+          <div class="flex flex-col flex-1 gap-10">
+            <div class="top_title flex overflow-x-auto whitespace-nowrap gap-6">
+              <div
+                class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] active"
+                data-id="Sales-role"
+              >
+                {{ section.settings.sales_title }}
+              </div>
+              <div
+                class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] "
+                data-id="Products-role"
+              >
+                {{ section.settings.products_title }}
+              </div>
+              <div
+                class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] "
+                data-id="Commercial-role"
+              >
+                {{ section.settings.commercial_title }}
+              </div>
+              <div
+                class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] "
+                data-id="Operations-role"
+              >
+                {{ section.settings.operations_title }}
+              </div>
+              <div
+                class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] "
+                data-id="Marketing-role"
+              >
+                {{ section.settings.marketing_title }}
+              </div>
+            </div>
+            <div class="tabbing_content">
+              {% liquid
+                assign salesRole = 0
+                assign productsRole = 0
+                assign commercialRole = 0
+                assign operationsRole = 0
+                assign marketingRole = 0
+                for block in section.blocks
+                  case block.type
+                    when 'Sales-role'
+                      assign salesRole = salesRole | plus: 1
+                    when 'Products-role'
+                      assign productsRole = productsRole | plus: 1
+                    when 'Commercial-role'
+                      assign commercialRole = commercialRole | plus: 1
+                    when 'Operations-role'
+                      assign operationsRole = operationsRole | plus: 1
+                    when 'Marketing-role'
+                      assign marketingRole = marketingRole | plus: 1
+                  endcase
+                endfor
+                assign salesCount = 0
+                assign productsCount = 0
+                assign commercialsCount = 0
+                assign operationsCount = 0
+                assign marketingsCount = 0
+              %}
+              {% for block in section.blocks %}
+                {% case block.type %}
+                  {% when 'Sales-role' %}
+                    {% assign salesCount = salesCount | plus: 1 %}
+                    <div
+                      class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 Sales-role mb-6 lg:mb-10 pb-6 lg:pb-10 {%  if salesCount != salesRole %} border-b-[1px]{% endif %} border-[#C3C5C7] *:rounded-full"
+                      data-id="Sales-role"
+                    >
+                      <!-- medium screen link set -->
+                      {% if block.settings.shopper_info != blank %}
+                        <accordion-item>
+                          <div class="flex flex-col gap-5">
+                            <div class="flex flex-col gap-4">
+                              <div class="lg:flex lg:flex-row lg:justify-between">
+                                <h4 class="text-[18px] font-normal leading-[120%] font-shape text-[#222222]">
+                                  {{ block.settings.role_title }}
+                                </h4>
+                                {% if block.settings.apply_btn != blank %}
+                                  <a
+                                    href="{{ block.settings.apply_link }}"
+                                    class="font-shape text-[13px] leading-[16px] font-normal  px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max hidden lg:!block"
+                                  >
+                                    {{- block.settings.apply_btn -}}
+                                  </a>
+                                {% endif %}
+                              </div>
+                              <div class="flex flex-col gap-4 lg:flex-row">
+                                <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222] lg:flex-[0_0_50%] lg:order-2  lg:text-right">
+                                  {{- block.settings.shopper_price -}}
+                                </span>
+                                <div class="flex flex-col gap-1 lg:flex-[0_0_50%] lg:order-[-1]">
+                                  <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222]">
+                                    {{ block.settings.shopper_stability -}}
+                                  </span>
+                                  <span class="w-full block text-[16px] font-light leading-[150%] font-shape text-[#222222] not-italic">
+                                    {{ block.settings.shopper_location }}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="text-[16px] font-light leading-[21px] font-shape text-[#222222] line-clamp-3"
+                              aria-hidden="true"
+                            >
+                              {{ block.settings.shopper_info }}
+                            </div>
+                            {% if block.settings.read_more_btn != blank or block.settings.read_more_btn != blank %}
+                              <div class="flex flex-row gap-5 items-center">
+                                {% if block.settings.apply_btn != blank %}
+                                  <a
+                                    href="{{ block.settings.apply_link }}"
+                                    class="font-shape text-[13px] leading-[16px] font-normal inline-block px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max lg:hidden"
+                                  >
+                                    {{- block.settings.apply_btn -}}
+                                  </a>
+                                {% endif %}
+                                {% if block.settings.read_more_btn != blank %}
+                                  <a
+                                    href="{{- block.settings.read_more_link -}}"
+                                    class="text-[13px] font-normal uppercase font-shape border-b-[1px] border-b-[#000] pb-1"
+                                  >
+                                    {{- block.settings.read_more_btn -}}
+                                  </a>
+                                {% endif %}
+                              </div>
+                            {% endif %}
+                          </div>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                  {% when 'Products-role' %}
+                    {% assign productsCount = productsCount | plus: 1 %}
+                    <div
+                      class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 Products-role mb-6 lg:mb-10 pb-6 lg:pb-10 {%  if productsCount != productsRole %} border-b-[1px]{% endif %} border-[#C3C5C7] hidden"
+                      data-id="Products-role"
+                    >
+                      <!-- medium screen link set -->
+                      {% if block.settings.shopper_info != blank %}
+                        <accordion-item>
+                          <div class="flex flex-col gap-5">
+                            <div class="flex flex-col gap-4">
+                              <div class="lg:flex lg:flex-row lg:justify-between">
+                                <h4 class="text-[18px] font-normal leading-[120%] font-shape text-[#222222]">
+                                  {{ block.settings.role_title }}
+                                </h4>
+                                {% if block.settings.apply_btn != blank %}
+                                  <a
+                                    href="{{ block.settings.apply_link }}"
+                                    class="font-shape text-[13px] leading-[16px] font-normal  px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max hidden lg:!block"
+                                  >
+                                    {{- block.settings.apply_btn -}}
+                                  </a>
+                                {% endif %}
+                              </div>
+                              <div class="flex flex-col gap-4 lg:flex-row lg:justify-between">
+                                <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222] lg:w-1/2 lg:order-2 lg:text-right">
+                                  {{- block.settings.shopper_price -}}
+                                </span>
+                                <div class="flex flex-col gap-1 lg:w-1/2 lg:order-1">
+                                  <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222]">
+                                    {{ block.settings.shopper_stability -}}
+                                  </span>
+                                  <address class="w-full block text-[16px] font-light leading-[150%] font-shape text-[#222222] not-italic">
+                                    {{ block.settings.shopper_location }}
+                                  </address>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="text-[16px] font-light leading-[21px] font-shape text-[#222222] line-clamp-3"
+                              aria-hidden="true"
+                            >
+                              {{ block.settings.shopper_info }}
+                            </div>
+                            <div class="flex flex-row gap-5 items-center">
+                              {% if block.settings.apply_btn != blank %}
+                                <a
+                                  href="{{ block.settings.apply_link }}"
+                                  class="font-shape text-[13px] leading-[16px] font-normal inline-block px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max lg:hidden"
+                                >
+                                  {{- block.settings.apply_btn -}}
+                                </a>
+                              {% endif %}
+                              {% if block.settings.read_more_btn != blank %}
+                                <a
+                                  href="{{- block.settings.read_more_link -}}"
+                                  class="text-[13px] font-normal uppercase font-shape border-b-[1px] border-b-[#000] pb-2"
+                                >
+                                  {{- block.settings.read_more_btn -}}
+                                </a>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                  {% when 'Commercial-role' %}
+                    {% assign commercialsCount = commercialsCount | plus: 1 %}
+                    <div
+                      class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 Commercial-role mb-6 lg:mb-10 pb-6 lg:pb-10 {%  if commercialsCount != commercialRole %} border-b-[1px]{% endif %} border-[#C3C5C7] hidden"
+                      data-id="Commercial-role"
+                    >
+                      <!-- medium screen link set -->
+                      {% if block.settings.shopper_info != blank %}
+                        <accordion-item>
+                          <div class="flex flex-col gap-5">
+                            <div class="flex flex-col gap-4">
+                              <div class="lg:flex lg:flex-row lg:justify-between">
+                                <h4 class="text-[18px] font-normal leading-[120%] font-shape text-[#222222]">
+                                  {{ block.settings.role_title }}
+                                </h4>
+                                {% if block.settings.apply_btn != blank %}
+                                  <a
+                                    href="{{ block.settings.apply_link }}"
+                                    class="font-shape text-[13px] leading-[16px] font-normal  px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max hidden lg:!block"
+                                  >
+                                    {{- block.settings.apply_btn -}}
+                                  </a>
+                                {% endif %}
+                              </div>
+                              <div class="flex flex-col gap-4 lg:flex-row lg:justify-between">
+                                <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222] lg:w-1/2 lg:order-2 lg:text-right">
+                                  {{- block.settings.shopper_price -}}
+                                </span>
+                                <div class="flex flex-col gap-1 lg:w-1/2 lg:order-1">
+                                  <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222]">
+                                    {{ block.settings.shopper_stability -}}
+                                  </span>
+                                  <address class="w-full block text-[16px] font-light leading-[150%] font-shape text-[#222222] not-italic">
+                                    {{ block.settings.shopper_location }}
+                                  </address>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="text-[16px] font-light leading-[21px] font-shape text-[#222222] line-clamp-3"
+                              aria-hidden="true"
+                            >
+                              {{ block.settings.shopper_info }}
+                            </div>
+                            <div class="flex flex-row gap-5 items-center">
+                              {% if block.settings.apply_btn != blank %}
+                                <a
+                                  href="{{ block.settings.apply_link }}"
+                                  class="font-shape text-[13px] leading-[16px] font-normal inline-block px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max lg:hidden"
+                                >
+                                  {{- block.settings.apply_btn -}}
+                                </a>
+                              {% endif %}
+                              {% if block.settings.read_more_btn != blank %}
+                                <a
+                                  href="{{- block.settings.read_more_link -}}"
+                                  class="text-[13px] font-normal uppercase font-shape border-b-[1px] border-b-[#000] pb-2"
+                                >
+                                  {{- block.settings.read_more_btn -}}
+                                </a>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                  {% when 'Operations-role' %}
+                    {% assign operationsCount = operationsCount | plus: 1 %}
+                    <div
+                      class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 Operations-role mb-6 lg:mb-10 pb-6 lg:pb-10 {%  if operationsCount != operationsRole %} border-b-[1px]{% endif %} border-[#C3C5C7] hidden"
+                      data-id="Operations-role"
+                    >
+                      <!-- medium screen link set -->
+                      {% if block.settings.shopper_info != blank %}
+                        <accordion-item>
+                          <div class="flex flex-col gap-5">
+                            <div class="flex flex-col gap-4">
+                              <div class="lg:flex lg:flex-row lg:justify-between">
+                                <h4 class="text-[18px] font-normal leading-[120%] font-shape text-[#222222]">
+                                  {{ block.settings.role_title }}
+                                </h4>
+                                {% if block.settings.apply_btn != blank %}
+                                  <a
+                                    href="{{ block.settings.apply_link }}"
+                                    class="font-shape text-[13px] leading-[16px] font-normal  px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max hidden lg:!block"
+                                  >
+                                    {{- block.settings.apply_btn -}}
+                                  </a>
+                                {% endif %}
+                              </div>
+                              <div class="flex flex-col gap-4 lg:flex-row lg:justify-between">
+                                <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222] lg:w-1/2 lg:order-2 lg:text-right">
+                                  {{- block.settings.shopper_price -}}
+                                </span>
+                                <div class="flex flex-col gap-1 lg:w-1/2 lg:order-1">
+                                  <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222]">
+                                    {{ block.settings.shopper_stability -}}
+                                  </span>
+                                  <address class="w-full block text-[16px] font-light leading-[150%] font-shape text-[#222222] not-italic">
+                                    {{ block.settings.shopper_location }}
+                                  </address>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="text-[16px] font-light leading-[21px] font-shape text-[#222222] line-clamp-3"
+                              aria-hidden="true"
+                            >
+                              {{ block.settings.shopper_info }}
+                            </div>
+                            <div class="flex flex-row gap-5 items-center">
+                              {% if block.settings.apply_btn != blank %}
+                                <a
+                                  href="{{ block.settings.apply_link }}"
+                                  class="font-shape text-[13px] leading-[16px] font-normal inline-block px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max lg:hidden"
+                                >
+                                  {{- block.settings.apply_btn -}}
+                                </a>
+                              {% endif %}
+                              {% if block.settings.read_more_btn != blank %}
+                                <a
+                                  href="{{- block.settings.read_more_link -}}"
+                                  class="text-[13px] font-normal uppercase font-shape border-b-[1px] border-b-[#000] pb-2"
+                                >
+                                  {{- block.settings.read_more_btn -}}
+                                </a>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                  {% when 'Marketing-role' %}
+                    {% assign marketingsCount = marketingsCount | plus: 1 %}
+                    <div
+                      class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 Marketing-role mb-6 lg:mb-10 pb-6 lg:pb-10 {%  if marketingsCount != marketingRole %} border-b-[1px]{% endif %} border-[#C3C5C7] hidden"
+                      data-id="Marketing-role"
+                    >
+                      <!-- medium screen link set -->
+                      {% if block.settings.shopper_info != blank %}
+                        <accordion-item>
+                          <div class="flex flex-col gap-5">
+                            <div class="flex flex-col gap-4">
+                              <div class="lg:flex lg:flex-row lg:justify-between">
+                                <h4 class="text-[18px] font-normal leading-[120%] font-shape text-[#222222]">
+                                  {{ block.settings.role_title }}
+                                </h4>
+                                {% if block.settings.apply_btn != blank %}
+                                  <a
+                                    href="{{ block.settings.apply_link }}"
+                                    class="font-shape text-[13px] leading-[16px] font-normal  px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max hidden lg:!block"
+                                  >
+                                    {{- block.settings.apply_btn -}}
+                                  </a>
+                                {% endif %}
+                              </div>
+                              <div class="flex flex-col gap-4 lg:flex-row lg:justify-between">
+                                <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222] lg:w-1/2 lg:order-2 lg:text-right">
+                                  {{- block.settings.shopper_price -}}
+                                </span>
+                                <div class="flex flex-col gap-1 lg:w-1/2 lg:order-1">
+                                  <span class="w-full block text-[16px] font-normal leading-[150%] font-shape text-[#222222]">
+                                    {{ block.settings.shopper_stability -}}
+                                  </span>
+                                  <address class="w-full block text-[16px] font-light leading-[150%] font-shape text-[#222222] not-italic">
+                                    {{ block.settings.shopper_location }}
+                                  </address>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="text-[16px] font-light leading-[21px] font-shape text-[#222222] line-clamp-3"
+                              aria-hidden="true"
+                            >
+                              {{ block.settings.shopper_info }}
+                            </div>
+                            <div class="flex flex-row gap-5 items-center">
+                              {% if block.settings.apply_btn != blank %}
+                                <a
+                                  href="{{ block.settings.apply_link }}"
+                                  class="font-shape text-[13px] leading-[16px] font-normal inline-block px-8 py-[13px] border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max lg:hidden"
+                                >
+                                  {{- block.settings.apply_btn -}}
+                                </a>
+                              {% endif %}
+                              {% if block.settings.read_more_btn != blank %}
+                                <a
+                                  href="{{- block.settings.read_more_link -}}"
+                                  class="text-[13px] font-normal uppercase font-shape border-b-[1px] border-b-[#000] pb-2"
+                                >
+                                  {{- block.settings.read_more_btn -}}
+                                </a>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                {% endcase %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- End careers tabbing question and Answers -->
+      </div>
+    </div>
+  </div>
+</section>
+
+{% render 'vite-tag' with '@modules/tabbing-v2.js' %}
+
+<script>
+  let tabButtons = document.querySelectorAll('.top_title [data-id]');
+  let tabContent = document.querySelectorAll('.tabbing_content [data-id]');
+
+  console.log(tabButtons, 'tabButtons tabButtons');
+  // Add click event listener to tab buttons
+  tabButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      // Remove 'active' class from all tab buttons
+      tabButtons.forEach(function (btn) {
+        btn.classList.remove('active');
+      });
+
+      // Add 'active' class to the clicked tab button
+      button.classList.add('active');
+
+      // Get the data-id of the clicked button
+      var clickedDataId = button.getAttribute('data-id');
+
+      // Loop through tab content to find the one with matching data-id
+      tabContent.forEach(function (content) {
+        // Remove 'hidden' class from the matching tab content, and add it to others
+        if (content.getAttribute('data-id') === clickedDataId) {
+          content.classList.remove('hidden');
+        } else {
+          content.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Careers tabbing v2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "spacing setting"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "link_list",
+      "label": "Menu Links",
+      "id": "menu_links"
+    },
+    {
+      "type": "header",
+      "content": "top section"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Love all things luxury? Welcome to THREADS"
+    },
+    {
+      "type": "richtext",
+      "id": "top_content",
+      "label": "Enter top section content",
+      "default": "<p>If you know your Loewe from your Louis V, are passionate about tech and luxury retail, or are social media savvy, you’ll feel at home at Threads. We’re a female-founded company that house an ambitious and creative team of individuals. Our vacancies include roles in marketing, brands, finance, technology and sales, and we always encourage our teams to collaborate to reach their fullest potential. We offer in-house training and development programmes, align our visions with your goals and celebrate our successes together. Sound good? Take a look at our current vacancies below</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image_one",
+      "label": "Image First"
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image_two",
+      "label": "Image Second"
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image_three",
+      "label": "Image three"
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image_four",
+      "label": "Image four"
+    },
+    {
+      "type": "header",
+      "content": "Tabbing title"
+    },
+    {
+      "type": "text",
+      "id": "avaliable_roles",
+      "label": "Enter Available Roles Title",
+      "default": "Available Roles within"
+    },
+    {
+      "type": "text",
+      "id": "sales_title",
+      "label": "Sales top title "
+    },
+    {
+      "type": "text",
+      "id": "products_title",
+      "label": "Products top title "
+    },
+    {
+      "type": "text",
+      "id": "commercial_title",
+      "label": "Commercial top title "
+    },
+    {
+      "type": "text",
+      "id": "operations_title",
+      "label": "Operations top title "
+    },
+    {
+      "type": "text",
+      "id": "marketing_title",
+      "label": "Marketing top title "
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Sales Role",
+      "type": "Sales-role",
+      "settings": [
+        {
+          "type": "text",
+          "id": "role_title",
+          "label": "Role content",
+          "default": "PERSONAL SHOPPER, UK (LEVEL 1- MID LEVEL)"
+        },
+
+        {
+          "type": "text",
+          "id": "shopper_price",
+          "label": "Enter Shopper annam value",
+          "default": "£30,000 - £40,000 per annum"
+        },
+        {
+          "type": "text",
+          "id": "shopper_stability",
+          "label": "Enter Shopper annam value",
+          "default": "Permanent"
+        },
+        {
+          "type": "text",
+          "id": "shopper_location",
+          "label": "Enter Shopper annam value",
+          "default": "London, United Kingdom"
+        },
+        {
+          "type": "richtext",
+          "id": "shopper_info",
+          "label": "Enter Shopper information",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur. At velit hac leo purus sed ac quis sit. Id luctus commodo non mauris semper neque feugiat. Semper ut faucibus faucibus convallis. Nam ornare malesuada sed risus volutpat at nulla rhoncus.</p>"
+        },
+        {
+          "type": "text",
+          "id": "apply_btn",
+          "label": "Enter apply Button title",
+          "default": "Apply"
+        },
+        {
+          "type": "url",
+          "id": "apply_link",
+          "label": "add button link here"
+        },
+        {
+          "type": "text",
+          "id": "read_more_btn",
+          "label": "Enter Read More Button title",
+          "default": "Read more"
+        },
+        {
+          "type": "url",
+          "id": "read_more_link",
+          "label": "add read more link here"
+        }
+      ]
+    },
+    {
+      "name": "Products Role",
+      "type": "Products-role",
+      "settings": [
+        {
+          "type": "text",
+          "id": "role_title",
+          "label": "Role content",
+          "default": "PERSONAL SHOPPER, UK (LEVEL 1- MID LEVEL)"
+        },
+
+        {
+          "type": "text",
+          "id": "shopper_price",
+          "label": "Enter Shopper annam value",
+          "default": "£30,000 - £40,000 per annum"
+        },
+        {
+          "type": "text",
+          "id": "shopper_stability",
+          "label": "Enter Shopper annam value",
+          "default": "Permanent"
+        },
+        {
+          "type": "text",
+          "id": "shopper_location",
+          "label": "Enter Shopper annam value",
+          "default": "London, United Kingdom"
+        },
+        {
+          "type": "richtext",
+          "id": "shopper_info",
+          "label": "Enter Shopper information",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur. At velit hac leo purus sed ac quis sit. Id luctus commodo non mauris semper neque feugiat. Semper ut faucibus faucibus convallis. Nam ornare malesuada sed risus volutpat at nulla rhoncus.</p>"
+        },
+        {
+          "type": "text",
+          "id": "apply_btn",
+          "label": "Enter apply Button title",
+          "default": "Apply"
+        },
+        {
+          "type": "url",
+          "id": "apply_link",
+          "label": "add button link here"
+        },
+        {
+          "type": "text",
+          "id": "read_more_btn",
+          "label": "Enter Read More Button title",
+          "default": "Read more"
+        },
+        {
+          "type": "url",
+          "id": "read_more_link",
+          "label": "add read more link here"
+        }
+      ]
+    },
+    {
+      "name": "Commercial Role",
+      "type": "Commercial-role",
+      "settings": [
+        {
+          "type": "text",
+          "id": "role_title",
+          "label": "Role content",
+          "default": "PERSONAL SHOPPER, UK (LEVEL 1- MID LEVEL)"
+        },
+
+        {
+          "type": "text",
+          "id": "shopper_price",
+          "label": "Enter Shopper annam value",
+          "default": "£30,000 - £40,000 per annum"
+        },
+        {
+          "type": "text",
+          "id": "shopper_stability",
+          "label": "Enter Shopper annam value",
+          "default": "Permanent"
+        },
+        {
+          "type": "text",
+          "id": "shopper_location",
+          "label": "Enter Shopper annam value",
+          "default": "London, United Kingdom"
+        },
+        {
+          "type": "richtext",
+          "id": "shopper_info",
+          "label": "Enter Shopper information",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur. At velit hac leo purus sed ac quis sit. Id luctus commodo non mauris semper neque feugiat. Semper ut faucibus faucibus convallis. Nam ornare malesuada sed risus volutpat at nulla rhoncus.</p>"
+        },
+        {
+          "type": "text",
+          "id": "apply_btn",
+          "label": "Enter apply Button title",
+          "default": "Apply"
+        },
+        {
+          "type": "url",
+          "id": "apply_link",
+          "label": "add button link here"
+        },
+        {
+          "type": "text",
+          "id": "read_more_btn",
+          "label": "Enter Read More Button title",
+          "default": "Read more"
+        },
+        {
+          "type": "url",
+          "id": "read_more_link",
+          "label": "add read more link here"
+        }
+      ]
+    },
+    {
+      "name": "Operations Role",
+      "type": "Operations-role",
+      "settings": [
+        {
+          "type": "text",
+          "id": "role_title",
+          "label": "Role content",
+          "default": "PERSONAL SHOPPER, UK (LEVEL 1- MID LEVEL)"
+        },
+
+        {
+          "type": "text",
+          "id": "shopper_price",
+          "label": "Enter Shopper annam value",
+          "default": "£30,000 - £40,000 per annum"
+        },
+        {
+          "type": "text",
+          "id": "shopper_stability",
+          "label": "Enter Shopper annam value",
+          "default": "Permanent"
+        },
+        {
+          "type": "text",
+          "id": "shopper_location",
+          "label": "Enter Shopper annam value",
+          "default": "London, United Kingdom"
+        },
+        {
+          "type": "richtext",
+          "id": "shopper_info",
+          "label": "Enter Shopper information",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur. At velit hac leo purus sed ac quis sit. Id luctus commodo non mauris semper neque feugiat. Semper ut faucibus faucibus convallis. Nam ornare malesuada sed risus volutpat at nulla rhoncus.</p>"
+        },
+        {
+          "type": "text",
+          "id": "apply_btn",
+          "label": "Enter apply Button title",
+          "default": "Apply"
+        },
+        {
+          "type": "url",
+          "id": "apply_link",
+          "label": "add button link here"
+        },
+        {
+          "type": "text",
+          "id": "read_more_btn",
+          "label": "Enter Read More Button title",
+          "default": "Read more"
+        },
+        {
+          "type": "url",
+          "id": "read_more_link",
+          "label": "add read more link here"
+        }
+      ]
+    },
+    {
+      "name": "Marketing Role",
+      "type": "Marketing-role",
+      "settings": [
+        {
+          "type": "text",
+          "id": "role_title",
+          "label": "Role content",
+          "default": "PERSONAL SHOPPER, UK (LEVEL 1- MID LEVEL)"
+        },
+
+        {
+          "type": "text",
+          "id": "shopper_price",
+          "label": "Enter Shopper annam value",
+          "default": "£30,000 - £40,000 per annum"
+        },
+        {
+          "type": "text",
+          "id": "shopper_stability",
+          "label": "Enter Shopper annam value",
+          "default": "Permanent"
+        },
+        {
+          "type": "text",
+          "id": "shopper_location",
+          "label": "Enter Shopper annam value",
+          "default": "London, United Kingdom"
+        },
+        {
+          "type": "richtext",
+          "id": "shopper_info",
+          "label": "Enter Shopper information",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur. At velit hac leo purus sed ac quis sit. Id luctus commodo non mauris semper neque feugiat. Semper ut faucibus faucibus convallis. Nam ornare malesuada sed risus volutpat at nulla rhoncus.</p>"
+        },
+        {
+          "type": "text",
+          "id": "apply_btn",
+          "label": "Enter apply Button title",
+          "default": "Apply"
+        },
+        {
+          "type": "url",
+          "id": "apply_link",
+          "label": "add button link here"
+        },
+        {
+          "type": "text",
+          "id": "read_more_btn",
+          "label": "Enter Read More Button title",
+          "default": "Read more"
+        },
+        {
+          "type": "url",
+          "id": "read_more_link",
+          "label": "add read more link here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Careers tabbing v2",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,250 @@
+{% liquid
+  if section.settings.Mob_image_url != blank
+    assign mobile_ratio = section.settings.Mob_image_url.aspect_ratio
+  else
+    assign mobile_ratio = 1
+  endif
+  if section.settings.desk_image_url != blank
+    assign desktop_ratio = section.settings.desk_image_url.aspect_ratio
+  else
+    assign desktop_ratio = 1.5
+  endif
+%}
+
+{% style %}
+  #our-mission-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+  #our-mission-{{ section.id }} .wrapper{
+    padding:0 {{ section.settings.horizontal_padding_mobile }}px;
+  }
+  #our-mission-{{ section.id }} .text-container{
+    background-color:{{ section.settings.text_bg }}
+  }
+
+  @media(min-width:768px){
+    #our-mission-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_desktop }}px;
+    margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+    #our-mission-{{ section.id }} .wrapper{
+    padding:0 {{ section.settings.horizontal_padding_desktop }}px;
+  }
+  .image_inner-wrapper{
+    padding-bottom:calc({{ 1 | divided_by : desktop_ratio | times : 100 }}% / 2) !important;
+  }
+  }
+{% endstyle %}
+
+<section class="image-video-text" id="our-mission-{{ section.id }}">
+  <div class="m-container:max-w-[1600px] mx-auto wrapper">
+    <div
+      class="flex flex-col flex-wrap lg:flex-row lg:items-center"
+    >
+      <!-- Text Block -->
+      <div class="flex flex-col md:flex-row md:gap-10 lg:gap-0 text-container lg:items-center">
+        <div class="flex flex-col order-2 gap-4 md:order-1 text-left py-[60px] px-[20px] lg:px-[142px] md:w-1/2 {% if section.settings.section_aligment == 'left'  %} md:order-[-1] {% else %} md:order-[2]  {% endif %} {% if section.settings.text_alignment == 'center'  %} text-center md:text-left {% endif %}">
+          <span class="block font-shape text-[#222222] text-[11px] tracking-[0.055px] uppercase leading-[150%] font-medium">
+            {{- section.settings.mission_heading -}}
+          </span>
+          <h2 class="text-[36px] font-[300] leading-[110%] font-gascogne-serial text-[#222222] capitalize">
+            {{ section.settings.heading }}
+          </h2>
+          <p class="font-shape text-[14px] lg:text-[16px] font-[300] leading-[150%] text-[#222222]">
+            {{ section.settings.description }}
+          </p>
+          <div class="flex flex-row mt-4 {% if section.settings.text_alignment == 'center'  %} justify-center md:justify-start {% endif %}">
+            <a
+              href="{{section.settings.rounded_button_link}}"
+              class="font-shape text-[13px] font-[500] leading-[120%] py-[13px] px-[24px] rounded-[20px] border-solid border-[1px] border-[#222] uppercase text-[#222222]"
+            >
+              {{- section.settings.rounded_button_text -}}
+            </a>
+          </div>
+        </div>
+        <!-- Picture Block -->
+
+        <div
+          class="image_inner-wrapper flex flex-col order-1 md:order-2 bg-[#D5D5D5] overflow-hidden  md:w-1/2 {% if section.settings.section_aligment == 'left'  %} md:order-[2] {% else %} md:order-[-1]  {% endif %} relative "
+          style="padding-bottom:{{ 1 | divided_by : mobile_ratio | times : 100 }}%"
+        >
+          {% if section.settings.desk_image_url != blank and section.settings.Mob_image_url != blank %}
+            <picture>
+              <source
+                media="(min-width:767px)"
+                srcset="
+                  {%- if section.settings.desk_image_url.width >= 1100 -%}{{ section.settings.desk_image_url | image_url: width: 1100 }} 1100w,{%- endif -%}
+                  {%- if section.settings.desk_image_url.width >= 1500 -%}{{ section.settings.desk_image_url | image_url: width: 1500 }} 1500w,{%- endif -%}
+                  {%- if section.settings.desk_image_url.width >= 1780 -%}{{ section.settings.desk_image_url | image_url: width: 1780 }} 1780w,{%- endif -%}
+                  {%- if section.settings.desk_image_url.width >= 2000 -%}{{ section.settings.desk_image_url | image_url: width: 2000 }} 2000w,{%- endif -%}
+                  {%- if section.settings.desk_image_url.width >= 3000 -%}{{ section.settings.desk_image_url | image_url: width: 3000 }} 3000w,{%- endif -%}
+                  {%- if section.settings.desk_image_url.width >= 3840 -%}{{ section.settings.desk_image_url | image_url: width: 3840 }} 3840w,{%- endif -%}
+                  {{ section.settings.desk_image_url | image_url }} {{ section.settings.desk_image_url.width }}w
+                "
+              >
+              <img
+                srcset="
+                  {%- if section.settings.Mob_image_url.width >= 375 -%}{{ section.settings.Mob_image_url | image_url: width: 375 }} 375w,{%- endif -%}
+                  {%- if section.settings.Mob_image_url.width >= 750 -%}{{ section.settings.Mob_image_url | image_url: width: 750 }} 750w,{%- endif -%}
+                "
+                sizes="100vw"
+                src="{{ section.settings.Mob_image_url | image_url: width: 1500 }}"
+                loading="lazy"
+                alt="{{ section.settings.Mob_image_url.alt | escape }}"
+                width="{{ section.settings.Mob_image_url.width }}"
+                class="absolute top-0 left-0 w-full h-full"
+                height="{{ section.settings.Mob_image_url.width | divided_by: section.settings.Mob_image_url.aspect_ratio }}"
+              >
+            </picture>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Mission V2",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 2,
+      "min": 0,
+      "max": 200,
+      "default": 112
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 2,
+      "min": 0,
+      "max": 200,
+      "default": 112
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_mobile",
+      "label": "Horizontal Padding Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_desktop",
+      "label": "Horizontal Padding Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 80
+    },
+    {
+      "type": "radio",
+      "id": "section_aligment",
+      "label": "Section alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "image_picker",
+      "id": "Mob_image_url",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image_url",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Alignment text",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "mission_heading",
+      "label": "sub Heading",
+      "default": "OUR MISSION"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Since launching in 2009, we've been on a mission to make outfit envy a thing of the past."
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "description of section",
+      "default": "From sourcing rare pieces to refreshing your wardrobe, no request is too big or small for our Personal Shoppers. Our pioneering approach combines social media and online shopping with 1:1 chat platforms, enabling us to connect in a uniquely personal way for the ultimate luxury personal shopping service."
+    },
+    {
+      "type": "text",
+      "id": "rounded_button_text",
+      "label": "Rounded Button Text",
+      "default": "Chat to a personal shopper"
+    },
+    {
+      "type": "url",
+      "id": "rounded_button_link",
+      "label": "Rounded Button URL"
+    },
+    {
+      "type": "color",
+      "label": "Choose Text Background Color",
+      "id": "text_bg",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Mission V2",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

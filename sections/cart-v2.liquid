@@ -1,0 +1,129 @@
+{% style %}
+  #MainContent [data-role='cart-count'] {
+    display: none;
+  }
+{% endstyle %}
+
+<cart-page
+  data-section="{{ section.id }}"
+  data-maxsku-count="{{ settings.sku_number }}"
+  data-sku-error="{{ settings.sku_error_message }}"
+  class="group/page"
+>
+  <span class="hidden" data-role="cart-count">{{ cart.item_count }}</span>
+  <div class="xl:flex xl:gap-[31px] max-w-[1600px] m-auto">
+    <!-- Start Empty shopping bag -->
+    <div class="w-full" data-role="items-wrapper">
+      <h2
+        class="text-[36px] lg:text-[46px] leading-[39.6px] lg:leading-[50.6px] font-gascogne-serial font-light capitalize  pt-[25px] lg:pt-[61px] pb-[20px] lg:pb-[45px] text-center"
+      >
+        Shopping Bag
+      </h2>
+      {% if cart.items == blank %}
+        <div data-role="empty-cart">
+          {% render 'empty-cart-v2' %}
+        </div>
+      {% else %}
+        {% render 'cart-grid-v2', cart: cart, settings: section.settings %}
+      {% endif %}
+    </div>
+    <!-- End Empty shopping bag -->
+  </div>
+  <div data-role="cart-loader">
+    <div
+      role="status"
+      class="fixed z-[999] hidden left-0 top-0 w-full h-full group-[&.loading]/page:flex justify-center items-center bg-[rgba(0,0,0,0.5)]"
+    >
+      {% render 'icon-v2', icon: 'icon-pdp-loader' %}
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</cart-page>
+
+{% render 'vite-tag' with '@modules/cart-v2.js' %}
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "empty_content",
+      "label": "Empty Content",
+      "default": "<p>Your bag is empty</p>"
+    },
+    {
+      "type": "text",
+      "id": "empty_items_add",
+      "label": "Empty item Content ",
+      "default": "Add items to your shopping bag to check out"
+    },
+    {
+      "type": "text",
+      "label": "Promo text",
+      "id": "promo_text",
+      "default": "Promo codes can be applied in checkout."
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Enter Button text",
+      "default": "Keep Shopping"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Payment-icon "
+    },
+    {
+      "type": "text",
+      "label": "Payment text",
+      "id": "payment_text",
+      "default": "Prices and delivery costs are not confirmed until you've reached the checkout. 28 days right of withdrawal. Read more about return and refund policy."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_icon",
+      "label": "Enable Payment icon",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Promotional Banner "
+    },
+    {
+      "type": "number",
+      "id": "promotional_value",
+      "label": "Promotional value"
+    },
+    {
+      "type": "text",
+      "label": "qualify Message",
+      "id": "qualify_text",
+      "default": "YOUR ARE QUALIFY FOR FREE DELIVERY"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_promotion",
+      "label": "Enable Promotion banner",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "payment",
+      "name": "Payment Method",
+      "settings": [
+        {
+          "type": "html",
+          "label": "Payment Icon Svg",
+          "id": "icon_svg"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

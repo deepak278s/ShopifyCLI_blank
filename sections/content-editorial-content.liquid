@@ -1,0 +1,230 @@
+<div
+  id="{{ section.id }}"
+>
+  {% if section.settings.description %}
+    <div class="content-editorial-description-container hide--tablet">
+      <p class="fnt-sec content-editorial-description">
+        {{ section.settings.description }}
+      </p>
+    </div>
+    <div class="hide--above-tablet" style="margin-top:20px"></div>
+  {% endif %}
+  <div class="content-editorial-image-gallery">
+    <div class="content-editorial-image-scrollable-row">
+      {% for i in (1..3) %}
+        {% case i %}
+          {% when 1 %}
+            {% assign image = section.settings.image_1 %}
+            {% assign image_text = section.settings.image_1_text %}
+
+          {% when 2 %}
+            {% assign image = section.settings.image_2 %}
+            {% assign image_text = section.settings.image_2_text %}
+
+          {% when 3 %}
+            {% assign image = section.settings.image_3 %}
+            {% assign image_text = section.settings.image_3_text %}
+        {% endcase %}
+
+        <div class="content-editorial-image-gallery__image-container">
+          <div class="object-cover">
+            {% if image %}
+              <img
+                class="content-editorial-image-gallery__image"
+                src="{{ image | img_url: 'master' }}"
+                alt="{{ image.alt }}"
+                title="{{ image.alt }}"
+                loading="lazy"
+                width="263"
+                height="464"
+              >
+            {% else %}
+              <img
+                class="content-editorial-image-gallery__image"
+                src="https://placehold.co/263x464"
+                width="263"
+                height="464"
+              >
+            {% endif %}
+          </div>
+
+          {% if image_text %}
+            <p class="fnt-sec title--sm content-editorial-image-gallery__image-text">{{ image_text }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="content-editorial-image-unscrollable-row">
+      {% for i in (4..5) %}
+        {% case i %}
+          {% when 4 %}
+            {% assign image = section.settings.image_4 %}
+            {% assign image_text = section.settings.image_4_text %}
+
+          {% when 5 %}
+            {% assign image = section.settings.image_5 %}
+            {% assign image_text = section.settings.image_5_text %}
+        {% endcase %}
+
+        <div class="content-editorial-image-gallery__image-container">
+          <div class="object-cover">
+            {% if image %}
+              <img
+                class="content-editorial-image-gallery__image"
+                src="{{ image | img_url: 'master' }}"
+                alt="{{ image.alt }}"
+                title="{{ image.alt }}"
+                loading="lazy"
+                width="263"
+                height="464"
+              >
+            {% else %}
+              <img
+                class="content-editorial-image-gallery__image"
+                src="https://placehold.co/263x464"
+                width="263"
+                height="464"
+              >
+            {% endif %}
+          </div>
+
+          {% if image_text %}
+            <p class="fnt-sec title--sm content-editorial-image-gallery__image-text">{{ image_text }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .content-editorial-description-container {
+    box-sizing: border-box;
+    padding-bottom: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .content-editorial-description {
+    margin-top: 30px;
+    width: 700px;
+  }
+  .content-editorial-image-gallery {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .content-editorial-image-gallery__image-container {
+    box-sizing: border-box;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .content-editorial-image-scrollable-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .content-editorial-image-scrollable-row {
+      overflow-x: scroll;
+      justify-content: start;
+    }
+  }
+
+  .content-editorial-image-unscrollable-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .content-editorial-image-scrollable-row::-webkit-scrollbar {
+    display: none;
+  }
+  .content-editorial-image-gallery__image {
+    border-radius: 50px;
+  }
+  .content-editorial-image-gallery__image-text {
+    margin: 15px;
+    text-align: center;
+    width: 263px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "Content editorial content",
+    "settings": [
+        {
+            "type": "textarea",
+            "id": "description",
+            "label": "Description",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_1",
+            "label": "Image 1"
+        },
+        {
+            "type": "textarea",
+            "id": "image_1_text",
+            "label": "Image 1 text",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_2",
+            "label": "Image 2"
+        },
+        {
+            "type": "textarea",
+            "id": "image_2_text",
+            "label": "Image 2 text",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_3",
+            "label": "Image 3"
+        },
+        {
+            "type": "textarea",
+            "id": "image_3_text",
+            "label": "Image 3 text",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_4",
+            "label": "Image 4"
+        },
+        {
+            "type": "textarea",
+            "id": "image_4_text",
+            "label": "Image 4 text"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_5",
+            "label": "Image 5"
+        },
+        {
+            "type": "textarea",
+            "id": "image_5_text",
+            "label": "Image 5 text"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Content editorial content",
+            "settings": {}
+        }
+    ]
+}
+{% endschema %}

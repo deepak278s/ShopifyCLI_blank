@@ -1,0 +1,128 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:46+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            d65e6afab7617e1904fdc41bc360214a
+//      Signature:      eyJpdiI6IjhsWGtYcWRYc3dYdk5tYXJlVHJuaXc9PSIsInZhbHVlIjoiMWRvRUZLek5ZUEJYeDVUM1hIcmpoZzI3STBHQWJFVFBxXC8zZjN0U3F1OUN0OFRRNnlETWI3WTNWSFRLMUZKa2ZMSTM2RGxBMU5VdlhMZkYraGNPYU42emwyTVwvbTVyUSs5UjU0S0ROZDdEMHhQOVlDU09RXC92Q0txUFwvOEoyKzdNaG4yK1plOVFJRWJLMjFVa1ZaaWtHWnB0QW5XbjRoR0V6bUZuKzFHYXl5TEdnODVzMVk4UTFkQTdmcVVtVXdNNFRsUFwvVVR3YjhqZlYyTnVrV3BPYng4SU9sckNDTWhnODNMT1R3WHdPSGFyajcxQW1PaWxSWmExMmpLTDNtbXd4WlwvUzgySmtqa05TVjV6eUV0RVlvdTFOOFFySndyMk1mcmZSV3NXT0JKcmRwODJJM0xXZkE5eHFMUGdReFwva2pFWlA1VlBmS2p4bmxtOTlmdU02NnVwZWpYc1J1elhEb1dsUTQ3RklNVU9HaWRFbWtrd1ZzWU4yUkFpQnArOFwvaElxVWNVVk52TSt0SGcxM3J2aUtcL0pMZz09IiwibWFjIjoiNGQ5YTlkMDM2NTRkMTA1NzgwMTYyMDhlZDUyZTE0OWVmY2FiZDg2ZjU3Yjk3Nzc1NzZhNmVjNGQyM2U3OTRkMCJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- render 'section__header', title: section.settings.title, title_tag: 'h1', content: section.settings.content -%}
+
+{%- form 'contact', id: 'ContactForm' -%}
+
+    {%- if form.posted_successfully? -%}
+
+        <div class="rte form-status form-status-list form__message fnt-sec" tabindex="-1" autofocus>{{ 'templates.contact.form.post_success' | t }}</div>
+
+    {%- elsif form.errors -%}
+
+        <div class="rte form__message">
+            <h2 class="form-status caption-large text-body fnt-sec red mb-md" role="alert" tabindex="-1" autofocus>{{ 'templates.contact.form.error_heading' | t }}</h2>
+            <ul class="form-status-list caption-large" role="list">
+                <li>
+                    <a href="#ContactForm-email" class="link">
+                        {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    {%- endif -%}
+
+    <div class="contact__fields">
+        <div class="input-field my-md">
+            <label for="ContactForm-name" class="flex f-vertical-middle f-flex-start mb-sm pb-sm">{{ 'templates.contact.form.name' | t }}</label>
+            <input
+                class="block" 
+                type="text"
+                id="ContactForm-name"
+                autocomplete="name"
+                value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.name' | t }}"
+                name="contact[{{ 'templates.contact.form.name' | t }}]"/>
+        </div>
+        <div class="input-field input-field--with-error my-md">
+            <label for="ContactForm-email" class="flex f-vertical-middle f-flex-start mb-sm pb-sm">{{ 'templates.contact.form.email' | t }} <span aria-hidden="true">*</span></label>
+            <input
+                class="block" 
+                type="text"
+                id="ContactForm-email"
+                autocomplete="email"
+                spellcheck="false"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.email' | t }}"
+                name="contact[email]"
+                {% if form.errors contains 'email' %}
+                    aria-invalid="true"
+                    aria-describedby="ContactForm-email-error"
+                {% endif %}/>
+        </div>
+        <div class="input-field my-md">
+            <label for="ContactForm-phone" class="flex f-vertical-middle f-flex-start mb-sm pb-sm">{{ 'templates.contact.form.phone' | t }}</label>
+            <input
+                class="block" 
+                type="tel"
+                id="ContactForm-phone"
+                autocomplete="tel"
+                pattern="[0-9\-]*"
+                value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.phone' | t }}"
+                name="contact[{{ 'templates.contact.form.phone' | t }}]"/>
+        </div>
+        <div class="input-field my-md">
+            <label for="ContactForm-comment" class="flex f-vertical-middle f-flex-start mb-sm pb-sm">{{ 'templates.contact.form.comment' | t }}</label>
+            <textarea
+                class="block" 
+                rows="10"
+                id="ContactForm-body"
+                placeholder="{{ 'templates.contact.form.comment' | t }}"
+                name="contact[{{ 'templates.contact.form.comment' | t }}]">
+                    {{- form.body -}}
+            </textarea>
+        </div>
+        <div class="contact__button mt-md">
+            <button type="submit" class="btn btn--full">
+                {{ 'templates.contact.form.send' | t }}
+            </button>
+        </div>
+</div>
+
+{%- endform -%}
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": "section",
+  "class": "contact container--xs my-xl",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Contact form",
+      "label": "Heading"
+    },
+    {
+        "type": "richtext",
+        "id": "content",
+        "label": "Content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}

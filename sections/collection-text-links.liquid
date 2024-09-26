@@ -1,0 +1,92 @@
+{% assign title_icon_class = "title-icon--small icon--" | append: section.settings.icon_color %}
+
+<div class="container py-lg">
+    {% if section.settings.title != blank %}
+    <div class="flex f-vertical-middle mb-md">
+        <h2 class="sm collection-links__title italic fnt-sec uc  ml-xs">{{section.settings.title}}</h2>
+    </div>
+    {% endif %}
+    <div class="collection-links__wrapper">
+        {% for block in section.blocks %}
+        <div class="collection-links__wrapper-link {{ section.settings.col_number }}">
+            <a href="{{ block.settings.url }}">
+                <span class="fnt-sec uc fw-300 italic">{{ block.settings.small_text }}</span>
+                <h3 class="title--xl relative">{{ block.settings.title }}</h3>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "2.0 Collection Links",
+        "settings": [
+            {
+                "type": "select",
+                "id": "col_number",
+                "label": "No of columns",
+                "options": [
+                    {
+                        "value": "cols-2",
+                        "label": "2"
+                    },
+                    {
+                        "value": "cols-3",
+                        "label": "3"
+                    }
+                ],
+                "default": "cols-3"
+            },
+            {
+                "type": "header",
+                "content": "Heading"
+            },
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title",
+                "default": "New in"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Content block",
+                "type": "image",
+                "settings": [
+                    {
+                        "type": "header",
+                        "content": "Text"
+                    },
+                    {
+                        "type": "text",
+                        "id": "small_text",
+                        "label": "Small text",
+                        "default": "Shop"
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Collection name",
+                        "default": "New in"
+                    },
+                    {
+                        "type": "header",
+                        "content": "URL"
+                    },
+                    {
+                        "type": "url",
+                        "id": "url",
+                        "label": "Link"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "2.0 Collection Links",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

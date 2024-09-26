@@ -1,0 +1,129 @@
+<div class="image-with-text__wrapper drop-timer__wrapper flex" id="{{ section.id }}">
+    <div class="image-with-text__wrapper-text">
+        <div class="image-with-text__wrapper-text--container flex f-space-between f-dir-column">
+            <div class="container py-lg">
+                {% if section.settings.title %}
+                <div class="image-with-text__wrapper-text-title mb-md pr-lg">           
+                    <h2 class="{% if section.settings.font_style == 'secondary' %}fnt-sec title--xl uc{% else %}title--xl{% endif %}">
+                        {{ section.settings.title }}
+                    </h2>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="image-with-text__wrapper-image object-fit-cover">
+            <a href="{{ section.settings.url }}" {% if section.settings.enable_klaviyo %}class="klaviyo_drop_form_trigger"{% endif %}>
+            <div class="container button__wrapper py-lg z-index--1">
+                {% if section.settings.end_date != blank %}
+                    <div class="countdown-timer z-index--1 image-heading absolute fnt-sec uc title--md" data-end-date="{{ section.settings.end_date }}"></div>
+                {% endif %}
+                {% if section.settings.cta_text != '' %}
+                    <span class="btn mt-md" href="{{ section.settings.url }}">{{section.settings.cta_text}}</span>
+                {% endif %}
+            </div>
+            {% if section.settings.image %}
+                <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.image.alt }}" title="{{ section.settings.image.alt }}" loading="lazy" class="blur-image"/>
+            {% else %}
+                <img src="https://placehold.co/600x1200"/>
+            {% endif %}
+        </a>
+    </div>
+</div>
+
+{% if section.settings.enable_klaviyo %}
+<script>
+// Display klaviyo form
+document.querySelector('.klaviyo_drop_form_trigger').addEventListener('click', function (event){
+    event.preventDefault()
+    console.log('clicked announcmenet bar');
+    var _klOnsite = window._klOnsite || []; 
+    _klOnsite.push(['openForm', '{{ section.settings.form_id}}']);
+});
+</script>
+{% endif %}
+
+{% schema %}
+    {
+        "name": "2.0 Drop Timer Banner",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Text"
+            },
+            {
+                "type": "textarea",
+                "id": "title",
+                "label": "Title",
+                "default": "Amina Muaddi"
+            },
+            {
+                "type": "select",
+                "id": "font_style",
+                "label": "Font Style",
+                "options": [
+                    {
+                        "value": "primary",
+                        "label": "Primary"
+                    },
+                    {
+                        "value": "secondary",
+                        "label": "Secondary"
+                    }
+                ],
+                "default": "secondary"
+            },
+            {
+                "type": "text",
+                "id": "end_date",
+                "label": "Countdown",
+                "info": "Enter the end date and time in the format of YYYY-MM-DD hh:mm:ss (e.g. 2023-03-31 09:00:00), where the time is in 24-hour format."
+            },
+            {
+                "type": "header",
+                "content": "Button"
+            },
+            {
+                "type": "text",
+                "id": "cta_text",
+                "label": "Text"
+            },
+            {
+                "type": "header",
+                "content": "Klaviyo"
+            },
+            {
+                "type": "checkbox",
+                "id": "enable_klaviyo",
+                "label": "Enable Klaviyo Pop Up",
+                "default": false
+            },
+            {
+                "type": "text",
+                "id": "form_id",
+                "label": "Form ID",
+                "info": "Enter Klaviyo's form ID, which can be found when you edit form in Klaviyo (part of URL e.g. https://www.klaviyo.com/forms/QP7AbP - 'QP7AbP' is form ID)"
+            },
+            {
+                "type": "header",
+                "content": "Image"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "url",
+                "id": "url",
+                "label": "URL"
+            }
+        ],
+        "presets": [
+            {
+                "name": "2.0 Drop Timer Banner",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

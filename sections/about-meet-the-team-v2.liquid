@@ -1,0 +1,315 @@
+{% style %}
+  #meet-the-team-section-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+  #meet-the-team-section-{{ section.id }} .wrapper{
+    padding:0 {{ section.settings.horizontal_padding_mobile }}px;
+  }
+  #meet-the-team-section-{{ section.id }} .text-container{
+    background-color:{{ section.settings.text_bg }}
+  }
+  @media(min-width:768px){
+    #meet-the-team-section-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_desktop }}px;
+    margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+    #meet-the-team-section-{{ section.id }} .wrapper{
+    padding:0 {{ section.settings.horizontal_padding_desktop }}px;
+  }
+  }
+{% endstyle %}
+<section class="meet-the-team-section overflow-hidden" id="meet-the-team-section-{{ section.id }}">
+  <div class="m-container:max-w-[1600px] mx-auto wrapper">
+    <div
+      class="flex flex-col lg:flex-row flex-wrap lg:flex-[0_0_25%] lg:flex-nowrap lg:gap-[27px]"
+      style="background-color:{{ section.settings.text_bg }}"
+    >
+      <!-- Text Block -->
+      <div class="px-5 md:px-0 pt-12 md:pt-0 pb-[45px] w-full flex flex-col gap-4 lg:max-w-[330px]">
+        <h2 class="text-[36px] font-light font-gascogne-serial leading-[39.6px]text-[#222222] capitalize">
+          {{ section.settings.heading }}
+        </h2>
+        <p class="font-shape text-[16px] font-[300] leading-[150%] text-[#222222]">
+          {{ section.settings.paragraph }}
+        </p>
+        {% if section.settings.rounded_button_text != blank %}
+          <a
+            class="text-[13px] font-shape bg-[#fff] text-[#121212] font-normal px-[24px] py-[12px] rounded-full leading-[16px] max-h-10 border border-solid max-w-max mt-4 min-w-[172px] text-center border-[#121212] uppercase"
+            href="{{section.settings.rounded_button_link}}"
+          >
+            {{- section.settings.rounded_button_text -}}
+          </a>
+        {% endif %}
+      </div>
+      <!-- Media Block (Image) -->
+      {% if section.blocks != blank %}
+        <!-- start block with description -->
+        <div
+          class="w-full keen-slider flex flex-row md:gap-5 lg:gap-[27px] relative lg:w-[calc(100%_-_330px)] pl-5 md:pl-0"
+          id="slider-wrap-{{ section.id }}"
+        >
+          {% for block in section.blocks %}
+            {%- capture sizes -%}
+                (min-width: 768px) 300px, 100px
+            {%- endcapture -%}
+            {% liquid
+              assign ratio = 1
+              if block.settings.image_url != blank
+                assign ratio = block.settings.image_url.aspect_ratio
+              endif
+            %}
+            <div class="keen-slider__slide w-full flex flex-col flex-[0_0_90%] md:flex-[0_0_31.53%] relative">
+              <div
+                class="relative overflow-hidden bg-[#F8F8F8]"
+                style="padding-bottom:{{ 1 | divided_by : ratio | times : 100 }}%"
+              >
+                {% if block.settings.image_url != blank %}
+                  <picture>
+                    {{
+                      block.settings.image_url
+                      | image_url: width: 300
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'w-full absolute left-0 top-0 h-full',
+                        sizes: sizes,
+                        widths: '90, 120, 150, 180, 210, 240, 270, 300'
+                    }}
+                  </picture>
+                {% endif %}
+              </div>
+              <div class="bg-[#F6F3EC] flex flex-col gap-1 pl-6 pt-5 pr-[67px] pb-[30px]">
+                <h5 class="text-[26px] font-light font-gascogne-serial leading-[28.6px]text-[#222222] capitalize">
+                  {{ block.settings['job-title'] }}
+                </h5>
+                <span class="w-full block font-shape text-[16px] font-[300] leading-[150%] text-[#222222]">
+                  {{ block.settings['job-position'] }}
+                </span>
+              </div>
+              <a
+                href="{{ block.settings.job_url.url }}"
+                target="_blank"
+                class="absolute left-0 w-full h-full"
+              ></a>
+            </div>
+          {% endfor %}
+        </div>
+        <!-- End block with description -->
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('custom:keenLoaded', (e) => {
+    if (window.innerWidth <= 767) {
+      function WheelControls(slider) {
+        var touchTimeout;
+        var position;
+        var wheelActive;
+
+        function dispatch(e, name) {
+          position.x -= e.deltaX;
+          position.y -= e.deltaY;
+          slider.container.dispatchEvent(
+            new CustomEvent(name, {
+              detail: {
+                x: position.x,
+                y: position.y,
+              },
+            })
+          );
+        }
+
+        function wheelStart(e) {
+          position = {
+            x: e.pageX,
+            y: e.pageY,
+          };
+          dispatch(e, 'ksDragStart');
+        }
+
+        function wheel(e) {
+          if (e.deltaY == -0) {
+            dispatch(e, 'ksDrag');
+          }
+        }
+
+        function wheelEnd(e) {
+          dispatch(e, 'ksDragEnd');
+        }
+
+        function eventWheel(e) {
+          if (!wheelActive) {
+            wheelStart(e);
+            wheelActive = true;
+          }
+          wheel(e);
+          clearTimeout(touchTimeout);
+          touchTimeout = setTimeout(() => {
+            wheelActive = false;
+            wheelEnd(e);
+          }, 50);
+        }
+
+        slider.on('created', () => {
+          slider.container.addEventListener(
+            'wheel',
+            (e) => {
+              if (e.deltaY != -0) {
+                slider.container.removeEventListener('wheel', () => {});
+              } else {
+                eventWheel(e);
+              }
+            },
+            { passive: false }
+          );
+        });
+      }
+      let Slider = e.detail.slider;
+      let slide = new Slider(
+        '#slider-wrap-{{ section.id }}',
+        {
+          loop: true,
+          slides: {
+            perView: 1.2,
+            spacing: 20,
+          },
+        },
+        [WheelControls]
+      );
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "About Meet-the-team-v2",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_mobile",
+      "label": "Horizontal Padding Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_desktop",
+      "label": "Horizontal Padding Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 88
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Meet the team"
+    },
+    {
+      "type": "textarea",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "default": "Lorem ipsum dolor sit amet consectetur. At velit hac leo purus sed ac quis sit. Id luctus commodo non mauris semper neque feugiat."
+    },
+    {
+      "type": "text",
+      "id": "rounded_button_text",
+      "label": "Vacancy Button Text",
+      "default": "See Job vacancy"
+    },
+    {
+      "type": "url",
+      "id": "rounded_button_link",
+      "label": "Rounded Button URL"
+    },
+    {
+      "type": "color",
+      "label": "Choose Text Background Color",
+      "id": "text_bg",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "job-position",
+      "name": "items",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Add Job position"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_url",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "job-title",
+          "label": "Enter Job Title",
+          "default": "Name"
+        },
+        {
+          "type": "text",
+          "id": "job-position",
+          "label": "Enter Job position",
+          "default": "Job position"
+        },
+        {
+          "type": "url",
+          "id": "job_url",
+          "label": "Job details Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Meet-the-team-v2",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

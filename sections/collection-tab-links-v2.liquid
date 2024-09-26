@@ -1,0 +1,136 @@
+{% style %}
+  #text-with-collection-{{ section.id }}{
+    background:{{section.settings.background }};
+  }
+  #text-with-collection-{{ section.id }} p, #text-with-collection-{{ section.id }} a{
+    color:{{section.settings.primary_button }};
+  }
+  #text-with-collection-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+  #text-with-collection-{{ section.id }} li{
+    background:{{ section.settings.tab_gb }};
+  }
+
+  @media(min-width:768px){
+    #text-with-collection-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_desktop }}px;
+    margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+  }
+{% endstyle %}
+{% assign contentData = collection.metafields.custom.clp_tabs_data.value %}
+<section
+  class="flex flex-col items-center py-10 md:px-10 md:py-[80px]"
+  id="text-with-collection-{{ section.id }}"
+>
+  <div class="w-full max-w-[670px] m-auto flex flex-col gap-6 px-5 lg:px-12">
+    <p class="font-shape text-[14px] font-light leading-[20px] tracking-[0.067px] text-center">
+      {{ contentData.description.value }}
+    </p>
+    <ul
+      class="flex flex-row gap-1 md:gap-y-2 overflow-x-auto -mr-5 md:mr-0 lg:px-5 md:overflow-visible md:flex-wrap md:justify-center"
+      id="collection_slid"
+    >
+      {% for value in contentData.tabs.value %}
+        <li class="inline-block rounded-[4px] bg-[#F6F3EC] last:mr-5 md:mr-0">
+          <a
+            href="{{ value.redirection }}"
+            class="inline-block whitespace-nowrap font-shape text-[12px] font-[500] leading-[16.2px] tracking-[0.06px] px-2 py-2 text-center uppercase"
+          >
+            {{ value.tab_name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection tab links",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Color"
+    },
+    {
+      "type": "color_background",
+      "id": "background",
+      "label": "Background",
+      "default": "linear-gradient(#ffffff, #ffffff)"
+    },
+    {
+      "type": "header",
+      "content": "Text Color"
+    },
+    {
+      "type": "color",
+      "id": "primary_button",
+      "label": "Primary",
+      "default": "#222222"
+    },
+    {
+      "type": "header",
+      "content": "tabs bg color"
+    },
+    {
+      "type": "color",
+      "id": "tab_gb",
+      "label": "Primary",
+      "default": "#F6F3EC"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 76
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 49
+    },
+
+    {
+      "type": "textarea",
+      "id": "text_desc",
+      "label": "description",
+      "default": "Lorem ipsum dolor sit amet consectetur. Tincidunt ac enim nulla nulla nibh aliquam malesuada. Eu malesuada augue fermentum pharetra augue. Massa aenean eget at urna vestibulum nibh ipsum."
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Collection tab links v2",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

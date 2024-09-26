@@ -1,0 +1,173 @@
+<div
+  class="content-editorial-banner-container"
+  id="{{ section.id }}"
+  style="background-color: {{ section.settings.header_color }}"
+>
+  <div class="content-editorial-banner-element">
+    <div class="hide--tablet content-editorial-banner-element__picture">
+      <div class="content-picture">
+        {% if section.settings.image %}
+          <img
+            src="{{ section.settings.image | img_url: 'master' }}"
+            alt="{{ section.settings.image.alt }}"
+            title="{{ section.settings.image.alt }}"
+            loading="lazy"
+            width="390"
+            height="844"
+          >
+        {% else %}
+          <img
+            src="https://placehold.co/390x844"
+            width="390"
+            height="844"
+          >
+        {% endif %}
+      </div>
+    </div>
+    <div class="hide--above-tablet" style="position:relative">
+      <div class="object-cover">
+        {% if section.settings.image %}
+          <img
+            src="{{ section.settings.image | img_url: 'master' }}"
+            alt="{{ section.settings.image.alt }}"
+            title="{{ section.settings.image.alt }}"
+            loading="lazy"
+            width="390"
+            height="844"
+          >
+        {% else %}
+          <img
+            src="https://placehold.co/390x844"
+            width="390"
+            height="844"
+          >
+        {% endif %}
+      </div>
+      <div class="image-mobile-overlay">
+        {% if section.settings.title %}
+          <div class="arrow a"></div>
+          <p class="fnt-sec image-with-text__short-legend">SCROLL TO DISCOVER</p>
+          <h1 class="image-with-text__short-title" style="margin-bottom:15px">
+            {{ section.settings.short_title }}
+          </h1>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="hide--tablet content-editorial-banner-element">
+    {% if section.settings.title %}
+      <div class="content-titles--lg">
+        <h2 class="title--lg">
+          {{ section.settings.title }}
+        </h2>
+        <h4 class="fnt-sec title--md mt-xl">
+          {{ section.settings.subtitle }}
+        </h4>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .content-editorial-banner-container {
+    display: flex;
+    height: 844px;
+    overflow: hidden;
+  }
+  .content-editorial-banner-element {
+    display: flex;
+    flex: 1;
+  }
+  .content-editorial-banner-element__picture {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .content-picture {
+    width: 390px;
+    height: 844px;
+    background-color: red;
+    border-radius: 50px;
+    margin-top: 75px;
+    overflow: hidden;
+  }
+  .content-titles--lg {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .image-mobile-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    text-align: center;
+    box-sizing: border-box;
+    padding-left: 50px;
+    padding-right: 50px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    background: linear-gradient(360deg, #000000 0%, rgba(12, 12, 12, 0.953125) 13.02%, rgba(255, 248, 248, 0) 100%);
+    color: white;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "Content editorial banner",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Text"
+        },
+        {
+          "type": "color",
+          "id": "header_color",
+          "label": "Header color",
+          "default": "#C3C4C3"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title",
+            "default": "Your Front Row Seats To This Seasons Hottest Runways"
+        },
+        {
+            "type": "textarea",
+            "id": "short_title",
+            "label": "Short title",
+            "default": "September @ Threads"
+        },
+        {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "Sub Title",
+            "default": "Lorem ipsum dolor"
+        },
+        {
+            "type": "header",
+            "content": "Button"
+        },
+        {
+            "type": "header",
+            "content": "Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Content editorial banner",
+            "settings": {}
+        }
+    ]
+}
+{% endschema %}

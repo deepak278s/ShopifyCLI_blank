@@ -1,0 +1,41 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:50+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            efdf932382700b7746e5ae6331a51553
+//      Signature:      eyJpdiI6ImR2WFdvRDZKRzQrbUc1YjdNVHg2b3c9PSIsInZhbHVlIjoiWHVJRVBHblp5dnZ5VXhZZXBld2xOTVwvcFBtTWdSMnpzd2J5V1pweVhZbnBCRHJDdUhcL0hCRk1MWDlUSzVpcyswOWxzXC91cmVqRlRhT0dUNFBremJSQ2ZLZUYzS1I2dlhuaU16QW1xdzhEbUFOakdzc0pnSkY2bXJYdzFEaXMxUlRNejlROXQ2Vmxod0NaYmhcL0U0MEYrK25YSHBhT3pTREg3OVduYVwvUWZaSkpqeElMNjhFQ21RRThKdmVQRzhIUkdlTllqU1dzc1lQM0FtQkdrUWJNalBIVTN3bUYyTERGOXd3SjU1dmE2aENTdUIrTXgrQkViSkI4NGJYcG1qNVdIQ2lZQXNHTk1Bd0czb3hMRHNHbnpDWXR5VGp6eWJzdXZmQTdycjlreDRRODk0eFd1YVVaNmhhRjBaUG9BRkU3RDFKVXdWM0gweUlWSHJ5Y3dyTlpVQlwvckN2YWc4VjFPQlhyd1wvSU9tbjl4TDZid0VTQjV4RmJqV2lPMDF3QjRVc3J0T28ycTJ4MFJuQU5XRnVZczdQb0E9PSIsIm1hYyI6ImM3ZTQxYjdmN2JmODBlMzYxNjRhYWY3NjBkNjJhOWJlMzIzMWQ0NmMwNzMwNTQzMWEyMjcwYWE5NTFhZmQ5YjAifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    for block in section.blocks
+        render block
+    endfor
+-%}
+
+{% schema %}
+  {
+    "name": "Apps",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "@app"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Apps"
+      }
+    ]
+  }
+{% endschema %}

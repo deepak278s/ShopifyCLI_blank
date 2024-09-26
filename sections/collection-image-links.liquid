@@ -1,0 +1,68 @@
+<div class="overflow-x-scroll">
+    <div class="collection-image-links__wrapper border-bottom flex">
+        {% for block in section.blocks %}
+        <div class="collection-image-links--link">
+            <a href="{{ block.settings.url }}">
+                <h3>{{ block.settings.title }}</h3>
+                <div class="collection-image-links--image object-fit-cover">
+                    {% if block.settings.image %}
+                        <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}" title="{{ block.settings.image.alt }}"/>
+                    {% else %}
+                        <img src="https://via.placeholder.com/700x780"/>
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Collection Image Links",
+        "max_blocks": 5,
+        "settings": [],
+        "blocks": [
+            {
+                "name": "Content block",
+                "type": "image",
+                "settings": [
+                    {
+                        "type": "header",
+                        "content": "Text"
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Collection name",
+                        "default": "Earrings"
+                    },
+                    {
+                        "type": "header",
+                        "content": "URL"
+                    },
+                    {
+                        "type": "url",
+                        "id": "url",
+                        "label": "Link"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Image"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Image"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Collection Image Links",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

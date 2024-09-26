@@ -1,0 +1,206 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:53+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            1b0d16b2158ab0b7f07214b09b3b0a19
+//      Signature:      eyJpdiI6InlRWU5XVHdlU3pnVEtxR1JVRElCV2c9PSIsInZhbHVlIjoidXJkd1BJb1pZQllHVVVEWEVMWVVBT1U3QUVwRHNyVHY1b0hVeUd4bjNET2o3b3h6SVpNZ1hIeXlcL0E5R0JGckV4THNuSkZ1VnhhRWUxUGVpMkpvQ1JOOGRRQWwrQW1LNFJjeTF2MUZcL1RkVm1GdTg2RlB0KzhqUjhtQXF0TFpSeU5KNzlTdm5XMzlwT1ZHNjVVb0NpWkNEV2JjNEQ5aFRKdVVwSDlsOFVGaWZEMzVpUkhHaENLXC9IeW1xQmVGalFsVm5iNWROYzdJTlcxQ2tNQUhJSUZ0OUZNK2c2UUg2Zko5VStLMDF2Qktrc3haQlZWY0JqWStWcHpMVDdGMkdXRmU1RUFRNG5cL2R0K25SOGc2cTJLaktFRjEwRTh3UWVKXC9XbHFtbkRZNlwvWUxSdnhRQzZraE8xZzBNQTRESldQdFdCS2JLMTliaU5uMmJoeTlBVjVmdXdONDVqalh6XC92SFVKamlqVGFoWmxzZlFcL2ZhcU9RNjh1OUNHYjFlYlZJZHN4azZTSVhiQVdKNU9Ga09McEo2K0pJemFGS0VlcW9Lakh3cmVQaG1RSGUwPSIsIm1hYyI6IjI3YjlkOTBkYWJhYzQxN2QxYjc2MDhlYTRkZmQ3MDBhOWY1ZDQwYmEzNWZiNzhkMTQ3OGZlNTM3YmE2NDc2NzEifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+
+<form class="collection__sorting bg-white flex f-space-between f-equal-width--tablet mb-lg p-sm--tablet">
+	<div class="filter-form flex">
+		<input type="checkbox" id="filter-groups" hidden>
+		<label for="filter-groups" class="mobile-filter-button bg-grey flex f-center f-vertical-middle px-md">
+			<h2 class="filter-groups__title fnt-sec xs uc--tablet">{{ 'collections.filters.title_tags' | t }}</h2>
+		</label>
+		<div class="filter-groups flex f-equal-width--above-tablet f-dir-column--tablet">
+			<label for="filter-groups" class="filter-groups__header hide--above-tablet flex--tablet f-space-between f-vertical-middle px-sm">
+				<h2 class="title--md">{{ 'collections.filters.title_tags' | t }}</h2>
+
+				{%- render 'icons', icon: 'close' -%}
+
+			</label>
+
+			{%- for filter in collection.filters -%}
+
+				{%- liquid
+					unless filter.values.size > 1
+						if filter.values[0].count == collection.products_count
+						endif
+					endunless
+				-%}
+
+				{%- assign active_filters = 0 -%}
+
+				<details class="filter-group">
+					<summary class="filter-group-summary flex f-flex-start f-vertical-middle px-md py-sm--tablet px-sm--tablet">
+						<div class="flex f-space-between f-vertical-middle py-sm--tablet">
+
+							{%- render 'icons', icon: 'arrow--short', class: 'mr-md hide--above-tablet' -%}
+							
+							<span class="filter-group__title block fnt-sec uc mr-md fw-200">{{ filter.label }}</span>
+
+							{%- liquid
+								render 'icons', icon: 'plus', class: 'ml-md hide--tablet'
+								render 'icons', icon: 'arrow--short', class: 'ml-md hide--above-tablet'
+							-%}
+
+						</div>
+					</summary>
+
+					<div class="filter-group-display bg-white flex f-space-between--above-tablet f-dir-column--tablet" data-filter="{{ filter.label }}">
+
+						{%- case filter.type -%}
+
+							{%- when 'list' -%}
+
+								<ul class="filter-group-display__list flex f-wrap--above-tablet f-dir-column--tablet">
+
+									{%- comment %}<locksmith:4728>{% endcomment -%}
+									  {%- assign locksmith_58aa_forloop__size = 0 %}{%- for filter_value in filter.values -%}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: filter_value, subject_parent: filter, variable: 'transparent' %}{% endcapture %}{% if var == 'true' %}{% assign locksmith_58aa_forloop__size = locksmith_58aa_forloop__size | plus: 1 %}{% endif %}{% endfor %}{% assign locksmith_58aa_forloop__index = nil -%}
+									{%- comment %}</locksmith:4728>{% endcomment -%}
+									{%- for filter_value in filter.values -%}
+										
+										{%- comment %}<locksmith:b497>{% endcomment -%}
+										  {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: filter_value, subject_parent: filter, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% if locksmith_58aa_forloop__index == nil %}{% assign locksmith_58aa_forloop__index = 1 %}{% assign locksmith_58aa_forloop__index0 = 0 %}{% else %}{% assign locksmith_58aa_forloop__index = locksmith_58aa_forloop__index | plus: 1 %}{% assign locksmith_58aa_forloop__index0 = locksmith_58aa_forloop__index0 | plus: 1 %}{% endif %}{% if locksmith_58aa_forloop__index == 1 %}{% assign locksmith_58aa_forloop__first = true %}{% else %}{% assign locksmith_58aa_forloop__first = false %}{% endif %}{% if locksmith_58aa_forloop__index == locksmith_58aa_forloop__size %}{% assign locksmith_58aa_forloop__last = true %}{% else %}{% assign locksmith_58aa_forloop__last = false %}{% endif %}{% assign locksmith_58aa_forloop__rindex = locksmith_58aa_forloop__size | minus: locksmith_58aa_forloop__index | minus: 1 %}{% assign locksmith_58aa_forloop__rindex0 = locksmith_58aa_forloop__size | minus: locksmith_58aa_forloop__index0 | minus: 1 %}{% else %}{% continue %}{% endif -%}
+										{%- comment %}</locksmith:b497>{% endcomment -%}
+										
+										<li class="filter-group-display__list-item">
+											<label for="Filter-{{ filter.param_name }}-{{ locksmith_58aa_forloop__index }}" class="flex f-vertical-middle input-field py-xs--tablet">
+												<input type="checkbox"
+													name="{{ filter_value.param_name }}"
+													value="{{ filter_value.value }}"
+													id="Filter-{{ filter.param_name }}-{{ locksmith_58aa_forloop__index }}"
+													{% if filter_value.active -%}checked{%- endif %}
+													{%- comment -%}
+														{% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}
+													{%- endcomment -%}
+												/>
+												<span class="fnt-sec xs product-option product-option__{{ filter.label | handleize }}--{{ filter_value.value | handleize }}">
+													{{- filter_value.label -}}
+												</span>
+											</label>
+										</li>
+
+									{%- endfor -%}
+
+									{%- assign active_filters = active_filters | plus: filter.active_values.size -%}
+
+								</ul>
+								<div class="filter-group-display__submit no-js">
+									<button type="submit">Apply</button>
+								</div>
+
+							{%- when 'price_range' -%}
+
+								<div class="filter-group-display__price-range flex f-vertical-center no-js">
+									<div class="filter-group-display__price-range-from input-field">
+										<label for="Filter-{{ filter.min_value.param_name }}"  class="fnt-sec">From</label>
+										<span>{{ cart.currency.symbol }}</span>
+										<input name="{{ filter.min_value.param_name }}"
+											id="Filter-{{ filter.min_value.param_name }}"
+											{% if filter.min_value.value -%}
+												value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+											{%- endif %}
+											type="number"
+											placeholder="0"
+											min="0"
+											max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+										/>
+									</div>
+									<div class="filter-group-display__price-range-to input-field">
+										<label for="Filter-{{ filter.max_value.param_name }}" class="fnt-sec">To</label>
+										<span>{{ cart.currency.symbol }}</span>
+										<input name="{{ filter.max_value.param_name }}"
+											id="Filter-{{ filter.max_value.param_name }}"
+											{% if filter.max_value.value -%}
+												value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+											{%- endif %}
+											type="number"
+											placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+											min="0"
+											max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+										/>
+									</div>
+								</div>
+
+								{%- liquid
+									if filter.max_value or filter.min_value
+										assign active_filters = active_filters | plus: 1
+									endif
+								-%}
+
+								<div class="filter-group-display__list js flex f-wrap">
+									<button class="filter-group-display__list-item fnt-sec xs text-align-left py-sm--tablet{% if filter.max_value.value == 500000 %} active{% endif %}"
+										data-input='{
+											"{{ filter.min_value.param_name }}": "",
+											"{{ filter.max_value.param_name }}": "5000"
+										}'>
+										<span>Under £5,000</span>
+									</button>
+									<button class="filter-group-display__list-item fnt-sec xs text-align-left py-sm--tablet{% if filter.min_value.value == 500000 and filter.max_value.value == 1000000 %} active{% endif %}"
+										data-input='{
+											"{{ filter.min_value.param_name }}": "5000",
+											"{{ filter.max_value.param_name }}": "10000"
+										}'>
+										<span>£5,000 - £10,000</span>
+									</button>
+									<button class="filter-group-display__list-item fnt-sec xs text-align-left py-sm--tablet{% if filter.min_value.value == 1000000 and filter.max_value.value == 1500000 %} active{% endif %}"
+										data-input='{
+											"{{ filter.min_value.param_name }}": "10000",
+											"{{ filter.max_value.param_name }}": "15000"
+										}'>
+										<span>£10,000 - £15,000</span>
+									</button>
+									<button class="filter-group-display__list-item fnt-sec xs text-align-left py-sm--tablet{% if filter.min_value.value == 1500000 and filter.max_value.value == 2000000 %} active{% endif %}"
+										data-input='{
+											"{{ filter.min_value.param_name }}": "15000",
+											"{{ filter.max_value.param_name }}": "20000"
+										}'>
+										<span>£15,000 - £20,000</span>
+									</button>
+									<button class="filter-group-display__list-item fnt-sec xs text-align-left py-sm--tablet{% if filter.min_value.value == 2000000 %} active{% endif %}"
+										data-input='{
+											"{{ filter.min_value.param_name }}": "20000",
+											"{{ filter.max_value.param_name }}": ""
+										}'>
+										<span>£20,000+</span>
+									</button>
+								</div>
+
+								<div class="filter-group-display__submit no-js">
+									<button type="submit">Apply</button>
+								</div>
+
+						{%- endcase -%}
+
+						{%- liquid
+							capture clear_text
+								render 'icons', icon: 'clear', class: 'hide--above-tablet mr-sm'
+								echo 'collections.filters.clear_single' | t
+							endcapture
+							assign link_class = 'filter-group-display__reset fnt-sec uc xs underline ml-md--above-tablet flex f-center f-vertical-middle'
+							if active_filters == 0
+								assign link_class = link_class | append: ' visually-hidden'
+							endif
+							echo clear_text | link_to: filter.url_to_remove, class: link_class
+						-%}
+					</div>
+				</details>
+
+			{%- endfor -%}
+
+		</div>
+	</div>
+</form>

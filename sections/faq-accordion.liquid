@@ -1,0 +1,146 @@
+<div class="collection__faq py-xl">
+    <div class="container">
+        <h3 class="title--lg text-align-center mb-md">FAQ's</h3>
+        <div class="faq-accordion">
+                <h2 class="faq-accordion-title py-sm fnt-sec sm uc">
+                    Lorem ipsum dolor sit amet consectetu
+                    <span class="arrow">
+						{% render 'icons', icon: 'chevron-right' %}
+					</span>
+                </h2>
+                <div class="accordion-content mb-md lg">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie dolor non risus feugiat hendrerit. Duis blandit ut orci sed laoreet. Vivamus in nunc dictum, ultricies tellus vel, pharetra sapien. Phasellus volutpat, orci a tincidunt bibendum, felis lorem tristique elit, at posuere enim velit ac purus. </p>
+                </div>
+                <h2 class="faq-accordion-title py-sm fnt-sec sm uc">
+                    Lorem ipsum dolor sit amet consectetu
+                    <span class="arrow">
+						{% render 'icons', icon: 'chevron-right' %}
+					</span>
+                </h2>
+                <div class="accordion-content mb-md lg">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie dolor non risus feugiat hendrerit. Duis blandit ut orci sed laoreet. Vivamus in nunc dictum, ultricies tellus vel, pharetra sapien. Phasellus volutpat, orci a tincidunt bibendum, felis lorem tristique elit, at posuere enim velit ac purus. </p>
+                </div>
+                <h2 class="faq-accordion-title py-sm fnt-sec sm uc">
+                    Lorem ipsum dolor sit amet consectetu
+                    <span class="arrow">
+						{% render 'icons', icon: 'chevron-right' %}
+					</span>
+                </h2>
+                <div class="accordion-content mb-md lg">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie dolor non risus feugiat hendrerit. Duis blandit ut orci sed laoreet. Vivamus in nunc dictum, ultricies tellus vel, pharetra sapien. Phasellus volutpat, orci a tincidunt bibendum, felis lorem tristique elit, at posuere enim velit ac purus. </p>
+                </div>
+                <h2 class="faq-accordion-title py-sm fnt-sec sm uc">
+                    Lorem ipsum dolor sit amet consectetu
+                    <span class="arrow">
+						{% render 'icons', icon: 'chevron-right' %}
+					</span>
+                </h2>
+                <div class="accordion-content mb-md lg">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie dolor non risus feugiat hendrerit. Duis blandit ut orci sed laoreet. Vivamus in nunc dictum, ultricies tellus vel, pharetra sapien. Phasellus volutpat, orci a tincidunt bibendum, felis lorem tristique elit, at posuere enim velit ac purus. </p>
+                </div>
+                <h2 class="faq-accordion-title py-sm fnt-sec sm uc">
+                    Lorem ipsum dolor sit amet consectetu
+                    <span class="arrow">
+						{% render 'icons', icon: 'chevron-right' %}
+					</span>
+                </h2>
+                <div class="accordion-content mb-md lg">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie dolor non risus feugiat hendrerit. Duis blandit ut orci sed laoreet. Vivamus in nunc dictum, ultricies tellus vel, pharetra sapien. Phasellus volutpat, orci a tincidunt bibendum, felis lorem tristique elit, at posuere enim velit ac purus. </p>
+                </div>
+        </div> 
+    </div>
+</div>
+
+<script>
+    const faqaccordion = document.querySelector('.faq-accordion');
+	const faqaccordionTitle = document.querySelectorAll('.faq-accordion-title');
+
+	function handleAccordion(){
+		const content = this.nextElementSibling;
+        
+
+		if(content.style.display === 'block') {
+			content.style.display = 'none';
+			this.classList.remove('active');
+		} else {
+			content.style.display = 'block';
+            this.classList.add('active');
+		}
+	}
+
+	faqaccordionTitle.forEach(title => title.addEventListener('click', handleAccordion));
+</script>
+
+
+{% schema %}
+    {
+        "name": "FAQ Accordion",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Text"
+            },
+            {
+                "type": "textarea",
+                "id": "title",
+                "label": "Title",
+                "default": "Amina Muaddi"
+            },
+            {
+                "type": "range",
+                "id": "font_size",
+                "min": 24,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Font size",
+                "default": 64
+            },
+            {
+                "type": "text",
+                "id": "subtitle",
+                "label": "Subtitle",
+                "default": "New in womenswear"
+            },
+            {
+                "type": "header",
+                "content": "CTA"
+            },
+            {
+                "type": "text",
+                "id": "cta_text",
+                "label": "Text",
+                "default": "Shop the edit"
+            },
+            {
+                "type": "url",
+                "id": "url",
+                "label": "Link"
+            },
+            {
+                "type": "header",
+                "content": "Image"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "header",
+                "content": "Sticker"
+            },
+            {
+                "type": "image_picker",
+                "id": "sticker",
+                "label": "Image"
+            }
+        ],
+        "presets": [
+            {
+                "name": "FAQ Accordion",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

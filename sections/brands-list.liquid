@@ -1,0 +1,177 @@
+
+{% assign available = "" | split: "" %}
+{% assign first_letter = vendor | upcase | slice: 0 %}
+{% assign letters = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z" %}
+{% for vendor in shop.vendors %}
+  {% assign firstLetter = vendor | upcase | slice: 0 %}
+  {% unless available contains firstLetter %}
+    {% assign available = available | append: ", " | append: firstLetter %}
+  {% endunless %}
+{% endfor %}
+{% assign available = available | remove_first: "[], " | split: ", " | sort %}
+
+{% assign title_icon_class = "title-icon--small icon--" | append: section.settings.icon_color %}
+
+<div class="container py-lg">
+    {% if section.settings.title != blank %}
+    <div class="flex f-vertical-middle">
+      {% if section.settings.icon == 'bell' %}
+          {% render 'icons', icon: 'bell-icon', class: title_icon_class %}
+      {% elsif section.settings.icon == 'stars' %}
+          {% render 'icons', icon: 'stars-icon', class: title_icon_class %}
+      {% elsif section.settings.icon == 'eye' %}
+          {% render 'icons', icon: 'eye-icon', class: title_icon_class %}
+      {% endif %}
+    <h2 class="{{ section.settings.title_size }} fnt-sec uc fw-500 {% unless section.settings.icons != 'none' %}ml-xs{% endunless %}">{{section.settings.title}}</h2>
+    </div>
+    {% endif %}
+
+    <div class="mt-lg flex f-space-between">
+        {% assign letters = letters | split: ", " %}
+        {% for letter in letters %}
+          {% assign first_letter = vendor | upcase | slice: 0 %}
+            <a class="brands-page__list--item fnt-sec fw-500 {% unless available contains letter %}empty{% endunless %}" id="filter_letter" data-brand-filter="{{ letter }}" href="#{{ letter }}">{{ letter }}</a>
+        {% endfor %}
+      </div>
+
+
+
+  <div class="mt-lg">
+    {% for vendor in shop.vendors %}
+      {% assign first_letter = vendor | upcase | slice: 0 %}
+      {% unless current == first_letter %}
+        {% unless forloop.first %}
+          </ul>
+          </div>
+        {% endunless %}
+        {% assign current = first_letter %}
+        <div class="brands-page__list" id="{{first_letter}}">
+          <div class="brands-page__list--letter fnt-sec uc fw-500 mb-md">{{first_letter}}</div>
+          <ul class="brands-page__list--name-container">
+      {% endunless %}
+      <li class="brands-page__list--name">
+        {% assign vendor_url = vendor | remove: "." | remove: "+" | replace: " ", "-" %}
+        {% if vendor == "RIANNA + NINA" %}
+          {% assign vendor_url = vendor | remove: "+" | replace: " ", "-" | remove_first: "-" %}
+        {% elsif vendor == "MACH & MACH" %}
+          {% assign vendor_url = vendor | remove: "&" | replace: " ", "-" | remove_first: "-" %}
+        {% elsif vendor == "LARKSPUR & HAWK" %}
+          {% assign vendor_url = vendor | remove: "&" | replace: " ", "-" | remove_first: "-" %}
+        {% elsif vendor == "MASON & BOOKS" %}
+          {% assign vendor_url = vendor | remove: "&" | replace: " ", "-" | remove_first: "-" %}
+        {% endif %}
+        <a href="/collections/{{vendor_url | downcase }}">
+          {{vendor}}
+        </a>
+      </li>
+
+      {% if forloop.last %}
+        </ul>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+
+</div>
+
+
+
+{% schema %}
+
+{
+    "name": "2.0 Brands",
+    "settings": [
+        {
+                "type": "header",
+                "content": "Settings"
+            },
+            {
+                "type": "checkbox",
+                "id": "border_top",
+                "label": "Border Top",
+                "default": false
+            },
+            {
+                "type": "checkbox",
+                "id": "border_bottom",
+                "label": "Border Bottom",
+                "default": false
+            },
+            {
+                "type": "header",
+                "content": "Heading"
+            },
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title",
+                "default": "New in"
+            },
+            {
+            "type": "select",
+            "id": "icon",
+            "label": "Icon",
+            "options": [
+                {
+                    "value": "none",
+                    "label": "None"
+                },
+                {
+                    "value": "bell",
+                    "label": "Bell"
+                },
+                {
+                    "value": "stars",
+                    "label": "Stars"
+                },
+                {
+                    "value": "eye",
+                    "label": "Eye"
+                }
+            ],
+            "default": "bell"
+            },
+            {
+                "type": "select",
+                "id": "icon_color",
+                "label": "Icon color",
+                "options": [
+                    {
+                        "value": "blue",
+                        "label": "Blue"
+                    },
+                    {
+                        "value": "green",
+                        "label": "Green"
+                    }
+                ],
+                "default": "blue"
+            },
+            {
+                "type": "select",
+                "id": "title_size",
+                "label": "Size",
+                "options": [
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Large"
+                    }
+                ],
+                "default": "md"
+            }
+    ],
+    "presets": [
+        {
+            "category": "Image",
+            "name": "2.0 Brands",
+            "settings": {}
+        }
+    ]
+}
+
+{% endschema %}

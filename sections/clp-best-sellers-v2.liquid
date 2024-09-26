@@ -1,0 +1,419 @@
+{% style %}
+  #best-sellers-section-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+  #best-sellers-section-{{ section.id }}{
+    padding-left:{{ section.settings.horizontal_padding_mobile }}px;
+  }
+  @media(min-width:768px){
+    #best-sellers-section-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_desktop }}px;
+    margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+    #best-sellers-section-{{ section.id }}{
+    padding-left:{{ section.settings.horizontal_padding_desktop }}px;
+  }
+  }
+  #best-sellers-section-{{ section.id }} [data-role="scroll-bar"]{
+    width: calc(100%/{{ section.settings.collection.products.length }});
+  }
+{% endstyle %}
+<section class="best-sellers-hero-slider" id="best-sellers-section-{{ section.id }}">
+  <div class="m-container:max-w-[1600px] m-container:mx-auto">
+    <div class="flex items-start justify-between heading-view-all cart-two">
+      <h2 class="font-gascogne-serial text-[36px] font-light leading-[120%] mb-[8px] lg:mb-[24px] {% if section.settings.title_aligment == 'center' %} text-center {% endif %} md:text-left">
+        {{ section.settings.heading }}
+      </h2>
+    </div>
+    <div class="relative">
+      <!-- tabbing title start -->
+      <div class="tabs relative flex flex-row gap-6 mb-5 pr-5 md:max-w-[205px] {% if section.blocks.size > 4 %} overflow-x-auto {% endif %}">
+        {% for block in section.blocks %}
+          <a
+            href="javascript:void(0)"
+            data-index="{{ forloop.index }}"
+            class="
+              {% if forloop.index == 1 %} active {% endif %} w-full inline-block text-center font-shape text-[12px] font-normal leading-[135%] tracking-[0.06px] pb-4 uppercase relative md:max-w-max
+              before:content-[''] before:w-full before:bg-[transparent] before:h-[2px] before:block
+              before:absolute before:bottom-0 before:left-0 before:transform before:scale-x-0
+              before:transition-[transform_1s_ease]
+              [&.active]:before:scale-x-100 [&.active]:before:bg-black
+              hover:before:scale-x-100 hover:before:bg-black
+            "
+          >
+            {{ block.settings.tab_title }}
+          </a>
+        {% endfor %}
+      </div>
+      <!-- tabbing title End -->
+      <div>
+        {% for block in section.blocks %}
+          {% if block.settings.collection == blank %}
+            <div
+              class="tabbing_content keen-slider flex-row pb-9 !hidden {% if forloop.index == 1 %} active  {% endif %} [&.active]:!flex"
+              id="most-popular-sellers-{{ section.id }}"
+              data-index="{{ forloop.index }}"
+            >
+              <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+                {%- render 'product-card-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00' -%}
+              </div>
+              <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+                {%- render 'product-card-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00' -%}
+              </div>
+              <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+                {%- render 'product-card-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00' -%}
+              </div>
+              <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+                {%- render 'product-card-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00' -%}
+              </div>
+            </div>
+          {% else %}
+            <div
+              class="tabbing_content keen-slider flex-row pb-9 !hidden {% if forloop.index == 1 %} active  {% endif %} [&.active]:!flex"
+              id="most-popular-sellers-{{ section.id }}"
+              data-index="{{ forloop.index }}"
+            >
+              {% for product in collections[block.settings.collection].products %}
+                <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+                  {%- render 'product-card-v2', product: product -%}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {% for block in section.blocks %}
+      <!-- navigation Dots code Start -->
+      {% if section.settings.scroll_bar != blank %}
+        <div data-role="thumb-wrapper" class="[&.active]:block hidden {% if forloop.index == 1 %} active  {% endif %}">
+          <div
+            class="flex relative left-0 w-[calc(100%_-_20px)] bottom-0 h-1 bg-[#F8F8F8]"
+            data-role="thumbs-dots"
+          >
+            <button
+              class="bg-[#000] absolute left-[0] transition-[left] [&.active]:bg-[#000] h-full [&.active]:h-1 {% if forloop.index == 1 %} active {% endif %} focus:outline-none "
+              data-role="scroll-bar"
+              data-index="{{ forloop.index }}"
+            ></button>
+          </div>
+        </div>
+      {% endif %}
+      <!-- navigation Dots code End -->
+      <div
+        class="view-all mt-[46px] hidden items-center justify-center [&.active]:flex {% if forloop.index == 1 %} active  {% endif %}"
+        data-role="red-btn"
+        data-index="{{ forloop.index }}"
+      >
+        <a
+          class="border-[1px] border-[#222] rounded-[20px] py-[13px] px-[32px] text-[13px] font-[500] leading-[120%] font-shape uppercase"
+          href="{{ block.settings.collection.url }}"
+          >View All</a
+        >
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  (function () {
+    let sliders = [];
+    //slider initialize
+    document.addEventListener('custom:keenLoaded', (e) => {
+      function WheelControls(slider) {
+        var touchTimeout;
+        var position;
+        var wheelActive;
+
+        function dispatch(e, name) {
+          position.x -= e.deltaX;
+          position.y -= e.deltaY;
+          slider.container.dispatchEvent(
+            new CustomEvent(name, {
+              detail: {
+                x: position.x,
+                y: position.y,
+              },
+            })
+          );
+        }
+
+        function wheelStart(e) {
+          position = {
+            x: e.pageX,
+            y: e.pageY,
+          };
+          dispatch(e, 'ksDragStart');
+        }
+
+        function wheel(e) {
+          if (e.deltaY == -0) {
+            dispatch(e, 'ksDrag');
+          }
+        }
+
+        function wheelEnd(e) {
+          dispatch(e, 'ksDragEnd');
+        }
+
+        function eventWheel(e) {
+          if (!wheelActive) {
+            wheelStart(e);
+            wheelActive = true;
+          }
+          wheel(e);
+          clearTimeout(touchTimeout);
+          touchTimeout = setTimeout(() => {
+            wheelActive = false;
+            wheelEnd(e);
+          }, 50);
+        }
+
+        slider.on('created', () => {
+          slider.container.addEventListener(
+            'wheel',
+            (e) => {
+              if (e.deltaY != -0) {
+                slider.container.removeEventListener('wheel', () => {});
+              } else {
+                eventWheel(e);
+              }
+            },
+            { passive: false }
+          );
+        });
+      }
+      let Slider = e.detail.slider;
+      let thumbSlider;
+      let sliderWraps = document.querySelectorAll('#best-sellers-section-{{ section.id }} .keen-slider');
+      sliderWraps.forEach((el, ind) => {
+        let scrollBar = document.querySelector(
+          `#best-sellers-section-{{ section.id }} [data-role="scroll-bar"][data-index="${ind + 1}"]`
+        );
+        let slide = new Slider(
+          el,
+          {
+            loop: true,
+            slideChanged: (s) => {
+              s.emit('slideupdated', s.track);
+            },
+            slides: {
+              perView: 1.2,
+              spacing: 2,
+            },
+            breakpoints: {
+              '(min-width: 786px)': {
+                slides: {
+                  perView: 2.6,
+                  spacing: 2,
+                },
+              },
+              '(min-width: 1024px)': {
+                slides: {
+                  perView: 3.6,
+                  spacing: 10,
+                },
+              },
+              '(min-width: 1300px)': {
+                slides: {
+                  perView: 3.8,
+                  spacing: 2,
+                },
+              },
+            },
+          },
+          [
+            (slider) => {
+              slider.on('created', () => {
+                if (scrollBar) {
+                  let scrollBarWidth = 100 / slider.track.details.slidesLength;
+                  if (scrollBarWidth > 100) {
+                    scrollBar.style.display = 'none';
+                    scrollBar.closest('[data-role="thumbs-dots"]').style.display = 'none';
+                  } else {
+                    scrollBar.style.display = 'block';
+                    scrollBar.closest('[data-role="thumbs-dots"]').style.display = 'block';
+                  }
+                  scrollBar.style.width = `${scrollBarWidth}%`;
+                }
+              });
+              slider.on('dragged', (slide) => {
+                if (scrollBar) {
+                  let kSlider = JSON.parse(JSON.stringify(slide));
+                  let progress = kSlider.track.details.progress * 100;
+                  if (kSlider.track.details.rel === 0) {
+                    progress = 0;
+                  }
+                  if (kSlider.track.details.rel === kSlider.track.details.slides.length - 1) {
+                    progress = 100;
+                  }
+                  let offsetWidth = (progress * scrollBar.getBoundingClientRect().width) / 100;
+                  scrollBar.style.left = `calc(${progress}% - ${offsetWidth}px)`;
+                }
+              });
+              slider.on('slideupdated', (s) => {
+                if (scrollBar) {
+                  let progress = s.track.details.progress * 100;
+                  if (s.track.details.rel === 0) {
+                    progress = 0;
+                  }
+                  if (s.track.details.rel === s.track.details.slides.length - 1) {
+                    progress = 100;
+                  }
+                  let offsetWidth = (progress * scrollBar.getBoundingClientRect().width) / 100;
+                  scrollBar.style.left = `calc(${progress}% - ${offsetWidth}px)`;
+                }
+              });
+            },
+            WheelControls,
+          ]
+        );
+        sliders.push(slide);
+      });
+    });
+
+    // tabbing
+    let tab = document.querySelectorAll('#best-sellers-section-{{ section.id }} .tabs a');
+    let coll_index = document.querySelectorAll('#most-popular-sellers-{{ section.id }}.tabbing_content');
+    let redirectionBtns = document.querySelectorAll('[data-role="red-btn"]');
+    let scrollBars = document.querySelectorAll('[data-role="scroll-bar"]');
+    tab.forEach(function (val) {
+      val.addEventListener('click', function () {
+        let index = val.dataset.index;
+        tab.forEach(function (el) {
+          el == val ? el.classList.add('active') : el.classList.remove('active');
+        });
+        coll_index.forEach(function (el) {
+          el.dataset.index == index ? el.classList.add('active') : el.classList.remove('active');
+        });
+        redirectionBtns.forEach(function (el) {
+          el.dataset.index == index ? el.classList.add('active') : el.classList.remove('active');
+        });
+        scrollBars.forEach(function (el) {
+          el.dataset.index == index
+            ? el.closest('[data-role="thumb-wrapper"]').classList.add('active')
+            : el.closest('[data-role="thumb-wrapper"]').classList.remove('active');
+        });
+        let slideToReninit = Number(index) - 1;
+        //console.log(sliders)
+        sliders[slideToReninit].update();
+      });
+    });
+  })();
+</script>
+{% schema %}
+{
+  "name": "CLP Best Sellers V2",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 76
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 49
+    },
+    {
+      "type": "radio",
+      "id": "title_aligment",
+      "label": "Title alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centered"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "label": "Heading",
+      "id": "heading",
+      "default": "Most Popular"
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_mobile",
+      "label": "Padding Left Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_desktop",
+      "label": "Padding Left Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "label": "Display Scroll Bar",
+      "id": "scroll_bar"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Content block",
+      "type": "image",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "label": "Tab Heading",
+          "id": "tab_title",
+          "default": "Jewellery"
+        },
+        {
+          "type": "collection",
+          "label": "Select your collection",
+          "id": "collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CLP Best Sellers V2",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

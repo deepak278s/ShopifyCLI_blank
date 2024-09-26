@@ -1,0 +1,248 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:36+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            b0e1490d168f91cc635c3228c85dd8c3
+//      Signature:      eyJpdiI6IlNuVlJiZWpyYk5OemlJcEVGTDlMZGc9PSIsInZhbHVlIjoiUFdBOWxTY3BDY01oYUJ0aWlpMGdaWkZ5RmRIb3R2SEJzUGtUcEhqRU1Ed3REeTBTRFNCWnRISXdVRWlOV2ZLUzhNTzVVRDJVYmN2eTBjb1FoRVljT1wvSW1SdHN6OXlMNEh6cnVPWXhpdWx6U2VPc1VSd1hOMkxrMUc2eFwvajJjbEhSUHFrTnRPalpLakdPSXV3ZzBDNkFzdHY5eXlZVSt4M05HSERhV2tlYUg3V0FcL3dFMUlSb1k4SEpwRU8rUlM2ZktvYXBxT2ZNQ0tETVdqTmpKdlQxSmxpblwvb24rVjRGam1WMTRWK1wvVVRaTzJ3dUJiTEhYcmtTY0xoSkZPZVBxc3YrXC9Sc2NZXC9OQ0ZiRXB3dFBlSWRnWk1RVmNXMlhUNjZNTGRhUmZNaHVqeGR4aTJ5SEZPRDdORER5SDZFQlNWejU5N2tDUFBJVWt0K0thbmFkdkFON0ZNekpOd0dSaVNIVzRISlllWXNVVWNwUjBVOUZxSWNyR3VCZjRyUHdRNTRUdzljcGxsTm11amhjSU5WWlVxa0FIMCtDbHhqdWRuTHFVYVhNdUZzTVk9IiwibWFjIjoiMjdkMWJmYWY4YmViODBmMWVlNjAwYjdjOTFjNWM1ZjViMDE0ZjY1YzBiMDE0OTc3NzhmYTk2MzE1N2RkNjFiOSJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign featured_collection = collections[section.settings.collection]
+-%}
+
+<div class="container
+    mt-{{ section.settings.spacing_top }} mb-{{ section.settings.spacing_bottom }}
+    {% if section.settings.spacing_top_tablet != '' %}mt-{{ section.settings.spacing_top_tablet }}--tablet{% endif %}
+    {% if section.settings.spacing_bottom_tablet != '' %}mb-{{ section.settings.spacing_bottom_tablet }}--tablet{% endif %}">
+
+    {%- render 'featured-collection__header', title: section.settings.title, title_tag: section.settings.title_tag, link_text: section.settings.link_text, link: featured_collection.url -%}
+
+    <ul class="grid grid--5 grid--2--tablet featured__collection-products">
+
+        {%- liquid
+            for featured_collection_product in featured_collection.products limit: 5
+                render 'product-item', product: featured_collection_product, collection: featured_collection
+            endfor
+        -%}
+
+    </ul>
+
+    
+</div>
+
+{% schema %}
+    {
+        "name": "Collection",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "select",
+                "id": "title_tag",
+                "label": "Title tag",
+                "options": [
+                    {
+                        "value": "h1",
+                        "label": "h1"
+                    },
+                    {
+                        "value": "h2",
+                        "label": "h2"
+                    },
+                    {
+                        "value": "h3",
+                        "label": "h3"
+                    },
+                    {
+                        "value": "h4",
+                        "label": "h4"
+                    }
+                ],
+                "default": "h2"
+            },
+            {
+                "type": "header",
+                "content": "Button"
+            },
+            {
+                "type": "text",
+                "id": "link_text",
+                "label": "Text",
+                "default": "View all"
+            },
+            {
+                "type": "header",
+                "content": "Collection"
+            },
+            {
+                "type": "collection",
+                "id": "collection",
+                "label": "Collection"
+            },
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "lg"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "lg"
+            },
+            {
+                "type": "header",
+                "content": "Mobile Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top_tablet",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom_tablet",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            }
+        ],
+        "presets": [
+            {
+                "name": "Collection",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

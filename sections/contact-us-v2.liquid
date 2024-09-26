@@ -1,0 +1,419 @@
+{% stylesheet %}
+  #contact-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+  #contact-{{ section.id }}{
+      padding-left:{{ section.settings.horizontal_padding_mobile }}px;
+  }
+  .help_section p a{
+    border-bottom: 1px solid #222222;
+  }
+  @media(min-width:768px){
+    #contact-{{ section.id }}{
+        margin-top:{{ section.settings.margin_top_desktop }}px;
+        margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+    #contact-{{ section.id }}{
+        padding-left:{{ section.settings.horizontal_padding_desktop }}px;
+    }
+  }
+{% endstylesheet %}
+
+<section class="relative" id="contact-{{ section.id }}">
+  <div class="w-full max-w-[1600px] mx-auto lg:px-[40px] flex gap-12 lg:gap-[60px]  flex-col lg:flex-row pb-[44px] md:pb-[49px] lg:md:pb-[49px] md:py-7 lg:pt-8">
+    <div class="w-full min-w-[220px] lg:w-1/4 lg:max-w-[325px]">
+      {% render 'legal-nav-cms' %}
+    </div>
+
+    <div class="contact-wrapper flex flex-col w-full gap-6 md:gap-[39px] px-5 lg:w-[calc(75%_-_40px)] xl:w-[calc(75%_-_75px)] lg:max-w-[820px] md:px-[22px] lg:px-0">
+      <div class="flex flex-col gap-12 md:gap-[40px]">
+        <!-- Start customer information section -->
+        <div class="flex flex-col gap-7 lg:max-w-[820px]">
+          <div class="section-inner flex flex-col gap-3 ">
+            <div class="relative md:bg-[#D5D5D5] md:overflow-hidden md:aspect-[820/258]">
+              <picture>
+                <img
+                  srcset="
+                    {%- if section.settings.banner.width >= 375 -%}{{ section.settings.banner | image_url: width: 375 }} 375w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 750 -%}{{ section.settings.banner | image_url: width: 750 }} 750w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 1100 -%}{{ section.settings.banner | image_url: width: 1100 }} 1100w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 1500 -%}{{ section.settings.banner | image_url: width: 1500 }} 1500w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 1780 -%}{{ section.settings.banner | image_url: width: 1780 }} 1780w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 2000 -%}{{ section.settings.banner | image_url: width: 2000 }} 2000w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 3000 -%}{{ section.settings.banner | image_url: width: 3000 }} 3000w,{%- endif -%}
+                    {%- if section.settings.banner.width >= 3840 -%}{{ section.settings.banner | image_url: width: 3840 }} 3840w,{%- endif -%}
+                    {{ section.settings.banner | image_url }} {{ section.settings.banner.width }}w
+                  "
+                  sizes="100vw"
+                  src="{{ section.settings.banner | image_url: width: 1500 }}"
+                  loading="lazy"
+                  alt="{{ section.settings.banner.alt | escape }}"
+                  width="{{ section.settings.banner.width }}"
+                  class="w-full hidden md:!block"
+                  height="{{ section.settings.banner.width | divided_by: section.settings.banner.aspect_ratio }}"
+                >
+              </picture>
+              {% if section.settings.main_heading != blank %}
+                <h1 class="text-[46px] leading-[110%] font-gascogne-serial font-light capitalize text-[#222222] m-0 mb-4 md:absolute md:bottom-0 md:pl-6 md:text-white md:pb-[14px] md:m-0">
+                  {{ section.settings.main_heading }}
+                </h1>
+              {% endif %}
+            </div>
+            {% if section.settings.top_content != blank %}
+              <div class="font-shape text-[16px] leading-[24px] font-light">
+                {{ section.settings.top_content }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <!-- End customer information section -->
+
+        <!-- Start open hours information section -->
+        <div class="flex flex-col gap-6 lg:flex-row lg:gap-6 lg:items-center">
+          <div class="flex flex-col gap-8 lg:gap-0 lg:flex-row lg:w-[calc(100%_-_228px)]">
+            <div class="lg:pr-4">
+              <h5 class="font-shape text-[18px] leading-[21.6px] font-normal capitalize text-[#222222]">
+                {{ section.settings.opening_title }}
+              </h5>
+              <div class="font-shape text-[16px] leading-[150%] font-light text-[#222222]">
+                {{ section.settings.personal_timing }}
+              </div>
+            </div>
+            <div class="lg:border-l lg:border-solid lg:border-[#C3C5C7] lg:pl-8">
+              <h5 class="font-shape text-[18px] leading-[21.6px] font-normal capitalize text-[#222222]">
+                {{ section.settings.shopper_title }}
+              </h5>
+              <div class="font-shape text-[16px] leading-[150%] font-light text-[#222222]">
+                {{ section.settings.shopper_timing }}
+              </div>
+            </div>
+          </div>
+          <div>
+            {% if section.settings.button_chat != blank %}
+              <a
+                href="{{ section.settings.button_link }}"
+                class="font-shape text-[11px] leading-[12px] font-normal inline-block px-6 py-3 border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max lg:hover:bg-[#222222] lg:hover:text-white lg:min-w-[228px]"
+              >
+                {{- section.settings.button_chat -}}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+        <!-- End open hours information section -->
+
+        <!-- Start Faq question and Answers -->
+        <div class="">
+          <div class="flex flex-col gap-9 md:gap-6">
+            <!-- start Email us section -->
+            <div class="flex flex-col gap-6">
+              <div>
+                <contact-form
+                  id="contact-us"
+                  class="contactpage group/contact"
+                  data-behavior="{{ section.settings.submission_behavior }}"
+                >
+                  {% form 'contact', class: 'registerpage__form' %}
+                    {%- if form.posted_successfully? -%}
+                      <section data-role="success" id="contact__success">
+                        <div class="flex flex-col px-12 pt-10 pb-12 w-full mx-auto gap-6 border border-[#C3C5C7]">
+                          <p class="text-[26px] font-gascogne-serial font-light capitalize text-[#222222] leading-8">
+                            Success!
+                          </p>
+                          <p class="text-[16px] font-shape font-medium leading-6 text-[#222222]">
+                            Thanks for contacting us, one of our team will come back to shortly.
+                          </p>
+                        </div>
+                      </section>
+                    {% else %}
+                      <section
+                        data-role="fail"
+                        class="group/fail {% if form.errors %}active{% endif %}"
+                        id="contact__fail"
+                      >
+                        <div class="group-[.active]/fail:flex flex-col px-4 pt-4 pb-4 w-full mx-auto gap-1 mb-3 border border-[#cc2525] hidden">
+                          <p class="text-[26px] font-gascogne-serial font-light capitalize text-[#cc2525] leading-8">
+                            Failed!
+                          </p>
+                          <p class="text-[16px] font-shape font-medium leading-6 text-[#cc2525]">
+                            Provided fields are invalid.
+                          </p>
+                        </div>
+                      </section>
+                      <h3 class="font-gascogne-serial text-[26px] leading-[31.2px] font-light mb-6 capitalize">
+                        Contact us
+                      </h3>
+                      <div class="md:grid md:grid-cols-2 md:gap-x-4">
+                        {% render 'text-input-v2',
+                          id: 'customer_name',
+                          name: 'contact[first_name]',
+                          label: 'First Name',
+                          errorLabel: 'Please Enter Valid Name',
+                          required: true
+                        %}
+
+                        {% render 'text-input-v2',
+                          id: 'customer_surname',
+                          name: 'contact[last_name]',
+                          label: 'Last Name',
+                          errorLabel: 'Please Enter Valid surname',
+                          required: true
+                        %}
+                      </div>
+                      <div class="md:grid md:grid-cols-2 md:gap-x-4">
+                        {% render 'text-input-v2',
+                          id: 'customer_email',
+                          name: 'contact[email]',
+                          type: 'email',
+                          label: 'Email address',
+                          errorLabel: 'Please Enter Valid Email',
+                          field: 'email',
+                          required: true,
+                          pattern: '[a-zA-Z0-9.!#$%&amp;’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+'
+                        %}
+
+                        <fieldset class="flex flex-col text-[10px] font-normal uppercase w-full mb-5 relative group/input">
+                          <label
+                            for="request-type"
+                            class="font-shape text-[14px] font-normal leading-[21px] mb-[8px] capitalize text-[#222222]"
+                          >
+                            Subject
+                          </label>
+                          <select
+                            class="w-full px-[15px] h-[48px] inactive [&.inactive]:text-[#707070] rounded-[4px] text-[13px] focus:border-[#D5D5D5] border-[0.75px] focus:ring-none focus:ring-transparent autofill:bg-red-300  group-[.error]/input:border-red-600"
+                            name="contact[request_type]"
+                            data-default=""
+                            autocomplete="country"
+                            id="request-type"
+                            required="required"
+                          >
+                            <option disabled selected value>Select</option>
+                            {% for block in section.blocks %}
+                              <option value="{% unless forloop.index == 1 %}{{ block.settings.topic_name }}{% endunless %}">
+                                {{ block.settings.topic_name }}
+                              </option>
+                            {% endfor %}
+                          </select>
+                          <p
+                            class="pt-1 text-[11px] text-[#ff1e1e] normal-case hidden group-[.error]/input:block font-normal"
+                          >
+                            Please Select Valid topic
+                          </p>
+                        </fieldset>
+                      </div>
+                      <fieldset class="grid md:gap-x-5 lg:gap-x-[30px] group/input">
+                        <label
+                          for="customer_name"
+                          class="font-shape text-[14px] font-normal leading-[21px] mb-[8px] capitalize text-[#222222]"
+                        >
+                          Your Message
+                        </label>
+                        <textarea
+                          field=""
+                          name="contact[body]"
+                          id="contact_message"
+                          type="text"
+                          required="required"
+                          data-role="message"
+                          class="w-full px-3 py-6 h-[196px] rounded-[4px] text-[14px] font-normal leading-[21px] focus:border-[#D5D5D5] border-[0.75px] focus:ring-none focus:ring-transparent autofill:bg-red-300 group-[.error]/input:border-red-600 min-h-[140px]"
+                          placeholder="Add your message here"
+                        ></textarea>
+                        <p
+                          class="pt-1 text-[11px] text-[#ff1e1e] normal-case hidden group-[.error]/input:block font-normal"
+                        >
+                          Please add your message here...
+                        </p>
+                      </fieldset>
+
+                      <fieldset class="mt-6">
+                        <div>
+                          <button
+                            id="contact-btn"
+                            type="submit"
+                            class="bg-black h-[40px] relative overflow-hidden text-white text-[16px] font-normal font-shape uppercase max-w-[306px] w-full rounded-[26px]"
+                          >
+                            <div
+                              role="status"
+                              class="absolute hidden left-0 top-0 w-full h-full group-[&.loading]/contact:flex justify-center items-center bg-[#000]"
+                            >
+                              {% render 'icon-v2', icon: 'icon-pdp-loader' %}
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                            <span class="registerpage__btn-default"> Send Message </span>
+                          </button>
+                        </div>
+                      </fieldset>
+                    {% endif %}
+                  {% endform %}
+                </contact-form>
+              </div>
+            </div>
+            <!-- Endstart call us section -->
+          </div>
+          <!-- icon and language -->
+        </div>
+        <!-- End Faq question and Answers -->
+
+        <!-- start help Faq -->
+        <div class="help_section font-shape text-[16px] leading-[150%] font-light text-[#222222]">
+          {{ section.settings.faq_content }}
+        </div>
+        <!-- End help Faq -->
+      </div>
+    </div>
+  </div>
+</section>
+
+{% render 'vite-tag' with '@modules/contact-us-v2.js' %}
+{% schema %}
+{
+  "name": "contact page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "spacing setting"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "link_list",
+      "label": "Menu Links",
+      "id": "menu_links"
+    },
+    {
+      "type": "header",
+      "content": "top section"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner",
+      "label": "Select Banner"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "richtext",
+      "id": "top_content",
+      "label": "Have any questions or comments?"
+    },
+    {
+      "type": "header",
+      "content": "Opening Hours"
+    },
+    {
+      "type": "text",
+      "id": "opening_title",
+      "label": "Enter title",
+      "default": "Opening Hours"
+    },
+    {
+      "type": "richtext",
+      "id": "personal_timing",
+      "label": "Enter your office timing",
+      "default": "<p>Monday - Friday: 9am - 5:30pm Saturday & Sunday: Closed</p>"
+    },
+    {
+      "type": "header",
+      "content": "Personal Shopper"
+    },
+    {
+      "type": "text",
+      "id": "shopper_title",
+      "label": "Enter title",
+      "default": "Personal Shopper (WhatsApp)"
+    },
+    {
+      "type": "richtext",
+      "id": "shopper_timing",
+      "label": "Enter your office timing",
+      "default": "<p>Monday - Friday: 9am - 5:30pm Saturday & Sunday: Closed</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_chat",
+      "label": "Chat to a personal shopper",
+      "default": "Chat to a Personal Shopper"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "add button link here",
+      "default": "/"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_content",
+      "label": "Enter your Need help content",
+      "default": "<p>Need some help? You might be able to find an answer to your question on our FAQs page.</p>"
+    },
+    {
+      "type": "select",
+      "label": "Form Submissin Behavior",
+      "id": "submission_behavior",
+      "options": [
+        {
+          "value": "reload",
+          "label": "Reload"
+        },
+        {
+          "value": "ajax",
+          "label": "Ajax"
+        }
+      ],
+      "default": "reload"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "select-topic",
+      "name": "select topic",
+      "settings": [
+        {
+          "type": "text",
+          "id": "topic_name",
+          "label": "Enter your topic",
+          "default": "Select a topic"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,55 @@
+{% style %}
+{% endstyle %}
+{% render 'vite-tag' with '@modules/collection.css' %}
+{% render 'vite-tag' with '@modules/collection.js' %}
+<section>
+  <div class="m-container:max-w-[1600px] m-container:mx-auto">
+    <div class="main-collection-wrapper group/collection layout-1">
+      {% assign paginate_count = section.settings.paginate_count %}
+      {% paginate collection.products by paginate_count %}
+        {% render 'facet-filters-v2', paginate: paginate %}
+        {% render 'collection-product-grid-v2',
+          products: collection.products,
+          metaObject: section.settings.metafield_defination,
+          card_image: section.settings.card_image,
+          card_index: section.settings.card_image_index,
+          banner_image: section.settings.banner_image,
+          banner_image_index: section.settings.banner_image_index,
+          paginate: paginate
+        -%}
+        {% render 'pagination-v2', paginate: paginate %}
+      {% endpaginate %}
+    </div>
+    {% if section.settings.bottom_text_display %}
+      {% render 'collection-footer-desc-v2', text: section.settings.bottom_text %}
+    {% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Collection Product Grid",
+  "settings": [
+    {
+      "type": "range",
+      "label": "No. Of Products To Show",
+      "step": 1,
+      "min": 1,
+      "max": 50,
+      "default": 10,
+      "id": "paginate_count"
+    },
+    {
+      "type": "checkbox",
+      "label": "Display Bottom Text",
+      "id": "bottom_text_display",
+      "default": true
+    },
+    {
+      "type": "text",
+      "label": "Enter Bottom Text",
+      "id": "bottom_text",
+      "default": "Our earrings lineup features styles from iconic brands and the hottest new designers. Whether you’re looking for the perfect gold huggies or a shoulder-dusting silver pair, our edit has got you covered."
+    }
+  ]
+}
+{% endschema %}

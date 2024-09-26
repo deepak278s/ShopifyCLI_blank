@@ -1,0 +1,114 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:39+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            73776abd2634b9aa94ff8044ac0cda7d
+//      Signature:      eyJpdiI6IjJzMmVxOENOT1hpS1BCNHBCRTdjdVE9PSIsInZhbHVlIjoielhGeDRCNGJCZmlGT2NYbXhEbXlkWFhkR2x6VFwveG9FajBBbFdMdUwwU3VhWVAzck03eFBydDFFOXUxSHNEYis4RHpzeGcwbWlWcmRIYjNtcjlqUU1XN1ZaQTZnaE42XC9kbFp2dzlOSXU5RzZMcXJURjBuSlQ2WUVJK0FjMmNFU3YzVEt5R2hQNFNIN0s0VUxqdkpZMVQrSjZCbXFzY0V4bmxvUWtFM3hOTStXRXNSdVFNMVFHR3pESXhvbWRXclwvZ3NrQWtNME9DaFZtV0s1QytkbE9SMnI3SElzc0UzUWY5cnFGbnJHR2Z5d0w3R1RqaXlSbFwvNHdkTmFwd1wvK3REaXBMb0t6eTJFQytzNkpZR0RpY3RGOXZqa0dSM09cLzcrYjZPZE1PM2JqTkFCRGVnMWdYWjNVZ29oQ0xNb2lNM3B5WXlqd3NrV3JTdEFzQTdHbTZocGFwVVc5UXE0ZXA0cjRITkM4V3pLTXJTVlwvMmxlNXZNNjViRzA1anJYN1VHKzFmbXpaYUllRWgwSzlmd2hRdFh5UEE9PSIsIm1hYyI6ImI2ZWJmZDZmY2YwMzY3ODQxYTJmNzY4YzBhMWNmODQxN2U3MzZlOWExZGQ5OGViOWVmMmQ5NWM3Mzc3ZmQzODIifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="contact-popup">
+    <div class="contact-popup__background"></div>
+    <div class="contact-popup__box">
+        <div class="contact-popup__close">{%- render 'icons', icon: 'close' -%}</div>
+        {% if section.settings.title != blank %}
+            <h3 class="contact-popup__heading">
+                {{ section.settings.title }}
+            </h3>
+        {% endif %}
+        {% if section.settings.subtitle != blank %}
+            <div class="contact-popup__body rte">
+                {{ section.settings.subtitle }}
+            </div>
+        {% endif %}
+        {% if section.settings.form_shortcode != blank %}
+            <div class="contact-popup__form">
+                {{ section.settings.form_shortcode }}
+            </div>
+        {% endif %}
+
+        <div class="contact-popup__help">
+            <div class="contact-popup__help-or">
+                {{ 'products.contact_pop_up.or' | t }}
+            </div>
+            <div class="contact-popup__help-title">
+                {{ 'products.contact_pop_up.reach_out_directly' | t }}
+            </div>
+            <ul class="flex f-flex-start f-vertical-center f-center">
+
+                {%- if settings.whatsapp_url.size > 0 -%}
+    
+                    <li class="social-icons__list-item">
+                        <a itemprop="sameAs" href="{{ settings.whatsapp_url }}" target="_blank" rel="noopener">{%- render 'icons', icon: 'whatsapp' -%}</a>
+                        <span class="social-icons__list-item-name">{{ 'products.contact_pop_up.whatsapp' | t }}</span>
+                    </li>
+    
+                {%- endif -%}
+
+                <li class="social-icons__list-item">
+                    <a itemprop="sameAs" href="mailto:{{ shop.email }}" target="_blank" rel="noopener">{%- render 'icons', icon: 'email' -%}</a>
+                    <span class="social-icons__list-item-name">{{ 'products.contact_pop_up.email' | t }}</span>
+                </li>
+
+                <li class="social-icons__list-item">
+                    <a itemprop="sameAs" href="{{ settings.instagram_url }}" target="_blank" rel="noopener">{%- render 'icons', icon: 'wechat' -%}</a>
+                    <span class="social-icons__list-item-name">{{ 'products.contact_pop_up.we_chat' | t }}</span>
+                </li>
+
+                {%- if settings.instagram_url.size > 0 -%}
+                    <li class="social-icons__list-item">
+                        <a itemprop="sameAs" href="{{ settings.instagram_url }}" target="_blank" rel="noopener">{%- render 'icons', icon: 'instagram--full-color' -%}</a>
+                        <span class="social-icons__list-item-name">{{ 'products.contact_pop_up.instagram' | t }}</span>
+                    </li>
+                {%- endif -%}
+    
+                {%- if settings.snapchat_url.size > 0 -%}
+    
+                    <li class="social-icons__list-item">
+                        <a itemprop="sameAs" href="{{ settings.snapchat_url }}" target="_blank" rel="noopener">{%- render 'icons', icon: 'snapchat--full-color' -%}</a>
+                        <span class="social-icons__list-item-name">{{ 'products.contact_pop_up.snapchat' | t }}</span>
+                    </li>
+    
+                {%- endif -%}
+    
+            </ul>            
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Contact Popup",
+    "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Contact Us"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Need some help? Please complete the form below and a member of our team will get back to you within 24h to 48h."
+        },
+        {
+          "type": "text",
+          "id": "form_shortcode",
+          "label": "Form Shortcode",
+          "info": "Forms can be found at Apps => Custom Contact Forms",
+          "default": "[esc-form=9a69dd60-b3ea-11ec-bcd8-bb408d0d4f19]"
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,419 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+{% render 'vite-tag' with '@@/slick.css' %}
+{% render 'vite-tag' with '@@/slick.theme.css' %}
+
+<style>
+  .contact-popup {
+    z-index: 9;
+  }
+  .complete_the_look__style {
+    padding: 30px;
+    text-align: center;
+  }
+  .contact-popup__box .fnt-sec {
+    font-family: var(--secondary-font);
+  }
+  .contact-popup__box .product-price {
+    font-family: var(--secondary-font);
+  }
+  .contact-popup__box .product-item__title {
+    line-height: 1.5;
+  }
+  .product__box {
+    display: flex;
+    border: 1px solid #f1f1f1;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .product__box .image {
+    width: 30%;
+  }
+  .product__box .text {
+    width: 70%;
+    text-align: left;
+    border-left: 1px solid #f1f1f1;
+    padding: 20px;
+  }
+  .product__box .text a {
+    text-decoration: none;
+  }
+  .complete_the_look__grid {
+    position: relative;
+  }
+  .complete_the_look__grid .arrows {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .complete_the_look__grid .arrows .arrow__next {
+    right: 0;
+  }
+  .complete_the_look__grid .arrows .arrow__prev {
+    left: 0;
+  }
+  .complete_the_look__grid .arrows .arrow__prev svg {
+    transform: rotate(180deg);
+  }
+  .product__form .selector-wrapper {
+    margin-bottom: 15px;
+  }
+  .complete_the_look__grid .arrows .slick-disabled {
+    opacity: 0 !important;
+    visibility: hidden;
+  }
+  @media (max-width: 768px) {
+    .product__box {
+      flex-direction: column;
+    }
+    .product__box .text {
+      width: 100%;
+    }
+    .product__box .image {
+      width: 60%;
+    }
+  }
+</style>
+
+{% assign no_of_looks = 0 %}
+{% for complete_look in product.metafields.complete_the_look.image %}
+  {% assign no_of_looks = forloop.length %}
+{% endfor %}
+
+{% if no_of_looks == 1 %}
+  <div class="complete_the_look__section">
+    <header class="section__header flex f-wrap f-vertical-bottom f-space-between mb-md">
+      <div class="title-dash">
+        <h2 class="title--md mb-sm sal-animate" data-sal="slide-up">{{ section.settings.title }}</h2>
+        <div class="rte sal-animate" data-sal="slide-up">
+          <p>{{ section.settings.description }}</p>
+        </div>
+      </div>
+    </header>
+
+    <ul class="collection__product-grid grid--2 grid--4--above-tablet pb-lg" role="list">
+      {%- liquid
+        for complete_look in product.metafields.complete_the_look.image
+          assign productOne = all_products[product.metafields.complete_the_look.product_one[forloop.index0]]
+          assign productTwo = all_products[product.metafields.complete_the_look.product_two[forloop.index0]]
+          assign productThree = all_products[product.metafields.complete_the_look.product_three[forloop.index0]]
+          assign productFour = all_products[product.metafields.complete_the_look.product_four[forloop.index0]]
+          assign productFive = all_products[product.metafields.complete_the_look.product_five[forloop.index0]]
+
+          if productOne != blank
+            render 'product-item', product: productOne, tag: 'li'
+          endif
+          if productTwo != blank
+            render 'product-item', product: productTwo, tag: 'li'
+          endif
+          if productThree != blank
+            render 'product-item', product: productThree, tag: 'li'
+          endif
+          if productFour != blank
+            render 'product-item', product: productFour, tag: 'li'
+          endif
+          if productFive != blank
+            render 'product-item', product: productFive, tag: 'li'
+          endif
+        endfor
+      -%}
+    </ul>
+  </div>
+{% elsif no_of_looks > 1 %}
+  <div class="complete_the_look__section">
+    <header class="section__header flex f-wrap f-vertical-bottom f-space-between mb-md">
+      <div class="title-dash">
+        <h2 class="title--md mb-sm sal-animate" data-sal="slide-up">{{ section.settings.title }}</h2>
+        <div class="rte sal-animate" data-sal="slide-up">
+          <p>{{ section.settings.description }}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="complete_the_look__grid ">
+      <div class="complete-look__carousel">
+        {% for complete_look in product.metafields.complete_the_look.image %}
+          <div class="product-item complete_the_look__style mb-md">
+            <a
+              href="#lookProductsPopup-{{ forloop.index }}"
+              id="lookbook-{{ forloop.index }}"
+              class="shop-look-btn"
+              data-related-popup="lookProductsPopup-{{ forloop.index }}"
+            >
+              <div class="product-item__image bg-grey object-cover">
+                <img src="{{ product.metafields.complete_the_look.image[forloop.index0] }}" loading="lazy">
+              </div>
+              <span class="btn btn--white btn--outline mt-md"> Shop the look </span>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="arrows">
+        <button class="arrow__prev">{%- render 'icons', icon: 'arrow-thin' -%}</button>
+        <button class="arrow__next">{%- render 'icons', icon: 'arrow-thin' -%}</button>
+      </div>
+    </div>
+
+    {% for complete_look in product.metafields.complete_the_look.image %}
+      {%- liquid
+        assign productOne = all_products[product.metafields.complete_the_look.product_one[forloop.index0]]
+        assign productTwo = all_products[product.metafields.complete_the_look.product_two[forloop.index0]]
+        assign productThree = all_products[product.metafields.complete_the_look.product_three[forloop.index0]]
+        assign productFour = all_products[product.metafields.complete_the_look.product_four[forloop.index0]]
+        assign productFive = all_products[product.metafields.complete_the_look.product_five[forloop.index0]]
+      -%}
+      <div class="contact-popup" id="lookProductsPopup-{{ forloop.index }}">
+        <div class="contact-popup__background"></div>
+        <div class="contact-popup__box">
+          <div class="contact-popup__close">
+            <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg">
+              <g stroke="#000" stroke-width="2" fill="none" fill-rule="evenodd" stroke-linecap="round"><path d="M17.5 7.1 7 17.5M7.1 7.1l10.4 10.4"></path></g>
+            </svg>
+          </div>
+          <h3 class="contact-popup__heading">Shop products</h3>
+          <div class="contact-popup__body rte">
+            <div class="complete_the_look__products" id="closestDiv">
+              <!-- Product #1 -->
+              {% if productOne != blank %}
+                <div class="product__box product">
+                  <div class="image">
+                    <a href="{{ productOne.url }}" title="{{ productOne.title }}">
+                      <img src="{{ productOne.featured_image  | img_url: 'master'}}">
+                    </a>
+                  </div>
+                  <div class="text">
+                    <div class="product-item__info mt-sm pt-sm">
+                      <span class="product-item__brand block fnt-sec xs fw-200 mb-sm">
+                        {{ productOne.vendor }}
+                      </span>
+                      <h2 class="product-item__title title--xs mb-sm sal-animate" data-sal="slide-up">
+                        <a href="{{ productOne.url }}" title="{{ productOne.title }}">
+                          {{ productOne.title }}
+                        </a>
+                      </h2>
+                      {%- render 'product__price',
+                        class: 'product-item__price',
+                        product: productOne,
+                        font: 'pri',
+                        current_variant: productOne.selected_or_first_available_variant
+                      -%}
+                      {%- render 'product__form-quickadd', product: productOne %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+
+              <!-- Product #2 -->
+              {% if productTwo != blank %}
+                <div class="product__box product">
+                  <div class="image">
+                    <a href="{{ productTwo.url }}" title="{{ productTwo.title }}">
+                      <img src="{{ productTwo.featured_image  | img_url: 'master'}}">
+                    </a>
+                  </div>
+                  <div class="text">
+                    <div class="product-item__info mt-sm pt-sm">
+                      <span class="product-item__brand block fnt-sec xs fw-200 mb-sm">
+                        {{ productTwo.vendor }}
+                      </span>
+                      <h2 class="product-item__title title--xs mb-sm sal-animate" data-sal="slide-up">
+                        <a href="{{ productTwo.url }}" title="{{ productTwo.title }}">
+                          {{ productTwo.title }}
+                        </a>
+                      </h2>
+                      {%- render 'product__price',
+                        class: 'product-item__price',
+                        product: productTwo,
+                        font: 'pri',
+                        current_variant: productTwo.selected_or_first_available_variant
+                      -%}
+                      {%- render 'product__form-quickadd', product: productTwo %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+
+              <!-- Product #3 -->
+              {% if productThree != blank %}
+                <div class="product__box product">
+                  <div class="image">
+                    <a href="{{ productThree.url }}" title="{{ productThree.title }}">
+                      <img src="{{ productThree.featured_image  | img_url: 'master'}}">
+                    </a>
+                  </div>
+                  <div class="text">
+                    <div class="product-item__info mt-sm pt-sm">
+                      <span class="product-item__brand block fnt-sec xs fw-200 mb-sm">
+                        {{ productThree.vendor }}
+                      </span>
+                      <h2 class="product-item__title title--xs mb-sm sal-animate" data-sal="slide-up">
+                        <a href="{{ productThree.url }}" title="{{ productThree.title }}">
+                          {{ productThree.title }}
+                        </a>
+                      </h2>
+                      {%- render 'product__price',
+                        class: 'product-item__price',
+                        product: productThree,
+                        font: 'pri',
+                        current_variant: productThree.selected_or_first_available_variant
+                      -%}
+                      {%- render 'product__form-quickadd', product: productThree %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              <!-- Product #4 -->
+              {% if productFour != blank %}
+                <div class="product__box product">
+                  <div class="image">
+                    <a href="{{ productFour.url }}" title="{{ productFour.title }}">
+                      <img src="{{ productFour.featured_image  | img_url: 'master'}}">
+                    </a>
+                  </div>
+                  <div class="text">
+                    <div class="product-item__info mt-sm pt-sm">
+                      <span class="product-item__brand block fnt-sec xs fw-200 mb-sm">
+                        {{ productFour.vendor }}
+                      </span>
+                      <h2 class="product-item__title title--xs mb-sm sal-animate" data-sal="slide-up">
+                        <a href="{{ productFour.url }}" title="{{ productFour.title }}">
+                          {{ productFour.title }}
+                        </a>
+                      </h2>
+                      {%- render 'product__price',
+                        class: 'product-item__price',
+                        product: productFour,
+                        font: 'pri',
+                        current_variant: productFour.selected_or_first_available_variant
+                      -%}
+                      {%- render 'product__form-quickadd', product: productFour %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              <!-- Product #5 -->
+              {% if productFive != blank %}
+                <div class="product__box product">
+                  <div class="image">
+                    <a href="{{ productFive.url }}" title="{{ productFive.title }}">
+                      <img src="{{ productFive.featured_image  | img_url: 'master'}}">
+                    </a>
+                  </div>
+                  <div class="text">
+                    <div class="product-item__info mt-sm pt-sm">
+                      <span class="product-item__brand block fnt-sec xs fw-200 mb-sm">
+                        {{ productFive.vendor }}
+                      </span>
+                      <h2 class="product-item__title title--xs mb-sm sal-animate" data-sal="slide-up">
+                        <a href="{{ productFive.url }}" title="{{ productFive.title }}">
+                          {{ productFive.title }}
+                        </a>
+                      </h2>
+                      {%- render 'product__price',
+                        class: 'product-item__price',
+                        product: productFive,
+                        font: 'pri',
+                        current_variant: productFive.selected_or_first_available_variant
+                      -%}
+                      {%- render 'product__form-quickadd', product: productFive %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<script type="text/javascript">
+  const boxes = document.querySelectorAll('.shop-look-btn');
+  const closePopup = document.querySelectorAll('.contact-popup__close');
+
+  for (const box of boxes) {
+    box.addEventListener('click', function handleClick(event) {
+      event.preventDefault();
+      const lookStyleId = box.dataset.relatedPopup;
+      document.getElementById(lookStyleId).classList.add('open');
+    });
+  }
+
+  for (const popup of closePopup) {
+    popup.addEventListener('click', function handleClick(event) {
+      event.preventDefault();
+      popup.parentNode.closest('.contact-popup').classList.remove('open');
+    });
+  }
+</script>
+
+<script>
+  $(document).ready(function() {
+      // Slick Slider
+      $('.complete-look__carousel').slick({
+          nextArrow: $('.arrow__next'),
+          prevArrow: $('.arrow__prev'),
+          {% if no_of_looks >= 3 %}
+              slidesToShow: 3,
+          {% elsif no_of_looks == 2 %}
+              slidesToShow: 2,
+          {% endif %}
+          slidesToScroll: 1,
+          infinite: false,
+          responsive: [
+          {
+              breakpoint: 1024,
+              settings: {
+                  slidesToShow: 2,
+                  slidesToScroll: 1,
+                  infinite: true,
+              }
+          },
+          {
+              breakpoint: 767,
+              settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1
+              }
+          }
+          ]
+      });
+      // Hide Recommended section if complete the look exists
+      // if($('.complete_the_look__section').length){
+      //    $('.product-recommendations').hide();
+      // }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Complete the look",
+  "tag": "section",
+  "class": "container",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Complete the look"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Recommended by our stylists"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Complete the look",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

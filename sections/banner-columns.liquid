@@ -1,0 +1,577 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:45+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            bed24d33caae88f9ffb09eb048a8e26a
+//      Signature:      eyJpdiI6IlRJU2RzZ3llME1XUkVzd0hlZnVQUGc9PSIsInZhbHVlIjoiT3FjXC9DZUc4eTBmdlhzQ3JydnVveGVlZ3Qrdk9tVGVaZTBuaFNDZHRMQVgzRDd4ckcxeVI3Zm9iR2J6VGRNWXJNbXJ2U2g3dWkxVDllTTErYXlDdUdIVktWNWUzSHhvcEhHMll2UVwvUTJNQUVaMVRma2NVd2dLNHZZRGtscUJPZllweU95cDh5R2piTlhkT0cwK3lYdHJKNzNDYllkMER6enprTFV5eE84UVFtMzF4aDBQd0s2Q3dXKzVHWCtmdDlxczJsSnB6eHlhMmZFRU01V1I0ZTVtSkFTWW9ib3JVbnlCelwvNFVsWUIrUkJDZk1hXC95UGoxVmJwckNtalpsaGxRKzhUMENVNzZYZkVUcHVDS2t2ejVCdXQrUkpvemVmOFZVQU9RYktrVmJxTFpEeXo3TzFPVzVtajQrSUNZZ25nSUE5UDd6ZlQyekZiNTVBN014S2ZrdXk2UVdcLzl1K1ZOTUdhM1U0czNicExxcUhweHZiS1VvY3hcLzhiR2p3NE5FRU5xRnJcL0Z1SDU2YWNUTHUzdStNOHc9PSIsIm1hYyI6IjNiNmQ2MGViY2NhZWI1ODUxYmE0NDY1NDk4OWIyZTNkMzY1OWNlYmNiZTI5ZjVlZTAwM2Q3MWY3N2UyNmQ5ZjcifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign class = "f-vertical-bottom--tablet"
+
+    if request.page_type == 'collection'
+        assign class = class | append: " px-xxl--above-tablet px-sm--tablet text-align-center--tablet"
+        if collection.metafields.media.video == empty or collection.metafields.banner.title == empty or collection.metafields.banner.content == empty
+            break
+        endif
+    endif
+
+    if section.settings.layout_tablet == 'media-first'
+        if section.blocks.first.type == 'content' or section.blocks.first.type == 'collection'
+            assign class = class | append: " f-dir-column-reverse--tablet"
+        else
+            assign class = class | append: " f-dir-column--tablet"
+        endif
+    elsif section.settings.layout_tablet == 'media-last'
+        if section.blocks.first.type == 'content' or section.blocks.first.type == 'collection'
+            assign class = class | append: " f-dir-column--tablet"
+        else
+            assign class = class | append: " f-dir-column-reverse--tablet"
+        endif
+    endif
+    assign collection_blocks = section.blocks | where: 'type', 'collection' | size
+    if collection_blocks > 0
+    assign class = class | append: " pb-xl--above-tablet"
+    endif
+-%}
+<div class="banner-columns banner-columns--{{ section.settings.layout_tablet }} flex f-vertical-top
+    {{ class }}
+    mt-{{ section.settings.spacing_top }} mb-{{ section.settings.spacing_bottom }}
+    {% if section.settings.spacing_top_tablet != '' %}mt-{{ section.settings.spacing_top_tablet }}--tablet{% endif %}
+    {% if section.settings.spacing_bottom_tablet != '' %}mb-{{ section.settings.spacing_bottom_tablet }}--tablet{% endif %}"
+    {% if section.settings.id != '' %}
+        id="{{ section.settings.id }}"
+    {% endif %}>
+
+    {%- liquid
+        for block in section.blocks
+            case block.type
+                when 'image'
+                    render 'banner-column--image', block: block
+                when 'video'
+                    render 'banner-column--video', block: block
+                when 'content'
+                    render 'banner-column--content', block: block, forloop: forloop
+                when 'collection'
+                    render 'banner-column--collection', block: block
+            endcase
+        endfor
+    -%}
+
+</div>
+
+{% schema %}
+    {
+        "name": "Banner Columns",
+        "settings" : [
+            {
+                "type": "text",
+                "id": "id",
+                "label": "Section ID"
+            },
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    },
+                    {
+                        "value": "xxl",
+                        "label": "XX Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Mobile Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top_tablet",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom_tablet",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "layout_tablet",
+                "label": "Order",
+                "options": [
+                    {
+                        "value": "media-first",
+                        "label": "Show media first"
+                    },
+                    {
+                        "value": "media-last",
+                        "label": "Show media last"
+                    }
+                ],
+                "default": "media-last"
+            }
+        ],
+        "max_blocks": 2,
+        "blocks": [
+            {
+                "name": "Image",
+                "type": "image",
+                "limit": 1,
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Image"
+                    },
+                    {
+                        "type": "range",
+                        "id": "width",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "label": "Width",
+                        "default": 50
+                    }
+                ]
+            },
+            {
+                "name": "Video",
+                "type": "video",
+                "limit": 1,
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "placeholder",
+                        "label": "Placeholder image"
+                    },
+                    {
+                        "type": "video_url",
+                        "id": "video",
+                        "label": "Video",
+                        "accept": [
+                            "youtube",
+                            "vimeo"
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "id": "video_filename",
+                        "label": "Video file name",
+                        "info": "Upload a video (mp4) to files, and enter the file name here."
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "video_cover",
+                        "label": "Fill image area with video",
+                        "default": false,
+                        "info": "This only affect direct upload videos, and not YouTube/Video embeds."
+                    },
+                    {
+                        "type": "range",
+                        "id": "width",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "label": "Width",
+                        "default": 50
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "enable_background",
+                        "label": "Apply background",
+                        "default": false
+                    }
+                ]
+            },
+            {
+                "name": "Collection grid",
+                "type": "collection",
+                "limit": 1,
+                "settings": [
+                    {
+                        "type": "collection",
+                        "id": "collection",
+                        "label": "Collection"
+                    },
+                    {
+                        "type": "range",
+                        "id": "width",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "label": "Width",
+                        "default": 50
+                    }
+                ]
+            },
+            {
+                "name": "Content",
+                "type": "content",
+                "limit": 1,
+                "settings": [
+                    {
+                        "type": "header",
+                        "content": "Title"
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Title"
+                    },
+                    {
+                        "type": "select",
+                        "id": "title_tag",
+                        "label": "Title tag",
+                        "options": [
+                            {
+                                "value": "h1",
+                                "label": "h1"
+                            },
+                            {
+                                "value": "h2",
+                                "label": "h2"
+                            },
+                            {
+                                "value": "h3",
+                                "label": "h3"
+                            },
+                            {
+                                "value": "h4",
+                                "label": "h4"
+                            }
+                        ],
+                        "default": "h2"
+                    },
+                    {
+                        "type": "select",
+                        "id": "title_size",
+                        "label": "Title size",
+                        "options": [
+                            {
+                                "value": "xs",
+                                "label": "Extra Small"
+                            },
+                            {
+                                "value": "sm",
+                                "label": "Small"
+                            },
+                            {
+                                "value": "md",
+                                "label": "Medium"
+                            },
+                            {
+                                "value": "lg",
+                                "label": "Large"
+                            },
+                            {
+                                "value": "xl",
+                                "label": "Extra Large"
+                            }
+                        ],
+                        "default": "xl"
+                    },
+                    {
+                        "type": "url",
+                        "id": "title_link",
+                        "label": "Title link"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Subtitle"
+                    },
+                    {
+                        "type": "text",
+                        "id": "subtitle",
+                        "label": "Subtitle"
+                    },
+                    {
+                        "type": "select",
+                        "id": "subtitle_tag",
+                        "label": "Subtitle tag",
+                        "options": [
+                            {
+                                "value": "h1",
+                                "label": "h1"
+                            },
+                            {
+                                "value": "h2",
+                                "label": "h2"
+                            },
+                            {
+                                "value": "h3",
+                                "label": "h3"
+                            },
+                            {
+                                "value": "h4",
+                                "label": "h4"
+                            }
+                        ],
+                        "default": "h3"
+                    },
+                    {
+                        "type": "select",
+                        "id": "subtitle_size",
+                        "label": "Subtitle size",
+                        "options": [
+                            {
+                                "value": "xs",
+                                "label": "Extra Small"
+                            },
+                            {
+                                "value": "sm",
+                                "label": "Small"
+                            },
+                            {
+                                "value": "md",
+                                "label": "Medium"
+                            },
+                            {
+                                "value": "lg",
+                                "label": "Large"
+                            },
+                            {
+                                "value": "xl",
+                                "label": "Extra Large"
+                            }
+                        ],
+                        "default": "md"
+                    },
+                    {
+                        "type": "url",
+                        "id": "subtitle_url",
+                        "label": "Subtitle link"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Content"
+                    },
+                    {
+                        "type": "richtext",
+                        "id": "content",
+                        "label": "Content"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Button"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Button"
+                    },
+                    {
+                        "type": "text",
+                        "id": "link_text",
+                        "label": "Text"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "Link"
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "link_icon",
+                        "label": "Show arrow icon"
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "link_light",
+                        "label": "White button",
+                        "default": false
+                    },
+                    {
+                        "type": "header",
+                        "content": "Background"
+                    },
+                    {
+                        "type": "color",
+                        "id": "background_color",
+                        "label": "Background colour",
+                        "info": "Optional"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "background",
+                        "label": "Background image",
+                        "info": "Optional (Will replace colour)"
+                    },
+                    {
+                        "type": "text",
+                        "id": "video_filename",
+                        "label": "Video file name",
+                        "info": "Upload a video (mp4) to files, and enter the file name here."
+                    },
+                    {
+                        "type": "header",
+                        "content": "Layout"
+                    },
+                    {
+                        "type": "range",
+                        "id": "width",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "label": "Width",
+                        "default": 50
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "strech",
+                        "label": "Fill height",
+                        "default": true
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "front",
+                        "label": "Bring to front",
+                        "default": false
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Banner Columns",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

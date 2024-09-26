@@ -1,0 +1,140 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:48+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            949aacb846c74568447037effb9e1a38
+//      Signature:      eyJpdiI6IlR6UzYwYkZ6TnhOa1duNm9yTnRta2c9PSIsInZhbHVlIjoiUmQ4ZFhYZU43QjFhR2NmcW80Mk1wMitmV0wxd1JJOVJTSUpSVXJ4MVYzZ1dnRWhlWlViU3NtQzZTUkVVd1RSM2pzOU5SMDRHaHg3VXNNNmVzQlwvdjYrdnhKXC90NHdcL3NkbGVlZ3duMzJqTVIzRFhjQjJRQ1VVZ1BkemN4WmcyMGVRRzVMbWJ0XC9vRE4zK05PWjllczZ5Wlk2Um5JYTIyZ2xocWNsZzlCTitMNXIrRXJRc3BIMXpmdVRGWW1uUlRTV3N0d3NTUFl0VmNRWXhGQnRWNFFVMngyMGdoSDhQU0pMUXlDUU5JeEVybk1UdEtyRjZoZ3FKNm40d3RiYVh4TmZqck5wdkRGOEliSVwvSG56cDQ2dkVDQXVHZ1VHM2l1MnVDOCtvZ0xka3VyV2JxT3FKdjdGT0JKQ1pIZitMclFkb2dwZTljdGVXKzNyZUUzVGlFMWd6Y2oxRmsyY2RrYnN5U0NoMkt0SU1nMDVGaFRYNStMTTdiSHJiaVRrdVdlb3M3b29RWnNleXEreWVNanA4WUVCSXJBPT0iLCJtYWMiOiJhMzQxOGQ4ODg3NjE1NTUzYTY1YjhhZTU5MzEyMjlhODQ2YzIwMjI5OWI3ZjZhOGYyZjZjN2QyODQ1ZjBkNjVhIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<!--go cart modal fail-->
+<div class="go-cart__modal go-cart__modal--fail js-go-cart-modal-fail">
+
+    <div class="go-cart-modal">
+
+        <!--go cart modal close-->
+        <div class="go-cart-modal__close js-go-cart-modal-fail-close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                <path d="M15.89 14.696l-4.734-4.734 4.717-4.717c.4-.4.37-1.085-.03-1.485s-1.085-.43-1.485-.03L9.641 8.447 4.97 3.776c-.4-.4-1.085-.37-1.485.03s-.43 1.085-.03 1.485l4.671 4.671-4.688 4.688c-.4.4-.37 1.085.03 1.485s1.085.43 1.485.03l4.688-4.687 4.734 4.734c.4.4 1.085.37 1.485-.03s.43-1.085.03-1.485z"></path>
+            </svg>
+
+        </div>
+        <!--end go cart modal close-->
+
+        <!--go cart modal content-->
+        <div class="go-cart-modal__content js-go-cart-modal-fail-content">
+            {{ 'cart.general.error' | t }}
+        </div>
+        <!--end go cart modal content-->
+
+    </div>
+
+</div>
+<!--end go cart modal fail-->
+
+<!--go cart modal-->
+<div class="go-cart__modal js-go-cart-modal">
+
+    <div class="go-cart-modal">
+
+        <!--go cart modal close-->
+        <div class="go-cart-modal__close js-go-cart-modal-close">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                <path d="M15.89 14.696l-4.734-4.734 4.717-4.717c.4-.4.37-1.085-.03-1.485s-1.085-.43-1.485-.03L9.641 8.447 4.97 3.776c-.4-.4-1.085-.37-1.485.03s-.43 1.085-.03 1.485l4.671 4.671-4.688 4.688c-.4.4-.37 1.085.03 1.485s1.085.43 1.485.03l4.688-4.687 4.734 4.734c.4.4 1.085.37 1.485-.03s.43-1.085.03-1.485z"></path>
+            </svg>
+
+        </div>
+        <!--end go cart modal close-->
+
+        <!--go cart modal content-->
+        <div class="go-cart-modal__content js-go-cart-modal-content"></div>
+        <!--end go cart modal content-->
+
+        <!--go cart modal buttons-->
+        <div class="go-cart-modal__buttons">
+
+            <a class="go-cart__button js-go-cart-modal-close">
+                Continue shopping
+            </a>
+
+        </div>
+        <!--end go cart modal buttons-->
+
+    </div>
+
+</div>
+<!--end go cart modal-->
+
+<!--go cart drawer-->
+<div class="go-cart__drawer js-go-cart-drawer">
+
+    <div class="go-cart-drawer">
+
+        <!--go cart drawer close-->
+        <div class="go-cart-drawer__header">
+            <div class="go-cart-drawer__title">
+                <h3 class="title--sm fnt-sec uc md fw-500">Order summary</h3>
+            </div>
+            <div class="go-cart-drawer__close js-go-cart-drawer-close">
+
+                {%- render 'icons', icon: 'close' -%}
+
+            </div>
+
+        </div>
+        <!--end go cart drawer close-->
+
+        <!--go cart drawer content-->
+        <div class="go-cart-drawer__content js-go-cart-drawer-content"></div>
+        <!--end go cart drawer content-->
+
+        <!--go cart drawer subtotal-->
+        <div class="go-cart-drawer__subtotal mt-md">
+            <h3 class="title--sm fnt-sec md uc fw-500 pt-lg">Payment Summary</h3>
+            <div class="go-cart-drawer__payment-details flex f-space-between fnt-sec py-sm sm uc fw-300">
+                <span>Subtotal: </span>
+                <span class="go-cart-drawer__subtotal-price js-go-cart-drawer-subtotal"></span>
+            </div>
+        </div>
+        <!--end go cart drawer subtotal-->
+
+        <!--go cart drawer buttons-->
+        <div class="go-cart-drawer__footer js-go-cart-drawer-footer">
+
+            {%- liquid
+                assign link_text = 'cart.general.checkout' | t
+                echo link_text | link_to: '/checkout/', class: 'btn btn--full sm'
+            -%}
+
+            {% comment %} <div class="go-cart-drawer__fast-checkout mt-md text-align-center">
+                <h4 class="fnt-sec uc sm">Fast check out</h4>
+            </div> {% endcomment %}
+        {%- comment -%} 
+            <a href="/cart/" class="go-cart__button">
+                View cart
+            </a>
+        {%- endcomment -%}
+
+        </div>
+        <!--end go cart drawer buttons-->
+
+    </div>
+
+</div>
+<!--end go cart drawer-->
+
+<!--go cart overlay-->
+<div class="go-cart__overlay js-go-cart-overlay">
+</div>
+<!--end go cart overlay-->

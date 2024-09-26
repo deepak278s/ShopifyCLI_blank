@@ -1,0 +1,125 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:51+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            95f86f578e36bd9fe7da501fc67e330c
+//      Signature:      eyJpdiI6InlSV094VDV3aG5waGZaOUE4QitUUWc9PSIsInZhbHVlIjoib1wvR1VPam9zNHk0RWplbER5UncrNVpIdHVtSk9zek0ydm1IU0N4aWp6MkZncHo5SGk1UEZpYWRQZmszS2hzMDg2TElYOXhBS1N0TitQNzlpUWpIUlExcGR6cUJuYWVkMXpvSnVqQ1FxaFplaTMzNlwvNUE5bU43SEorNnJhbnViS2RDYTFVQklxcVRja1B5OHkwMVlwYlZPZlwvXC95RHZ1bGVONVc0K2hCdDB1VnlvYWpWdU8yTGs0MkZiaXdOVHY0bkUxclpqbEs4bFI0Q2JLYjNMdmZZSzduRWVreWxZdmFIXC91QmwyV3FyOVdlSkdDOEVGbExrRGo5U0plM2U3ZnhCUnIwR0NtbnlqTEtiVjllNDRBWk4rMG5Vc2prNjJYaFBvaGZETlwvQVNtQmpqN1wvTThWY0M1YTd2NWliT0ZiRzMwWjM1MG85RkV0MkJCWGhJS1pTWm9qaGtOckhSNnhwVVluUE95d0tacGRiMGdTaDliRVg0RzdpY2pwbFhwd3ZHaldQN3Y1a1ZiVDV2dVJJaEJMTXBpK05jUHd0VmF5V0E3ZWN6MnZPRkJOT2M9IiwibWFjIjoiYTIyMTgwZWEwNDRiMzUxOGQ2Y2M1ZDg3NTI4NGJmYmQ3OTQ5YWEwZWUzOTQxMDBiY2M0Y2U1NjA5ZmU1MzM2ZiJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{% comment %} Assign Empty References String And Seperator {% endcomment %}
+{% assign popup_collection_references_string = '' %}
+{% assign seperator = '|###|' %}
+
+{% comment %} Check If Collection Is For Popup - Append To References String If True {% endcomment %}
+{% for collection in collections %}
+    {%- comment %}<locksmith:97ad>{% endcomment -%}
+      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: collection, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+    {%- comment %}</locksmith:97ad>{% endcomment -%}
+    {% if collection.metafields.collection.is_popup_collection %}
+        {% assign popup_collection_references_string = popup_collection_references_string | append: collection.handle | append: seperator %}
+    {% endif %}
+{% endfor %}
+
+{% comment %} Check That Collections Were Found {% endcomment %}
+{% if popup_collection_references_string != '' %}
+
+    {% comment %} Split References String - Create Array {% endcomment %}
+    {% assign collection_references_array = popup_collection_references_string | split: seperator %}
+
+    {% comment %} Assume That The First Collection Is Our Earliest Expiring Collection {% endcomment %}
+    {% assign earliest_popup_collection = collections[collection_references_array[0]] %}
+
+    {% comment %} Define NULL For Second Earliest Collection {% endcomment %}
+    {% assign second_earliest_popup_collection = null %}
+
+    {% comment %} Find Collections With Earliest Expiry Dates {% endcomment %}
+    {% for item in collection_references_array offset:1 %}
+
+        {% comment %} Get Expiry Date Of Current Collection {% endcomment %}
+        {% assign popup_collection = collections[item] %}
+        {% assign expiry_date = popup_collection.metafields.popup.end_date | date: '%s' %}
+
+        {% comment %} Check If The Expiry Date Is The Earliest We've Seen So Far {% endcomment %}
+        {% assign earliest_expiry_date = earliest_popup_collection.metafields.popup.end_date | date: '%s' %}
+        {% if expiry_date <= earliest_expiry_date %}
+            
+            {% comment %} Assign The Previous Earliest Collection As The Second Earliest Collection {% endcomment %}
+            {% assign second_earliest_popup_collection = earliest_popup_collection %}
+           
+            {% comment %} Update Earliest Collection {% endcomment %}
+            {% assign earliest_popup_collection = collections[item] %}
+
+        {% elsif second_earliest_popup_collection == null %}
+
+            {% comment %} Assume That The Second Collection Is Our Second Earliest Expiring Collection {% endcomment %}
+            {% assign second_earliest_popup_collection = collections[item] %}
+
+        {% else %}
+
+            {% comment %} Check & Update Second Earliest Collection {% endcomment %}
+            {% assign second_earliest_expiry_date = second_earliest_popup_collection.metafields.popup.end_date | date: '%s' %}
+            {% if expiry_date <= second_earliest_expiry_date %}
+                {% assign second_earliest_popup_collection = collections[item] %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<div class="collection-popup__related {% if section.settings.hide_section == true %}hide{% endif %}">
+    <div class="collection-popup__related-wrapper">
+        {% if section.settings.title != blank %}
+            <h2 class="collection-popup__related-main-title title--md mb-sm">{{section.settings.title}}</h2>
+        {% endif %}
+        {% if section.settings.button_link != blank %}
+            {%- render 'link', class: 'collection-popup__related-viewall', style: 'button--light', text: 'View All', link: {{section.settings.button_link}}, icon: 'arrow' -%}
+        {% endif %}
+
+        <div class="collection-popup__related-container flex f-space-between">
+            {% if earliest_popup_collection != null %}
+                {% render 'collection-popup-related-card', pop_collection: earliest_popup_collection, card_name: 'one' %}
+            {% endif %}
+            {% if second_earliest_popup_collection != null %}
+                {% render 'collection-popup-related-card', pop_collection: second_earliest_popup_collection, card_name: 'two' %} 
+            {% endif %}   
+        </div>
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Popup Collection Related",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "url",
+                "id": "button_link",
+                "label": "View All Link"
+            },
+            {
+                "type": "checkbox",
+                "id": "hide_section",
+                "label": "Hide Section?"
+            }
+        ],
+        "presets": [
+            {
+                "name": "Popup Section"
+            }
+        ]
+    }
+{% endschema %}

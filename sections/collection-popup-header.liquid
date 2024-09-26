@@ -1,0 +1,68 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:33+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            84d9858fb1aa0c70f5314d7304b127fa
+//      Signature:      eyJpdiI6Iks4TG5qeWFuNVdCcU50RGxRajNmQmc9PSIsInZhbHVlIjoibzl4Y3NxVWZlSXFsUHpycmlqWU45NDBiRXpGazNSbDZkM0lDbUkyQVArYjZ4bDMySU9CZG9tYjNidHhTcVpBdWVqMW94Q0ZrQkdORWUrcUxrQlRYMlRUZ3Vud3ZIY1wvck5qR3RCZ2E4NGRDOENTVTBoSjZwczJXclUwSVlpUWtLcVlcL09wS1pDTVNjVnVHRzNad1B1NzJGWkpaUHlUR0drZmd4SlJVS1wvVUR5ZWdxVVhLSW5DQ1U3K2JGdHA3ZXpaNmhZWXhBNUVmRUhPanhiTXZxdUVkRENaWjc0Q3BIZ2JYWW1UMHpBMEtxUFhHYVUrbGxmM0NqMTdsRFwvR2RVeSs1VXFWNHZoNTIwTzdDVUJzUjNQamVXQXIwSVBCNHdvajdoU3pSQkoxNlBSUmg1eE8zV3dTc2oxN2J4eGpMMVJEdEVaWGR4RHBURHN1b0hMWWROdFZEWEZhYjFacGJMRW5OdzBqSXpVZXlcL0x1UHpsYWFGK0pZWjg3YXZ2NUpTNHZMd0NqdXRySzlJSWduR3FKRm5BVXBwSWVGZUxVTVA3bEhEbVRiY2hJeVlJPSIsIm1hYyI6IjVhYTE2NTdmYzhkMDQ4ODJkNjE5YTlhZjc1NjMzZTVlNTVjNDhhNzJmM2Y5ZWJhZDE4ZjNlYjM0NzRkMTNmZjAifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="collection-popup__header flex">
+    <div class="collection-popup__header-image" style="background-image: url({{collection.image | img_url: 'master'}})">
+    </div>
+    <div class="collection-popup__header-content flex f-vertical-center">
+        <div class="collection-popup__header-container">
+            <h1 class="collection-popup__header-title title--md">{{collection.title}}</h1>
+            {% if collection.metafields.popup.end_date != blank and section.settings.hide_date == false %}
+                <div data-date-visibility="{{collection.metafields.popup.end_date}}">
+                    <div
+                        class="collection-popup__header-date visually-hidden"
+                        data-date-visibility-has-not-expired>
+                        <p class="collection-popup__header-date-text">Ends:</p>
+                        <span class="collection-popup__header-date-date">{{collection.metafields.popup.end_date | date: '%d/%m/%y'}}</span>
+                    </div>
+                    <div
+                        class="collection-popup__header-ended visually-hidden"
+                        data-date-visibility-has-expired>
+                        <p class="collection-popup__header-ended-text">The collection has now ended.</p>
+                        {% if section.settings.button_link != blank %}
+                            {%- render 'link', style: 'button--light', text: 'View Popups', link: {{section.settings.button_link}}, icon: 'arrow', class: 'collection-popup__header-ended-cta' -%}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if collection.description != '' %}
+                <p class="collection-popup__header-description">{{collection.description}}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name":"Popup Collection Header",
+        "settings":[
+            {
+                "type": "checkbox",
+                "id": "hide_date",
+                "label": "Hide End Date?",
+                "default": false
+            },
+            {
+                "type": "url",
+                "id": "button_link",
+                "label": "View Popups Link"
+            }
+        ]
+    }
+{% endschema %}

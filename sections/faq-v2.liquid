@@ -1,0 +1,512 @@
+{% stylesheet %}
+     #faq-{{ section.id }}{
+       margin-top:{{ section.settings.margin_top_mob }}px;
+       margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+     }
+     #faq-{{ section.id }}{
+         padding-left:{{ section.settings.horizontal_padding_mobile }}px;
+     }
+     @media(min-width:768px){
+       #faq-{{ section.id }}{
+           margin-top:{{ section.settings.margin_top_desktop }}px;
+           margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+       }
+       #faq-{{ section.id }}{
+           padding-left:{{ section.settings.horizontal_padding_desktop }}px;
+       }
+     }
+     details[open] summary span svg {
+    transform: rotate(180deg);
+  }
+  .top_title .active{
+    border-bottom: 2px solid #121212;
+  }
+  .need_help p{
+    font-size:16px;
+  }
+  .need_help a{
+    border-bottom:1px solid #121212;
+  }
+{% endstylesheet %}
+<section class="relative" id="faq-{{ section.id }}">
+  <div class="w-full max-w-[1600px] mx-auto lg:px-[40px] flex gap-12 lg:gap-[60px]  flex-col lg:flex-row pb-[44px] md:pb-[49px] lg:md:pb-[49px] md:py-7 lg:pt-8">
+    <div class="w-full min-w-[220px] lg:w-1/4 lg:max-w-[325px]">
+      {% render 'legal-nav-cms' %}
+    </div>
+
+    <div class="delivery-wrapper flex flex-col w-full gap-6 md:gap-[39px] px-5 lg:w-[calc(75%_-_40px)] xl:w-[calc(75%_-_75px)] lg:max-w-[820px] md:px-[22px] lg:px-0">
+      <div class="flex flex-col md:px-[62px] lg:px-0 gap-12 md:gap-10">
+        <!-- Start customer information section -->
+        <div class="flex flex-col gap-7 md:max-w-[476px] lg:max-w-[820px]">
+          <div class="section-inner flex flex-col gap-4">
+            {% if section.settings.main_heading != blank %}
+              <h1 class="text-[46px] leading-[110%] font-gascogne-serial font-light capitalize text-[#222222] m-0">
+                {{ section.settings.main_heading }}
+              </h1>
+            {% endif %}
+            {% if section.settings.top_content != blank %}
+              <div class="font-shape text-[16px] leading-[24px] font-light">
+                {{ section.settings.top_content }}
+              </div>
+            {% endif %}
+            {% if section.settings.button_chat != blank %}
+              <a
+                href="{{ section.settings.button_link }}"
+                class="font-shape text-[13px] leading-[16px] font-normal inline-block px-6 py-3 border border-[#121212] rounded-[20px] text-[#222222] text-center  uppercase md:max-w-max"
+              >
+                {{- section.settings.button_chat -}}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="delivery flex flex-col flex-1 text-[12px] leading-[20.4px] font-normal gap-[38px] lg:gap-5">
+          <div class="top_title flex overflow-x-auto whitespace-nowrap gap-6">
+            <div
+              class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] active"
+              data-id="general-questions"
+            >
+              {{ section.settings.general_title }}
+            </div>
+            <div
+              class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] "
+              data-id="personal-shopper"
+            >
+              {{ section.settings.personal_title }}
+            </div>
+            <div
+              class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] "
+              data-id="delivery"
+            >
+              {{ section.settings.delivery_title }}
+            </div>
+            <div
+              class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape pb-4 relative flex justify-between cursor-pointer text-[#222222] "
+              data-id="returns"
+            >
+              {{ section.settings.returns_title }}
+            </div>
+          </div>
+          <div class="tabbing_content">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'general-questions' %}
+                  <div
+                    class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 general-questions"
+                    data-id="general-questions"
+                  >
+                    <div
+                      class="flex-1 accordia "
+                    >
+                      <!-- medium screen link set -->
+                      {% if block.settings.faqs_answ != blank %}
+                        <accordion-item>
+                          <details class="accordian-panel border-b border-[#d8d8d8] overflow-hidden">
+                            <!-- Accordian Btn -->
+                            <summary class="flex flex-row md:items-center justify-between w-full py-5 accordian-trigger cursor-pointer outline-none">
+                              <h4 class="text-[14px] uppercase font-normal leading-[21px] font-shape text-[#222222] pr-[10px] rtl:pr-0 rtl:pl-9">
+                                {{ block.settings.faq_title }}
+                              </h4>
+                              <span class="flex items-center justify-center w-6 h-6 mt-[-0.8px]">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  class="p-[1px]"
+                                >
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.4519 8.55205C18.8494 8.95477 18.8494 9.60773 18.4519 10.0105L12.3447 16.198C11.9472 16.6007 11.3028 16.6007 10.9053 16.198L4.79812 10.0105C4.40062 9.60773 4.40062 8.95477 4.79812 8.55205C5.19562 8.14932 5.84009 8.14932 6.23759 8.55205L11.625 14.0103L17.0124 8.55205C17.4099 8.14932 18.0544 8.14932 18.4519 8.55205Z" fill="#222222"/>
+                                </svg>
+                              </span>
+                            </summary>
+                            <!-- Accordian Content -->
+                            <div
+                              class="accordion-content text-[14px] font-light leading-[21px] font-shape text-[#222222]"
+                              aria-hidden="true"
+                            >
+                              <div class="pb-8 pr-6">
+                                {{ block.settings.faqs_answ }}
+                              </div>
+                            </div>
+                          </details>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                  </div>
+                {% when 'personal-shopper' %}
+                  <div
+                    class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 personal-shopper hidden"
+                    data-id="personal-shopper"
+                  >
+                    <div
+                      class="flex-1 accordian "
+                    >
+                      <!-- medium screen link set -->
+                      {% if block.settings.faqs_answ != blank %}
+                        <accordion-item>
+                          <details class="accordian-panel border-b border-[#d8d8d8] overflow-hidden">
+                            <!-- Accordian Btn -->
+                            <summary class="flex flex-row md:items-center justify-between w-full py-5 accordian-trigger cursor-pointer outline-none">
+                              <h4 class="text-[14px] uppercase font-normal leading-[21px] font-shape text-[#222222] pr-[10px] rtl:pr-0 rtl:pl-9">
+                                {{ block.settings.faq_title }}
+                              </h4>
+                              <span class="flex items-center justify-center w-6 h-6 mt-[-0.8px]">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  class="p-[1px]"
+                                >
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.4519 8.55205C18.8494 8.95477 18.8494 9.60773 18.4519 10.0105L12.3447 16.198C11.9472 16.6007 11.3028 16.6007 10.9053 16.198L4.79812 10.0105C4.40062 9.60773 4.40062 8.95477 4.79812 8.55205C5.19562 8.14932 5.84009 8.14932 6.23759 8.55205L11.625 14.0103L17.0124 8.55205C17.4099 8.14932 18.0544 8.14932 18.4519 8.55205Z" fill="#222222"/>
+                                </svg>
+                              </span>
+                            </summary>
+                            <!-- Accordian Content -->
+                            <div
+                              class="accordion-content text-[14px] font-light leading-[21px] font-shape text-[#222222]"
+                              aria-hidden="true"
+                            >
+                              <div class="pb-8 pr-6">
+                                {{ block.settings.faqs_answ }}
+                              </div>
+                            </div>
+                          </details>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                  </div>
+                {% when 'delivery' %}
+                  <div class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 delivery hidden" data-id="delivery">
+                    <div
+                      class="flex-1 accordian"
+                    >
+                      <!-- medium screen link set -->
+                      {% if block.settings.faqs_answ != blank %}
+                        <accordion-item>
+                          <details class="accordian-panel border-b border-[#d8d8d8] overflow-hidden">
+                            <!-- Accordian Btn -->
+                            <summary class="flex flex-row md:items-center justify-between w-full py-5 accordian-trigger cursor-pointer outline-none">
+                              <h4 class="text-[14px] uppercase font-normal leading-[21px] font-shape text-[#222222] pr-[10px] rtl:pr-0 rtl:pl-9">
+                                {{ block.settings.faq_title }}
+                              </h4>
+                              <span class="flex items-center justify-center w-6 h-6 mt-[-0.8px]">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  class="p-[1px]"
+                                >
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.4519 8.55205C18.8494 8.95477 18.8494 9.60773 18.4519 10.0105L12.3447 16.198C11.9472 16.6007 11.3028 16.6007 10.9053 16.198L4.79812 10.0105C4.40062 9.60773 4.40062 8.95477 4.79812 8.55205C5.19562 8.14932 5.84009 8.14932 6.23759 8.55205L11.625 14.0103L17.0124 8.55205C17.4099 8.14932 18.0544 8.14932 18.4519 8.55205Z" fill="#222222"/>
+                                </svg>
+                              </span>
+                            </summary>
+                            <!-- Accordian Content -->
+                            <div
+                              class="accordion-content text-[14px] font-light leading-[21px] font-shape text-[#222222]"
+                              aria-hidden="true"
+                            >
+                              <div class="pb-8 pr-6">
+                                {{ block.settings.faqs_answ }}
+                              </div>
+                            </div>
+                          </details>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                  </div>
+                {% when 'returns' %}
+                  <div class="lg:max-w-[1234px] m-auto flex flex-col gap-7 md:gap-4 returns hidden" data-id="returns">
+                    <div class="flex-1 accordian">
+                      <!-- medium screen link set -->
+                      {% if block.settings.faqs_answ != blank %}
+                        <accordion-item>
+                          <details class="accordian-panel border-b border-[#d8d8d8] overflow-hidden">
+                            <!-- Accordian Btn -->
+                            <summary class="flex flex-row md:items-center justify-between w-full py-5 accordian-trigger cursor-pointer outline-none">
+                              <h4 class="text-[14px] uppercase font-normal leading-[21px] font-shape text-[#222222] pr-[10px] rtl:pr-0 rtl:pl-9">
+                                {{ block.settings.faq_title }}
+                              </h4>
+                              <span class="flex items-center justify-center w-6 h-6 mt-[-0.8px]">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  class="p-[1px]"
+                                >
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.4519 8.55205C18.8494 8.95477 18.8494 9.60773 18.4519 10.0105L12.3447 16.198C11.9472 16.6007 11.3028 16.6007 10.9053 16.198L4.79812 10.0105C4.40062 9.60773 4.40062 8.95477 4.79812 8.55205C5.19562 8.14932 5.84009 8.14932 6.23759 8.55205L11.625 14.0103L17.0124 8.55205C17.4099 8.14932 18.0544 8.14932 18.4519 8.55205Z" fill="#222222"/>
+                                </svg>
+                              </span>
+                            </summary>
+                            <!-- Accordian Content -->
+                            <div
+                              class="accordion-content text-[14px] font-light leading-[21px] font-shape text-[#222222]"
+                              aria-hidden="true"
+                            >
+                              <div class="pb-8 pr-6">
+                                {{ block.settings.faqs_answ }}
+                              </div>
+                            </div>
+                          </details>
+                        </accordion-item>
+                      {% endif %}
+                      <!-- larger screen link set -->
+                    </div>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="need_help">
+          <h4 class="text-[26px] font-light leading-[28.6px] font-gascogne-serial text-[#222222] mb-4">
+            {{ section.settings.help_heading }}
+          </h4>
+          {{ section.settings.help_content }}
+        </div>
+
+        <!-- End Faq question and Answers -->
+      </div>
+    </div>
+  </div>
+</section>
+
+{% render 'vite-tag' with '@modules/tabbing-v2.js' %}
+
+<script>
+  let tabButtons = document.querySelectorAll('.top_title [data-id]');
+  let tabContent = document.querySelectorAll('.tabbing_content [data-id]');
+
+  //console.log(tabButtons, 'tabButtons tabButtons');
+  // Add click event listener to tab buttons
+  tabButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      // Remove 'active' class from all tab buttons
+      tabButtons.forEach(function (btn) {
+        btn.classList.remove('active');
+      });
+
+      // Add 'active' class to the clicked tab button
+      button.classList.add('active');
+
+      // Get the data-id of the clicked button
+      var clickedDataId = button.getAttribute('data-id');
+
+      // Loop through tab content to find the one with matching data-id
+      tabContent.forEach(function (content) {
+        // Remove 'hidden' class from the matching tab content, and add it to others
+        if (content.getAttribute('data-id') === clickedDataId) {
+          content.classList.remove('hidden');
+        } else {
+          content.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "accordions section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "spacing setting"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "link_list",
+      "label": "Menu Links",
+      "id": "menu_links"
+    },
+    {
+      "type": "header",
+      "content": "top section"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Frequently asked questions"
+    },
+    {
+      "type": "richtext",
+      "id": "top_content",
+      "label": "Enter top section content"
+    },
+    {
+      "type": "text",
+      "id": "button_chat",
+      "label": "Chat to a personal shopper"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "add button link here"
+    },
+    {
+      "type": "header",
+      "content": "Help section"
+    },
+    {
+      "type": "text",
+      "id": "help_heading",
+      "label": "Heading",
+      "default": "Need more help?"
+    },
+    {
+      "type": "richtext",
+      "id": "help_content",
+      "label": "content of section"
+    },
+    {
+      "type": "header",
+      "content": "Tabbing title"
+    },
+    {
+      "type": "text",
+      "id": "general_title",
+      "label": "General top title "
+    },
+    {
+      "type": "text",
+      "id": "personal_title",
+      "label": "Personal top title "
+    },
+    {
+      "type": "text",
+      "id": "delivery_title",
+      "label": "delivery top title "
+    },
+    {
+      "type": "text",
+      "id": "returns_title",
+      "label": "returns top title "
+    }
+  ],
+  "blocks": [
+    {
+      "name": "general Question",
+      "type": "general-questions",
+      "settings": [
+        {
+          "type": "text",
+          "id": "faq_title",
+          "label": "Faqs Question",
+          "default": "Faqs Question"
+        },
+        {
+          "type": "richtext",
+          "id": "faqs_answ",
+          "label": "Enter Faqs answers",
+          "default": "<p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum</p>"
+        }
+      ]
+    },
+    {
+      "name": "personal Question",
+      "type": "personal-shopper",
+      "settings": [
+        {
+          "type": "text",
+          "id": "faq_title",
+          "label": "Faqs Question",
+          "default": "Faqs Question"
+        },
+        {
+          "type": "richtext",
+          "id": "faqs_answ",
+          "label": "Enter Faqs answers",
+          "default": "<p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum</p>"
+        }
+      ]
+    },
+    {
+      "name": "delivery Question",
+      "type": "delivery",
+      "settings": [
+        {
+          "type": "text",
+          "id": "faq_title",
+          "label": "Faqs Question",
+          "default": "Faqs Question"
+        },
+        {
+          "type": "richtext",
+          "id": "faqs_answ",
+          "label": "Enter Faqs answers",
+          "default": "<p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum</p>"
+        }
+      ]
+    },
+    {
+      "name": "returns Question",
+      "type": "returns",
+      "settings": [
+        {
+          "type": "text",
+          "id": "faq_title",
+          "label": "Faqs Question",
+          "default": "Faqs Question"
+        },
+        {
+          "type": "richtext",
+          "id": "faqs_answ",
+          "label": "Enter Faqs answers",
+          "default": "<p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "accordions section",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

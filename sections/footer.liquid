@@ -1,0 +1,86 @@
+<div class="container">
+    <div class="footer__wrapper flex py-lg">
+        <div class="footer__links-container">
+            {% for block in section.blocks %}
+                {% if block.settings.footer_menu != blank %}
+                    {% assign footer_menu = linklists[block.settings.footer_menu] %}
+                    <ul class="footer__links-container-nav mb-lg">
+                        {% for link in footer_menu.links %}
+                            {%- comment %}<locksmith:2c74>{% endcomment -%}
+                              {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: footer_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                            {%- comment %}</locksmith:2c74>{% endcomment -%}
+                            <li>
+                                <a href="{{ link.url }}" class="fnt-sec uc sm fw-300">{{ link.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="footer__newsletter-container flex f-vertical-top">
+            <div class="footer__newsletter-container--form">
+                {% if section.settings.newsletter_heading != blank %}
+                    <h4 class="fnt-sec sm italic uc fw-300 mb-sm">{{ section.settings.newsletter_heading }}</h4>
+                {% endif %}
+                {% if section.settings.newsletter_text != blank %}
+                    <p>{{ section.settings.newsletter_text }}</p>
+                {% endif %}
+                {% if section.settings.newsletter_html != blank %}
+                    <div class="footer__newsletter-klaviyo">
+                        {% render 'newsletter-klaviyo' %}
+                    </div>
+                {% endif %}
+                {%- render 'social-icons', class: 'footer__social-icons mt-md' -%}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "2.0 Footer",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Newsletter"
+            },
+            {
+                "type": "text",
+                "id": "newsletter_heading",
+                "label": "Heading",
+                "default": "Join our mailing list"
+            },
+            {
+                "type": "textarea",
+                "id": "newsletter_text",
+                "label": "Text",
+                "default": "Get emails you’ll *actually* want to read and receive 10% off your first online order!"
+            },
+            {
+                "type": "text",
+                "id": "newsletter_html",
+                "label": "HTML Embed (Klaviyo)",
+                "info": "Copy HTML embed code from Klaviyo sign up forms and paste in there. e.g. <div class='klaviyo-form-X883Kw'></div>"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Link list",
+                "type": "linklist",
+                "settings": [
+                    {
+                        "type": "link_list",
+                        "id": "footer_menu",
+                        "label": "Link list"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "2.0 Footer",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}
