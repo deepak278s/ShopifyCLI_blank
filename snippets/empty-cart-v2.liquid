@@ -1,0 +1,19 @@
+<div data-role="empty-cart" class="">
+  <div class="pt-[82px] m-auto md:pt-[80px] lg:pt-[109px] pb-[106px] md:pb-[76px] lg:pb-[83px] flex flex-col items-center max-w-[310px] lg:max-w-[450px] gap-4">
+    <span>{% render 'icon-v2', icon: 'icon-mini-cart-bag' %}</span>
+    <h2 class="text-[36px] font-gascogne-serial leading-[31px] lg:leading-[40px] font-light text-center text-[#222222]">
+      {{ section.settings.empty_content }}
+    </h2>
+    <p class="text-[16px] font-shape font-light leading-[24px] text-center text-[#222222] px-8 ">
+      {{ section.settings.empty_items_add }}
+    </p>
+    {% if section.settings.btn_text != blank %}
+      <a
+        href="{{section.settings.button_link}}"
+        class="mt-[16px] flex justify-center text-center font-shape uppercase text-[13px] bg-[#121212] py-[10.3px] w-full text-[#fff] rounded-full font-normal lg:max-w-[310px]"
+      >
+        {{ section.settings.btn_text }}
+      </a>
+    {% endif %}
+  </div>
+</div>

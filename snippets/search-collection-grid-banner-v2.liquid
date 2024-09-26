@@ -1,0 +1,256 @@
+{% for block in section.blocks %}
+  {% liquid
+    assign cardMeta = block.settings
+    assign card_index = cardMeta.position | times : 1
+    assign card_title = cardMeta["banner-title"]
+    assign card_image = cardMeta.image
+    assign card_mob_image = cardMeta["Mob_image_url"]
+    assign card_subsdecription = cardMeta["banner-subdescrption"]
+    assign card_btn_text = cardMeta.btn_title
+    assign card_redirection = cardMeta.btn_url
+    assign span_count = cardMeta.span_count | times : 1
+    assign currenIndex = paginate.current_offset | plus: loop.index
+  %}
+
+
+  {% if currenIndex == card_index and span_count == 1 %}
+    <div class="image-card-plp">
+      {% liquid
+        assign card_ratio = 1
+        if card_mob_image != blank
+          assign card_ratio = card_mob_image.aspect_ratio
+        endif
+        assign card_desk_ratio = 1.8
+        if card_image != blank
+          assign card_desk_ratio = card_image.aspect_ratio
+        endif
+      %}
+      {% style %}
+     @media only screen and (min-width:768px) {
+      .card_ratio-{{card_image.id }}{
+        padding-bottom:{{ 1 | divided_by : card_desk_ratio | times : 100 }}% !important;
+      }
+
+     }
+      {% endstyle %}
+      <div class="relative bg-[#F8F8F8] card_ratio-{{card_image.id }}" style="height:100%; padding-bottom:{{ 1 | divided_by : card_ratio | times : 100 }}%" >
+        {% if card_image != blank %}
+          <picture>
+            <source
+              media="(min-width:767px)"
+              srcset="
+                {%- if card_image.width >= 1100 -%}{{ card_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                {%- if card_image.width >= 1500 -%}{{ card_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                {%- if card_image.width >= 1780 -%}{{ card_image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                {%- if card_image.width >= 2000 -%}{{ card_image | image_url: width: 2000 }} 2000w,{%- endif -%}
+                {%- if card_image.width >= 3000 -%}{{ card_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                {%- if card_image.width >= 3840 -%}{{ card_image | image_url: width: 3840 }} 3840w,{%- endif -%}
+                {{ card_image | image_url }} {{ card_image.width }}w
+              "
+            >
+            <img
+              srcset="
+                {%- if card_mob_image.width >= 375 -%}{{ card_mob_image | image_url: width: 375 }} 375w,{%- endif -%}
+                {%- if card_mob_image.width >= 750 -%}{{ card_mob_image | image_url: width: 750 }} 750w,{%- endif -%}
+              "
+              sizes="100vw"
+              src="{{ card_mob_image | image_url: width: 1500 }}"
+              alt="{{ card_mob_image.alt | escape }}"
+              loading="lazy"
+              class="absolute top-0 left-0 w-auto h-full object-cover"
+              width="{{ card_image.width | divided_by : 4 }}"
+              height="{{ card_image.height }}"
+            >
+          </picture>
+        {% endif %}
+        <div class="absolute bottom-0 top-0 left-0 w-full pb-[23px] px-[9px] flex flex-col gap-6 items-center justify-center">
+          <div class="flex flex-col gap-3 items-center justify-center">
+            {% if card_title != blank %}
+              <h3 class="text-center font-gascogne-serial text-[#fff] text-[20px] lg:text-[26px] font-light capitalize leading-[31.2px]">
+                {{ card_title }}
+              </h3>
+            {% endif %}
+            {% if card_subsdecription != blank %}
+              <p class="font-shape text-[#fff] text-[16px] leading-[24p] text-center font-normal">
+                {{ card_subsdecription }}
+              </p>
+            {% endif %}
+          </div>
+
+          {% if card_btn_text != blank %}
+            <a
+              class="bg-[#fff] rounded-full font-shape text-[11px] px-4 lg:px-8 py-3 font-normal uppercase text-[#121212]"
+              href="{{ card_redirection }}"
+            >
+              {{- card_btn_text -}}
+            </a>
+          {% endif %}
+          <a
+            class="h-full w-full absolute top-0 left-0"
+            href="{{ card_redirection }}"
+          ></a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if currenIndex == card_index and span_count == 2 %}
+    <div class="banner-image-plp group-[&.layout-2]/collection:col-span-1 col-span-2 lg:col-span-2 lg:group-[&.layout-2]/collection:col-span-2">
+      {% liquid
+        assign card_ratio = 1.2
+        if card_image != blank
+          assign card_ratio = card_mob_image.aspect_ratio
+        endif
+        assign card_desk_ratio = 1.2
+        if card_image != blank
+          assign card_desk_ratio = card_image.aspect_ratio
+        endif
+      %}
+      {% style %}
+     @media only screen and (min-width:768px) {
+      .card_ratio-{{card_image.id }}{
+        padding-bottom:{{ 1 | divided_by : card_desk_ratio | times : 100 }}% !important;
+      }
+
+     }
+      {% endstyle %}
+      <div class="relative bg-[#F8F8F8] card_ratio-{{card_image.id }}" style="height:100%;padding-bottom:{{ 1 | divided_by : card_ratio | times : 100 }}%">
+        {% if card_image != blank %}
+
+          <picture>
+            <source
+              media="(min-width:767px)"
+              srcset="
+                {%- if card_image.width >= 1100 -%}{{ card_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                {%- if card_image.width >= 1500 -%}{{ card_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                {%- if card_image.width >= 1780 -%}{{ card_image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                {%- if card_image.width >= 2000 -%}{{ card_image | image_url: width: 2000 }} 2000w,{%- endif -%}
+                {%- if card_image.width >= 3000 -%}{{ card_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                {%- if card_image.width >= 3840 -%}{{ card_image | image_url: width: 3840 }} 3840w,{%- endif -%}
+                {{ card_image | image_url }} {{ card_image.width }}w
+              "
+            >
+              <img
+                srcset="
+                  {%- if card_mob_image.width >= 375 -%}{{ card_mob_image | image_url: width: 375 }} 375w,{%- endif -%}
+                  {%- if card_mob_image.width >= 750 -%}{{ card_mob_image | image_url: width: 750 }} 750w,{%- endif -%}
+                "
+                sizes="100vw"
+                src="{{ card_mob_image | image_url: width: 1500 }}"
+                alt="{{ card_mob_image.alt | escape }}"
+                loading="lazy"
+                class="absolute top-0 left-0 w-full h-full object-cover"
+                width="{{ card_image.width | divided_by : 4 }}"
+                height="{{ card_image.height }}"
+              >
+          </picture>
+        {% endif %}
+        <div class="absolute bottom-0 top-0 left-0 w-full pb-[23px] px-[9px] flex flex-col gap-6 items-center justify-center">
+          <div class="flex flex-col gap-3 items-center justify-center">
+            {% if card_title != blank %}
+              <h3 class="text-center font-gascogne-serial text-[#fff] text-[26px] lg:text-[46px] lg:leading-[60px] font-light leading-6 lg:tracking-[0.69px]">
+                {{ card_title }}
+              </h3>
+            {% endif %}
+            {% if card_subsdecription != blank %}
+              <p class="font-shape text-[#fff] text-[14px] max-w-[346px] text-center lg:tracking-[0.067px] lg:leading-[20px]">
+                {{ card_subsdecription }}
+              </p>
+            {% endif %}
+          </div>
+          {% if card_btn_text != blank %}
+            <a
+              class="bg-[#fff] rounded-full font-shape text-[13px] px-8 lg:px-[42px] py-3 font-normal uppercase text-[#121212]"
+              href="{{ card_redirection }}"
+            >
+              {{- card_btn_text -}}
+            </a>
+          {% endif %}
+          <a
+            class="h-full w-full absolute top-0 left-0"
+            href="{{ card_redirection }}"
+          ></a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if currenIndex == card_index and span_count == 3 %}
+    <div class="banner-image-plp col-span-2 group-[&.layout-2]/collection:col-span-1 lg:col-span-3 lg:group-[&.layout-2]/collection:col-span-2">
+      {% liquid
+        assign card_ratio = 1.2
+        if card_image != blank
+          assign card_ratio = card_mob_image.aspect_ratio
+        endif
+        assign card_desk_ratio = 1.2
+        if card_image != blank
+          assign card_desk_ratio = card_image.aspect_ratio
+        endif
+      %}
+      {% style %}
+     @media only screen and (min-width:768px) {
+      .card_ratio-{{card_image.id }}{
+        padding-bottom:{{ 1 | divided_by : card_desk_ratio | times : 100 }}% !important;
+      }
+
+     }
+      {% endstyle %}
+
+      <div class="relative bg-[#F8F8F8] card_ratio-{{card_image.id }}" style="height:100%; padding-bottom:{{ 1 | divided_by : card_ratio | times : 100 }}%">
+      <picture>
+        <source
+          media="(min-width:767px)"
+          srcset="
+            {%- if card_image.width >= 1100 -%}{{ card_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+            {%- if card_image.width >= 1500 -%}{{ card_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+            {%- if card_image.width >= 1780 -%}{{ card_image | image_url: width: 1780 }} 1780w,{%- endif -%}
+            {%- if card_image.width >= 2000 -%}{{ card_image | image_url: width: 2000 }} 2000w,{%- endif -%}
+            {%- if card_image.width >= 3000 -%}{{ card_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+            {%- if card_image.width >= 3840 -%}{{ card_image | image_url: width: 3840 }} 3840w,{%- endif -%}
+            {{ card_image | image_url }} {{ card_image.width }}w
+          "
+        >
+          <img
+            srcset="
+              {%- if card_mob_image.width >= 375 -%}{{ card_mob_image | image_url: width: 375 }} 375w,{%- endif -%}
+              {%- if card_mob_image.width >= 750 -%}{{ card_mob_image | image_url: width: 750 }} 750w,{%- endif -%}
+            "
+            sizes="100vw"
+            src="{{ card_mob_image | image_url: width: 1500 }}"
+            alt="{{ card_mob_image.alt | escape }}"
+            loading="lazy"
+            class="absolute top-0 left-0 w-full h-full object-cover"
+            width="{{ card_image.width | divided_by : 4 }}"
+            height="{{ card_image.height }}"
+          >
+      </picture>
+        
+        <div class="absolute bottom-0 top-0 left-0 w-full pb-[23px] px-[9px] flex flex-col gap-6 items-center justify-center">
+          <div class="flex flex-col gap-3 items-center justify-center">
+            
+            {% if card_title != blank %}
+              <h3 class="text-center font-gascogne-serial text-[#fff] text-[20px] lg:text-[46px] lg:leading-[60px] font-light leading-6 lg:tracking-[0.69px]">
+                {{ card_title }}
+              </h3>
+            {% endif %}
+            {% if card_subsdecription != blank %}
+              <p class="font-shape text-[#fff] text-[14px] max-w-[346px] text-center lg:tracking-[0.067px] lg:leading-[20px]">
+                {{ card_subsdecription }}
+              </p>
+            {% endif %}
+          </div>
+          {% if card_btn_text != blank %}
+            <a
+              class="bg-[#fff] rounded-full font-shape text-[13px] px-4 lg:px-[42px] py-3 font-normal uppercase text-[#121212]"
+              href="{{ card_redirection }}"
+            >
+              {{- card_btn_text -}}
+            </a>
+          {% endif %}
+          <a
+            class="h-full w-full absolute top-0 left-0"
+            href="{{ card_redirection }}"
+          ></a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

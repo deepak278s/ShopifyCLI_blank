@@ -1,0 +1,63 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:05+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            cca09ea1a1c087bbd601a3bf0cd49c74
+//      Signature:      eyJpdiI6IjY5UzNlZkV2VlFUTlJ0NmdpN0JCOHc9PSIsInZhbHVlIjoib2FvRXdkakhmZkxsWm91aHI2WTlsTmRLWjlJXC8rV3ZPRkVURlwvcnpWNk5MTEVHNzVsRWRyWnVRMnJSM2ViWGhqWFg3bENrMTRWQ3dST2haWGxiWXJCR1Z3V0c0WVFvZHREaUwrc3E4ekppOTFIbmM3aEZWQUVKb3dcL0dPY2VoTVpRaFo1RDVwYjZoRkYwaXJlaUZsVlIreVJpdEpkK1llQXl5eGxHT21BRUVUQTVFRHhIVTYyM3hVOGFoTkN0dktqK2xLOStTWlRFTGR5OFgyZmxWVlFOSXhLdVlrNkpjVHdEQ2hZTjM3c2FwREcrQXNVNVhaeFwvWHhPZWJMTXgzYzBBMDFqeGUyUE5TNWIydW43Wk9ycWxBUHVacDZKa0hPK3RJR0gzbWlUeUhRMUFRMzdFTTdUdWhkS0ppV0tLUmNJU1dEWmVrMlwvdENkSkpJejRWZ1czQXNGRmhKY0VtbUpJOUZUMWhJcDI4TkNBa0RDVVVQdDN6UE9sVGdMMWtQTk9qalpISHBBcEQyM1N5a2RTbWhSSGRRPT0iLCJtYWMiOiIxNzhiMzFmZTc4MzA2MGRlOWQ5MzUwNzUxYzlhNGRlYjA4OWYwYzk5MTU0NTIwZjc2Mzk1OTUzMjA5MzYwYTFmIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- if load_more -%}
+
+    <div class="pagination">
+        <p class="text-align-center lg mt-md">
+
+            {%- liquid
+                assign current_shown = paginate.current_offset | plus: collection.products.size
+                echo 'collections.general.items_with_count' | t: product_count: current_shown, count: paginate.items
+            -%}
+
+        </p>
+        <progress class="pagination-progress block mx-a my-md" max="{{ paginate.items }}" value="{{ current_shown }}"></progress>
+
+        {%- if paginate.next -%}
+
+            <div class="flex f-center f-vertical-center{% if class %} {{ class }}{% endif %}">
+                <button data-load-more="{{ template.name }}" data-next-page="{{ paginate.next.url }}" class="pagination-btn btn{% if infinite_load %} visually-hidden{% endif %}">Load more</button>
+            </div>
+
+        {%- endif -%}
+
+    </div>
+
+{%- else -%}
+
+
+    {%- if paginate.next or paginate.previous -%}
+
+        <div class="pagination fnt-sec fw-500 uc md flex py-xl f-center f-vertical-center {% if class %} {{ class }}{% endif %}">
+
+            {% comment %} Prev/Next {% endcomment %}
+            {% capture pagination_previous %}
+                {% render 'icons', icon: 'arrow--short', class: 'pagination__prev' %}
+            {% endcapture %}
+
+            {% comment %} Page Select {% endcomment %}
+            {{ paginate | default_pagination: next: 'Next', previous: 'Back' }}
+            
+        </div>
+
+    {%- endif -%}
+    
+
+{%- endif -%}

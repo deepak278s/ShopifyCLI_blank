@@ -1,0 +1,37 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:26+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            dba8190bb69e76bf0cd65f6475b0ed06
+//      Signature:      eyJpdiI6Ik9BWHFZTzN0MjFRNG0rTmJFbllLRXc9PSIsInZhbHVlIjoiRWs4SENaZEtBZExDWFV0cThOZ0ZKajdcL0IrWm1Ec01FQmoxOG10UWNhejliaERcL2pJaGtyZ1FzYW1aTXBYbHNLNThITmtnWWtqYmVoZ1wvXC85WVVIOTd6TDc2M2V4S0NtMXhWWXhMWHZJczFqajBua0FcL2ZjSmxhT3RWOUw1cWNPZEFVZ3RvQWxFRTVvUmpidjV1Z2o3N2haaVVrVFFnTDdQTk5HV0dwbFwvWTF1bTRWOG5makZDSE1HbUI5bThKSk5DbEVJZHkwUEtVXC9hZFFxNXcwRnNOcVpMSkxmSlhubTJmNm1OU3ZTd3o2cGZ0a0hsQjdWZzBvdElPaWQ0QWdTMUtDMVUwbEJ1ejIzSWozK2w1MXk5MXFpNmVsQ1k2TnFjM2hZQU5ic2grTXVoeSt0S2JYYjFjejF1RDdYRkVEb2NPNVRRWTY4aU4zazZ0aitUT1psWkNuQjVDb2lIU2x1c1lHWnFGZkorbUVha3dLYlwvWFFuVEhwYkJ3eHArYXVMMmk5RE9XcW4rRVhuOEFNcGVIWFY2aXRXbzVxQ2dLaUYyUUh5eFZmalwvRUpHND0iLCJtYWMiOiI3OTVkZDkzNDc2MDMwMTM4OGJjYzQwYjFhNGU5NzBjYmFkNTM0ZmRkNzc2MTMwNmJmZTQ3MmRhMzM5MDUzODNkIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="collection-popup__related-card collection-popup__related-card--{{card_name}}">
+    <div class="collection-popup__related-card-image" style="background-image: url({{pop_collection.image | img_url: '590x'}})">
+        {% if pop_collection.metafields.popup.homepage_badge != blank %}
+            <span class="collection-popup__related-card-badge">{{pop_collection.metafields.popup.homepage_badge}}</span>
+        {% endif %}
+    </div>
+    <h3 class="collection-popup__related-title">{{pop_collection.title}}</h3>
+    {% if pop_collection.description != '' %}
+        <p class="collection-popup__related-description">{{pop_collection.description}}</p>
+    {% endif %}
+    <a class="collection-popup__related-btn btn" href="{{pop_collection.url}}">Shop Now</a>
+</div>
+
+{% style %}
+    .collection-popup__related-card--{{card_name}} .collection-popup__related-card-badge {
+        background-color: {{pop_collection.metafields.popup.homepage_badge_colour}};
+    }
+{% endstyle %}

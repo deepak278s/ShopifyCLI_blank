@@ -1,0 +1,54 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:06+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            b23824311ca2888ebeeb8a32524947f0
+//      Signature:      eyJpdiI6ImV0TEluaENReXpCN3YrMmUwekNoQ3c9PSIsInZhbHVlIjoicUxkM0ZlOUtER29ERkpcL0xwVjNjVmVDYWJTZXVweDgycHFNbHlYQ3JvRnhcL0FKK09VVGVqN3g5MlFcLzd0aDR5alc4cW1uRnEwK0hkQkg2eEVKTURxKzIrN0tBdzIxWmlUNkN3YjhNVDJYbEUyUnd0dUZ1OXZwTmNpZzlOWEZ0MDkzaWxiZkk5R2dwQlowczM0OTBzblJmXC8rUzR0aWFQaWNiN3JDZGtVeE5Cb3ZQanFsVWFLSVZaQkx4R3EwUkxzSTdPTzkzOSsrRVlcL1JwVFJDVFpLNXQ5N295RFFLVk45TlRyTkhIb2lMT094ODVIeDdsQnhCNUxYNTE5Smt0aktRWStBOEVMaFpLaXJEVUVRUGFXRVdQMkRWdUFBNW9xRlVvRUJBd1FOVlwvTXBJc2IrUUE3cXpYWjFCUCtYV2UxTGR2Vk5NazNXeVBOY2pNNWxocER4K2wzUEQ2Q2drUk9mMGk5V2VaTlwvMDBrc0xYdEprQXE2K1NnN2h6dEYxaHpTd2JwWUZBS0Y2MHBoUytUK3FDdGMrZ2xGUzJiN3hMZVdjQjNpUUREQzlcL3pJPSIsIm1hYyI6IjA4NjlkZjkwNDliZGU0OGY5MjYwYTk5ZWRlNmY2M2Y3MzZhYjMxODY4MGFiODFjMzU2Y2I0ZTM0NjM3OWE0MjkifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="banner-column__video{% if block.settings.video_cover %} object-cover{% endif %}" id="block--{{ block.id }}" {{ block.shopify_attributes }}
+    {% if request.page_type == 'collection' and collection.metafields.media.video != empty %}
+        data-deferred-media='{ "media_url": "{{ collection.metafields.media.video.value.url }}", "media_type": "local" }'
+    {% elsif block.settings.video_filename != '' %}
+        data-deferred-media='{ "media_url": "{{ block.settings.video_filename | file_url }}", "media_type": "local" }'
+    {% elsif block.settings.video %}
+        data-deferred-media='{ "media_id": "{{ block.settings.video.id }}", "media_type": "{{ block.settings.video.type }}" }'
+    {% endif %}>
+    {% if block.settings.video != '' and block.settings.placeholder != '' %}
+        <a target="_blank" href="{{block.settings.video}}" class="banner-column__video-trigger">
+            <div class="banner-column__video-placeholder" style="background-image: url({{block.settings.placeholder | img_url: '700x'}})"></div>
+        </a>
+    {% endif %}
+
+    {%- style -%}
+        #block--{{ block.id }} {
+            --width: {{ block.settings.width }}%;
+        }
+        {% if request.page_type == 'collection' %}
+            #block--{{ block.id }}.banner-column__video {
+                height: auto !important;
+                padding-bottom: 0!important;
+                aspect-ratio: initial!important;
+                transform: none;
+            }
+            #block--{{ block.id }}.banner-column__video video {
+                height: auto!important;
+                position: relative!important;
+            }
+            #block--{{ block.id }}:before {
+                content: '';
+            }
+        {% endif %}
+    {%- endstyle -%}
+</div>

@@ -1,0 +1,24 @@
+{%- comment %}<locksmith:7248>{% endcomment -%}
+  {%- assign locksmith_be4a_product__available = false %}{% assign locksmith_be4a_product__price = nil %}{% assign locksmith_be4a_product__compare_at_price = nil %}{% for variant in product.variants %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% if locksmith_be4a_product__available == false and variant.available %}{% assign locksmith_be4a_product__available = true %}{% endif %}{% if locksmith_be4a_product__price == nil %}{% assign locksmith_be4a_product__price = variant.price %}{% endif %}{% if locksmith_be4a_product__compare_at_price == nil %}{% assign locksmith_be4a_product__compare_at_price = variant.compare_at_price %}{% endif %}{% endfor -%}
+{%- comment %}</locksmith:7248>{% endcomment -%}
+
+{%- liquid
+    assign tag = false
+    assign tag_color = 'var(--color-black)'
+    assign sale = false
+    if locksmith_be4a_product__available == false
+        assign tag = 'products.product.sold_out' | t
+    elsif locksmith_be4a_product__price < locksmith_be4a_product__compare_at_price
+        assign tag = 'products.product.on_sale' | t
+        assign tag_color = 'var(--color-sale)'
+        assign sale = true
+    elsif product.metafields.descriptors.tag != blank
+        assign tag = product.metafields.descriptors.tag
+        if product.metafields.descriptors.tag_color != blank
+            assign tag_color = product.metafields.descriptors.tag_color
+        endif
+    endif
+-%}
+{%- if tag -%}
+    <span class="product__tag{% if sale %} product__tag--sale{% endif %} mb-xs fnt-sec sm uc fw-300 mb-xs">{{ tag }}</span>
+{%- endif -%}

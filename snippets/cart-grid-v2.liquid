@@ -1,0 +1,20 @@
+<cart-form>
+  <div data-role="cart-item-grid" class="lg:flex lg:justify-between lg:gap-[34px] ">
+    <div class="group/items lg:w-[calc(100%_-_360px)] relative h-max">
+      <div
+        data-role="items"
+        class="relative flex flex-col gap-5 lg:gap-[34px] py-[25px] md:pb-0 md:pt-[15px] px-5 md:px-[22px] lg:pr-0 xl:pl-9"
+      >
+        {% for item in cart.items %}
+          {% render 'cart-item-v2', item: item %}
+        {% endfor %}
+      </div>
+    </div>
+    <div
+      data-role="cart-summary"
+      class="summary_section w-full px-[20px] pt-5 md:px-[22px] md:pl-0 flex flex-col gap-10 lg:max-w-[360px] xl:pr-10 relative"
+    >
+      {% render 'cart-summary-v2', promotionalValue: settings.promotional_value %}
+    </div>
+  </div>
+</cart-form>

@@ -1,0 +1,37 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:12+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            6ad449e715d49e657689eb75acd1fa5d
+//      Signature:      eyJpdiI6IkNVSms2NlNZKzNMM3ZramMybWtFb1E9PSIsInZhbHVlIjoicUFNR2trVEgwcUxIQnc5UVVSanRzcWlnTTVvdFp0dXBOVWNETXFPbWNNVjhJTm1oNzZYRWVHSUF4TXExNnlOSUpqSyt3bTlQaWQzNVhhMWJKNVwvQjhPXC9MMm1SdndMejB3eWVuQjBQODljZVwvYVFSZ1JFZFVcLzJBZUdlM29INGpaV2Z2NitIR1A0Nk1icElMcEZCbEozOGxIS3BWelB3Vll1cjFNaDZoRDZoMFJ3dUZaYlBmd3BZT0NUREd3UVBQeURkNHlNMjNPT2ROK1g0WDF4aXFuejFWNmo0Z2FkSEFFQnhjR2JaeUpWSzdMSE1ac1hHV29rdWJaaEJuV1NRcnVrTUJRTmVOczRrSUdnOG5NYk00QUFcL3Zwb0ptNE5KeTA2dVZLb0hjYXhSeTRVSjR3eXM5YUd3aDVHWjgzbGxIdWYrMDYrTjA1MU5JZVpRMVNKYlI3U0hRK1NHMlErd3BmRTY0MUdLbGU2Mk45Q1l5NlRYZWtKWXpnKzdVVVFcL09FZkVMMkRKNVNOZE5cL1oyMGZjbjlrb0E9PSIsIm1hYyI6Ijk0YWJiNDYzNTE5NDcxZGVkYjIyOTJmYWNlNTVmNmYzZjJkNDViY2VhNDZhZDA2NDk1ZTBlMGVjNTg0YzFiZTMifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    if icon
+        capture icon_html
+            render 'icons', icon: icon
+        endcapture
+        assign text = 'general.html_helpers.span_html' | t: inner_html: text
+        assign text = text | append: icon_html
+        assign class = class | append: ' btn btn--white btn--outline'
+    elsif style == 'button'
+        assign class = class | append: ' btn'
+    elsif style == 'text-link'
+        assign class = class | append: ' text-link fnt-sec uc fw-300 xs'
+    else
+        assign class = class | append: ' btn btn--white'
+    endif
+    assign class = class | append: ' ' | append: link_class
+    echo text | link_to: link, class: class
+-%}

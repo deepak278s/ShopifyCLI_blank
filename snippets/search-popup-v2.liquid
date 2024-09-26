@@ -1,0 +1,797 @@
+{% render 'vite-tag' with '@modules/search-popup-v2.js' %}
+
+{% style %}
+
+/* iPhone in portrait or landscape mode */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait),
+only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+  /* Add your iPhone-specific CSS here */
+  .mac_style {
+        padding-bottom: 80px;
+   }
+}
+ 
+{% endstyle %}
+
+
+
+{% if template contains 'index'
+  or template contains 'collection'
+  or template contains 'product'
+  or template contains 'cart'
+  or template contains '404'
+  or template contains 'static-page-v2'
+  or template contains 'delivery-v2'
+  or template contains 'faq-v2'
+  or template contains 'about-us-v2'
+  or template contains 'contact-v2'
+  or template contains 'our-services-v2'
+  or template contains 'careers-v2'
+  or template contains 'search'
+%}
+  <search-popup class="fixed top-[31px] bg-[#fff] w-full max-h-[calc(100vh_-_32px)] overflow-y-auto left-0 z-[999] hidden [&.active]:block group/search">
+    <div class="m-containerr:max-w-[1600px] m-containerr:mx-auto relative z-[1] mac_style">
+      <div class="bg-[#fff] z-[2] sticky top-0 " >
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
+          data-role="search-form"
+          class="p-5 lg:px-10 lg:py-6 border-b-[0.5px] border-b-[#D5D5D5]"
+        >
+          <div class="flex gap-2 lg:gap-4 items-center">
+            {% render 'icon-v2',
+              icon: 'icon-search-tilt',
+              classAttr: 'w-full max-w-[20px] h-5 lg:max-w-[32px] lg:h-[32px]'
+            %}
+            <input
+              type="text"
+              value="{{ search.terms | escape }}"
+              class="border-0 p-0 outline-none w-full font-gascogne-serial text-[26px] font-light leading-[25px] ring-0 focus:ring-0"
+              placeholder="Search for..."
+              data-role="search-input"
+              maxlength="200"
+            >
+            <button
+              class="ml-auto border-0 flex gap-2 items-center min-w-[65px]"
+              data-role="clear-input"
+              data-action="search-toggle"
+            >
+              <span class="font-shape font-light text-[14px] text-[#222222]">Clear</span>
+              {%- render 'icon-v2',
+                icon: 'icon-search-close',
+                classAttr: 'w-full max-w-[20px] h-4 lg:max-w-[32px] lg:min-w-[32px] lg:h-[32px]'
+              %}
+            </button>
+          </div>
+        </form>
+        <div
+          class="bg-[#fff] py-6 lg:py-[52px] lg:px-10 pl-5 {% unless section.settings.popular_search %}!hidden{% endunless %}"
+          data-role="popular"
+        >
+          <h3 class="font-gascogne-serial text-[26px] leading-[25px] text-[#222222]">
+            {{ section.settings.popular_title }}
+          </h3>
+          <div class="flex mt-6 gap-[11px] overflow-y-auto">
+            {% for block in section.blocks %}
+              {% if block.settings.popular_search != blank %}
+                <div
+                  class="uppercase text-[11px] font-shape p-[6px_11px] leading-[22px] bg-[#F6F3EC] gap-2 h-max rounded-full whitespace-nowrap text-[#222222] cursor-pointer"
+                  data-role="pop-text"
+                >
+                  {{ block.settings.popular_search }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {%- render 'search-popup-collection-v2' -%}
+        </div>
+      </div>
+      <div class="w-full h-[140px] bg-[#fff] relative hidden group-[&.loading]/search:block" data-role="loader">
+        <div
+          role="status"
+          class="absolute left-0 top-0 w-full h-full flex justify-center items-center"
+        >
+          {% render 'icon-v2', icon: 'icon-pdp-loader' %}
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <div
+        class="hidden px-5 lg:px-10 pt-4 pb-[44px] lg:pt-12 {% if section.settings.suggestion %}lg:pt-0{% endif %} bg-[#fff]"
+        data-role="empty-search"
+      >
+        <div class="flex flex-col items-center max-w-[574px] m-auto">
+          {% render 'icon-v2',
+            icon: 'icon-search-tilt',
+            classAttr: 'w-full h-12 max-w-[48px] mb-8'
+          %}
+        <h3 class="font-gascogne-serial text-[46px] leading-[50.6px] font-light mb-4 text-[#222222] text-center px-4">
+          {{section.settings.no-result-title}}
+        </h3>
+        
+        <div data-empty="{{ section.settings.no-result-discription}}" class="font-shape text-[16px] font-light leading-[24px] text-center flex flex-col gap-3">
+          {{ section.settings.no-result-discription | replace : "**searchTerm**" , predictive_search.terms}}
+        </div>
+        
+        <div
+          class="w-full mt-8 {% unless section.settings.popular_search %}!hidden{% endunless %}"
+          data-role="popular"
+        >
+          
+          <h3 class="popular_title w-full font-gascogne-serial text-[26px] font-light leading-[120%] capitalize mb-0 text-[#222222] text-center hidden">Popular Searches</h3>
+          <div class="flex gap-[11px] overflow-y-auto">
+            {% for block in section.blocks %}
+              {% if block.settings.popular_search != blank %}
+                <div
+                  class="uppercase text-[11px] font-shape p-[6px_11px] leading-[22px] bg-[#F6F3EC] gap-2 h-max rounded-full whitespace-nowrap text-[#222222] cursor-pointer"
+                  data-role="pop-text"
+                >
+                  {{ block.settings.popular_search }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        </div>
+          {%- render 'search-popup-collection-v2' -%}
+      </div>
+      <div
+        class="hidden [&.active]:block [&.active]:lg:grid {% if section.settings.suggestion %} lg:grid-cols-[0.6fr_3fr] {% else %} lg:grid-cols-[1fr] {% endif %} lg:gap-9 bg-[#fff]"
+        data-role="results-container"
+      >
+        <div class="px-5 lg:pl-10 lg:pr-0 pt-[22px] lg:pt-10 pb-10 {% unless section.settings.suggestion %}!hidden{% endunless %}">
+          <h3 class="font-gascogne-serial text-[26px] leading-[29px] font-light mb-6 lg:mb-8 text-[#222222]">
+            Suggestions
+          </h3>
+          <ul class="flex flex-col gap-4" data-role="suggestion-text"></ul>
+        </div>
+        <div class="px-5 {% if section.settings.suggestion %}lg:pl-0 {% else %}pt-5{% endif %} lg:pr-[44px] pb-[58px] lg:pb-8 lg:pt-10">
+          <div>
+            <ul class="flex mb-4 lg:mb-6 gap-12 border-b-[#D5D5D5] border-b-[0.5px] {% unless section.settings.inspiration %}hidden{%  endunless %}">
+              <li
+                class="font-gascogne-serial text-[26px] font-light leading-[29px] [&.active]:border-b-[#000] active [&.active]:border-b-[1px] flex-[0_0_calc(50%_-_24px)] lg:flex-[0_0_auto] text-center pb-2 cursor-pointer"
+                data-role="toggle-result"
+                data-value="products"
+              >
+                Products
+              </li>
+              <li
+                class="font-gascogne-serial text-[26px] font-light leading-[29px] [&.active]:border-b-[#000] [&.active]:border-b-[1px]  flex-[0_0_calc(50%_-_24px)] lg:flex-[0_0_auto] text-center pb-2 cursor-pointer"
+                data-role="toggle-result"
+                data-value="articles"
+              >
+                Inspiration
+              </li>
+            </ul>
+            <div class="hidden [&.active]:block active" data-slot="products">
+              <p class="font-shape font-light leading-[21px] text-[14px] mb-3">
+                Search Results (<span data-role="results-products-count"></span>)
+              </p>
+              <div>
+                <div
+                  class="flex flex-col gap-3 lg:grid lg:grid-cols-4 lg:gap-[18px]"
+                  data-role="suggestion-products"
+                ></div>
+                <div data-role="result-products-btn" class="w-full"></div>
+              </div>
+            </div>
+            <div class="hidden [&.active]:block" data-slot="articles">
+              <p class="font-shape font-light leading-[21px] text-[14px] mb-3">
+                Search Results (<span data-role="results-articles-count"></span>)
+              </p>
+              <div>
+                <div
+                  class="flex flex-col gap-3 lg:grid lg:grid-cols-4 lg:gap-[18px] {% unless section.settings.inspiration %}!hidden{%  endunless %}"
+                  data-role="suggestion-articles"
+                ></div>
+                <div data-role="result-articles-btn" class="w-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-action="search-toggle" class="fixed top-0 left-0 w-full h-full bg-[#000] opacity-50 z-[-1]"></div>
+  </search-popup>
+{% else %}
+  {% style %}
+    .search-popup_container {
+      z-index: 1;
+      position: relative;
+      margin: 0 auto;
+      max-width: 100%;
+      width: 100%;
+    }
+    search-popup {
+      position: fixed;
+      top: 31px;
+      background-color: #fff;
+      max-height: calc(100vh - 32px);
+      overflow-y: auto;
+      left: 0px;
+      z-index: 999;
+      display: none;
+      width: 100%;
+    }
+    search-popup.active {
+      display: block;
+    }
+    search-popup .\!hidden {
+      display: none;
+    }
+    .search-popup_container {
+      position: relative;
+      z-index: 1;
+    }
+    .search-popup_wrapper {
+      background-color: #fff;
+      z-index: 1;
+      position: sticky;
+      top: 0px;
+    }
+    .search-popup_wrapper > form {
+      padding: 20px;
+      border-bottom: solid 0.5px #d5d5d5;
+    }
+    .search-popup_input_wrapper {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .search-popup_input_wrapper > svg {
+      width: 100%;
+      max-width: 20px;
+      height: 20px;
+    }
+    .search-popup_input_wrapper > input[type='text'] {
+      border: 0px;
+      padding: 0px;
+      outline: transparent;
+      font-family: var(--primary-font);
+      font-size: 26px;
+      font-weight: 300;
+      line-height: 25px;
+      width: 100%;
+    }
+    .search-popup_input_wrapper > button {
+      margin-left: auto;
+      border: 0px;
+      display: flex;
+      align-items: center;
+      min-width: 65px;
+    }
+    .search-popup_input_wrapper > button > span {
+      font-family: var(--secondary-font);
+      font-weight: 300;
+      font-size: 14px;
+      color: #000;
+    }
+    .search-popup_input_wrapper > button > svg {
+      width: 100%;
+      max-width: 20px;
+      height: 16px;
+    }
+    .search-popup_overlay {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      opacity: 0.5;
+      z-index: -1;
+    }
+    .search-popup-loader {
+      width: 100%;
+      height: 140px;
+      background-color: #fff;
+      position: relative;
+      display: none;
+    }
+    .loading .search-popup-loader {
+      display: block;
+    }
+    .search-popup-loader [role='status'] {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    .search-popup-loader [role='status'] svg {
+      fill: #000;
+      color: rgba(229, 231, 235, 1);
+      animation: spin 1s linear infinite;
+      width: 32px;
+      height: 32px;
+    }
+    .search-popup-loader [role='status'] span {
+      display: none;
+    }
+    .search-popup_empty-search {
+      padding: 20px;
+      padding-top: 20px;
+      padding-bottom: 44px;
+      background-color: #fff;
+    }
+    .search-popup_empty-search.hidden {
+      display: none;
+    }
+    .search-popup_empty-search h3 {
+      font-family: var(--primary-font);
+      font-size: 26px;
+      line-height: 29px;
+      font-weight: 300;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .search-popup_empty-search p {
+      font-family: var(--secondary-font);
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 24px;
+      text-align: center;
+    }
+    .search-popup_result-container.hidden {
+      display: none;
+    }
+    .search-popup_result-container.active {
+      display: block;
+    }
+    .search-popup_result-container {
+      background-color: #fff;
+    }
+    .search-popup_result-container {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+    }
+    .search-popup_result-wrapper {
+      padding: 20px;
+      padding-bottom: 58px;
+      background-color: #fff;
+    }
+    .search-popup_result-products.hidden {
+      display: none;
+    }
+    .search-popup_result-products.active {
+      display: block;
+    }
+    .search-popup_result-text {
+      font-family: var(--secondary-font);
+      font-weight: 300;
+      line-height: 21px;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .search-popup_result-product-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .search-popup_result-product-btn a {
+      font-size: 13px;
+      line-height: 16px;
+      font-family: var(--secondary-font);
+      font-weight: 300;
+      border: solid 1px #000;
+      border-radius: 1000px;
+      width: 100%;
+      margin-top: 24px;
+      padding: 13px 0;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+    }
+    /*Search popup */
+    [data-role='popular'] {
+      background-color: #fff;
+      padding-top: 1.5rem /* 24px */;
+      padding-bottom: 1.5rem /* 24px */;
+      padding-left: 1.25rem /* 20px */;
+    }
+    .popular_title {
+      font-family: var(--primary-font);
+      font-size: 26px;
+      line-height: 25px;
+      font-weight: 300;
+      color: #222222;
+    }
+    .tabb_list {
+      display: flex;
+      margin-top: 1.5rem;
+      gap: 11px;
+      overflow-y: auto;
+    }
+    [data-role='pop-text'] {
+      text-transform: uppercase;
+      font-size: 11px;
+      font-family: var(--secondary-font);
+      padding: 6px 11px;
+      line-height: 22px;
+      background-color: #f6f3ec;
+      gap: 0.5rem /* 8px */;
+      height: max-content;
+      border-radius: 9999px;
+      white-space: nowrap;
+      color: #222222;
+    }
+    .search-popup_result-container {
+      background-color: #fff;
+    }
+    .suggestion_wrapper {
+      padding-left: 1.25rem /* 20px */;
+      padding-right: 1.25rem /* 20px */;
+      padding-top: 1rem /* 16px */;
+      padding-bottom: 44px;
+    }
+    .suggestion_wrapper.\!hidden {
+      display: none !important;
+    }
+    .suggestion_wrapper h3 {
+      font-family: var(--primary-font);
+      font-size: 26px;
+      line-height: 29px;
+      font-weight: 300;
+      margin-bottom: 1.5rem /* 24px */;
+      color: #222222;
+    }
+    .suggestion-active {
+      padding-top: 1.25rem /* 20px */;
+    }
+    [data-role='suggestion-text'] {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem /* 16px */;
+    }
+    .search-popup_result-wrapper ul {
+      display: flex;
+      margin-bottom: 1rem /* 16px */;
+      gap: 3rem /* 48px */;
+      border-bottom: 0.5px solid #d5d5d5;
+    }
+    .search-popup_result-wrapper ul.hidden {
+      display: none;
+    }
+    .search-popup_result-wrapper ul li {
+      font-family: var(--primary-font);
+      font-size: 26px;
+      line-height: 29px;
+      font-weight: 300;
+
+      color: #222222;
+      flex: 0 0 calc(50% - 24px);
+      text-align: center;
+      padding-bottom: 0.5rem /* 8px */;
+      cursor: pointer;
+      color: #222222;
+    }
+    .search-popup_result-wrapper ul li.active {
+      border-bottom: 1px solid #222222;
+    }
+    .search-popup_result-container {
+      background: #ffffff;
+    }
+    .search-popup_result-container.hidden {
+      display: none;
+    }
+    .search-popup_result-container.active {
+      display: block;
+    }
+    /*articles*/
+    .articles {
+      display: none;
+    }
+    .articles.active {
+      display: block;
+    }
+    .search-result {
+      font-family: var(--secondary-font);
+      font-weight: 300;
+      line-height: 21px;
+      font-size: 14px;
+      margin-bottom: 0.75rem;
+    }
+    [data-role='suggestion-articles'] {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    [data-role='suggestion-articles'].hide {
+      display: block;
+    }
+    .items-article > div > div {
+      display: grid;
+      grid-template-columns: 92px 1fr 1fr;
+      gap: 1rem;
+    }
+    .items-article > div > div > div:first-child {
+      background-color: #ffffff;
+      position: relative;
+    }
+
+    .items-article > div > div img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .items-article > div > div > div + div {
+      grid-column: span 2 / span 2;
+      padding-top: 13px;
+      padding-bottom: 13px;
+    }
+    .items-article > div > div > div + div h3 {
+      font-family: var(--primary-font);
+      letter-spacing: 0;
+      line-height: 21px;
+      font-weight: 400;
+      font-size: 14px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+    }
+    .items-article > div > div > div + div p {
+      font-family: var(--secondary-font);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 21px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .items-article > div > div > div + div a {
+      font-family: var(--secondary-font);
+      padding-bottom: 4px;
+      text-transform: uppercase;
+      font-size: 11px;
+      line-height: 12px;
+      border-bottom: 1px solid #222222;
+      margin-top: 12px;
+    }
+
+    @media (min-width: 1024px) {
+      .search-popup_wrapper > form {
+        padding: 24px 40px;
+      }
+      .search-popup_input_wrapper {
+        gap: 20px;
+      }
+      .search-popup_input_wrapper > svg {
+        max-width: 32px;
+        height: 32px;
+      }
+      .search-popup_input_wrapper > button > svg {
+        width: 32px;
+        height: 32px;
+      }
+      .search-popup_empty-search {
+        padding-left: 40px;
+        padding-right: 0px;
+      }
+      .search-popup_empty-search h3 {
+        margin-bottom: 32px;
+      }
+      .search-popup_result-wrapper {
+        padding-right: 44px;
+        padding-bottom: 32px;
+        padding-top: 2.5rem;
+      }
+      .search-popup_result-product-container {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .search-popup_result-product-btn a {
+        width: max-content;
+        min-width: 211px;
+        margin: 0 auto;
+      }
+      /*search popup*/
+      [data-role='popular'] {
+        padding-top: 52px;
+        padding-bottom: 52px;
+        padding-right: 1.25rem /* 20px */;
+      }
+      .search-popup_result-container {
+        gap: 2.25rem /* 36px */;
+      }
+      .suggestion_wrapper {
+        padding-right: 0px;
+        padding-left: 2.5rem /* 40px */;
+        padding-top: 2.5rem /* 40px */;
+      }
+      .suggestion_wrapper h3 {
+        margin-bottom: 2rem /* 32px */;
+      }
+      .search-popup_result-wrapper ul {
+        margin-bottom: 1.5rem /* 24px */;
+      }
+      .search-popup_result-wrapper ul li {
+        flex: 0 0 auto;
+      }
+      .search-popup_result-container.active {
+        display: grid;
+        gap: 2.25rem /* 36px */;
+      }
+      .search-grid-cols {
+        grid-template-columns: 1fr;
+      }
+      .search-grid-cols-lg {
+        grid-template-columns: 0.6fr 3fr;
+      }
+      .suggestion-active-lg {
+        padding-left: 0;
+      }
+      [data-role='suggestion-articles'] {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .items-article > div > div {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 0px;
+      }
+      .items-article > div > div > div + div {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-right: 2px;
+      }
+      .items-article > div > div > div + div h3 {
+        font-size: 18px;
+      }
+    }
+  {% endstyle %}
+  <search-popup class="fixed top-[31px] bg-[#fff] w-full max-h-[calc(100vh_-_32px)] overflow-y-auto left-0 z-[999] hidden [&.active]:block group/search">
+    <div class="search-popup_container">
+      <div class="search-popup_wrapper">
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
+          data-role="search-form"
+          class=""
+        >
+          <div class="search-popup_input_wrapper">
+            {% render 'icon-v2',
+              icon: 'icon-search-tilt',
+              classAttr: 'w-full max-w-[20px] h-5 lg:max-w-[32px] lg:h-[32px]'
+            %}
+            <input
+              type="text"
+              value="{{ search.terms | escape }}"
+              class="border-0 p-0 outline-none w-full font-gascogne-serial text-[26px] font-light leading-[25px] ring-0 focus:ring-0"
+              placeholder="Search for..."
+              data-role="search-input"
+            >
+            <button
+              class="ml-auto border-0 flex gap-2 items-center min-w-[65px]"
+              data-role="clear-input"
+              data-action="search-toggle"
+            >
+              <span class="font-shape font-light text-[14px] text-[#222222]">Clear</span>
+              {%- render 'icon-v2',
+                icon: 'icon-search-close',
+                classAttr: 'w-full max-w-[20px] h-4 lg:max-w-[32px] lg:min-w-[32px] lg:h-[32px]'
+              %}
+            </button>
+          </div>
+        </form>
+        <div
+          class="{% unless section.settings.popular_search %}!hidden{% endunless %}"
+          data-role="popular"
+        >
+          <h3 class="popular_title">Popular Searches</h3>
+          <div class="tabb_list">
+            {% for block in section.blocks %}
+              {% if block.settings.popular_search != blank %}
+                <div
+                  data-role="pop-text"
+                  class="cursor-pointer"
+                >
+                  {{ block.settings.popular_search }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {%- render 'search-popup-collection-v2' -%}
+        </div>
+      </div>
+      <div
+        class="search-popup-loader w-full h-[140px] bg-[#fff] relative hidden group-[&.loading]/search:block"
+        data-role="loader"
+      >
+        <div
+          role="status"
+          class="absolute left-0 top-0 w-full h-full flex justify-center items-center"
+        >
+          {% render 'icon-v2', icon: 'icon-pdp-loader' %}
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <div
+        class="search-popup_empty-search px-5 lg:pl-10 pt-4 pb-[44px] lg:pt-12 {% if section.settings.suggestion %}lg:pt-0{% endif %} hidden bg-[#fff]"
+        data-role="empty-search"
+      >
+        <h3 class="font-gascogne-serial text-[26px] leading-[29px] font-light mb-6 lg:mb-8 text-[#222222] text-center">
+          No Result Found
+        </h3>
+        <p class="font-shape text-[16px] font-light leading-[24px] text-center">
+          Search was unable to find any results ,you may have typed your word incorrectly, or are being too specific.
+        </p>
+      </div>
+      <div
+        class="search-popup_result-container {% if section.settings.suggestion %} search-grid-cols-lg {% else %} search-grid-cols {% endif %}"
+        data-role="results-container"
+      >
+        <div class="suggestion_wrapper {% unless section.settings.suggestion %}!hidden{% endunless %}">
+          <h3 class="">Suggestions</h3>
+          <ul class="" data-role="suggestion-text"></ul>
+        </div>
+        <div class="search-popup_result-wrapper {% if section.settings.suggestion %}suggestion-active-lg {% else %}suggestion-active{% endif %} ">
+          <div>
+            <ul class="{% unless section.settings.inspiration %}hidden{%  endunless %}">
+              <li
+                class="active"
+                data-role="toggle-result"
+                data-value="products"
+              >
+                Products
+              </li>
+              <li
+                class=""
+                data-role="toggle-result"
+                data-value="articles"
+              >
+                Inspiration
+              </li>
+            </ul>
+            <div class="search-popup_result-products hidden [&.active]:block active" data-slot="products">
+              <p class="search-popup_result-text font-shape font-light leading-[21px] text-[14px] mb-3">
+                Search Results (<span data-role="results-products-count"></span>)
+              </p>
+              <div>
+                <div
+                  class="search-popup_result-product-container flex flex-col gap-3 lg:grid lg:grid-cols-4 lg:gap-[18px]"
+                  data-role="suggestion-products"
+                ></div>
+                <div class="search-popup_result-product-btn" data-role="result-products-btn" class="w-full"></div>
+              </div>
+            </div>
+            <div class="articles" data-slot="articles">
+              <p class="search-result">Search Results (<span data-role="results-articles-count"></span>)</p>
+              <div>
+                <div
+                  class="{% unless section.settings.inspiration %}hide{%  endunless %}  items-article"
+                  data-role="suggestion-articles"
+                ></div>
+                <div data-role="result-articles-btn" class="w-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      data-action="search-toggle"
+      class="search-popup_overlay"
+    ></div>
+  </search-popup>
+{% endif %}

@@ -1,0 +1,39 @@
+<div
+  class="collection-product-grid"
+  data-slot="product-grid-items"
+  data-module="product-grid"
+  data-id="{{ section.id }}"
+>
+  {% if products != blank %}
+    {% for product in products %}
+      {% if  template contains 'search' %}
+        {% render 'search-collection-grid-banner-v2', 
+          loop:forloop,
+          card_index: card_index,
+          card_image: card_image,
+          banner_image: banner_image,
+          banner_image_index: banner_image_index,
+          paginate: paginate
+        %}
+        {% else %}
+      {% else %}  
+      {% render 'collection-grid-banner-v2',
+        loop: forloop,
+        metaObject: metaObject,
+        card_index: card_index,
+        card_image: card_image,
+        banner_image: banner_image,
+        banner_image_index: banner_image_index,
+        paginate: paginate
+      %}
+      {% endif %}
+      {% if product.object_type == 'article' %}
+        {% render 'search-article-card', article : product %}
+      {% else %}
+      {% render 'product-card-v2', product: product %}
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <p class="collection_empty-text">No product found</p>
+  {% endif %}
+</div>

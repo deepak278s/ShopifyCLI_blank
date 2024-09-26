@@ -1,0 +1,111 @@
+{% if template contains 'index'
+  or template contains 'collection'
+  or template contains 'product'
+  or template contains 'cart'
+  or template contains '404'
+  or template contains 'static-page-v2'
+  or template contains 'delivery-v2'
+  or template contains 'faq-v2'
+  or template contains 'about-us-v2'
+  or template contains 'contact-v2'
+  or template contains 'our-services-v2'
+  or template contains 'careers-v2'
+  or template contains 'search'
+%}
+  <section class="search-sellers-slider mt-8 lg:mt-10" id="search-recommended-{{ section.id }}">
+    <div class="m-container:mx-auto">
+      <div class="w-full flex items-start justify-between">
+        <h2 class="w-full font-gascogne-serial text-[26px] font-light leading-[120%] capitalize mb-6 lg:mb-8 text-[#222222]">
+          {{ section.settings['collection-title'] }}
+        </h2>
+      </div>
+      <div class="relative">
+        <div
+          class=" flex flex-col lg:flex-row gap-3 lg:gap-[18px]"
+          id="popular-sellers-{{ section.id }}"
+        >
+          {% for product in collections[section.settings.collection_url].products limit: 4 %}
+            <div class="flex-[0_0_100%] lg:flex-[0_0_24%]">
+              {%- render 'search-popup-card-v2', searchPrd: product -%}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% else %}
+  {% style %}
+    .search-sellers-slider{
+    	margin-top: 2rem;
+    	padding-right: 1.25rem;
+
+    }
+    .m-container{
+    	margin-left: auto;
+        margin-right: auto;
+    }
+    .collecton_title{
+    	width: 100%;
+    	display: flex;
+    	align-items: flex-start;
+    	justify-content: space-between;
+    }
+    .collecton_title h2{
+    	width: 100%;
+    	font-family: var(--primary-font);
+    	font-size: 26px;
+    	font-weight: 300;
+    	line-height: 120%;
+    	text-transform: capitalize;
+    	margin-bottom: 1.5rem/* 24px */;
+    	color:#222222;
+    }
+    .popular-sellers-wrapper{
+    	position: relative;
+    }
+    #popular-sellers-{{ section.id }}{
+    	display: grid;
+      grid-template-columns: repeat(1, 1fr);
+    	flex-direction: column;
+    	gap: 0.75rem/* 12px */;
+    }
+
+    @media (min-width: 1024px){
+    	.search-sellers-slider{
+            padding-right: 0px;
+        }
+        .collecton_title h2{
+        	margin-bottom: 2rem/* 32px */;
+        }
+        #popular-sellers-{{ section.id }}{
+        	flex-direction: row;
+        	gap: 18px;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+    }
+  {% endstyle %}
+  <section class="search-sellers-slider" id="search-recommended-{{ section.id }}">
+    <div class="m-container">
+      <div class="collecton_title">
+        <h2 class="">
+          {{ section.settings['collection-title'] }}
+        </h2>
+      </div>
+      <div class="popular-sellers-wrapper">
+        <div
+          class=""
+          id="popular-sellers-{{ section.id }}"
+        >
+          {% for product in collections[section.settings.collection_url].products limit: 4 %}
+            <div class="card-wrapper">
+              {%- render 'search-popup-card-v2', searchPrd: product -%}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}
+

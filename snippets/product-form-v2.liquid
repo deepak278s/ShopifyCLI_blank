@@ -1,0 +1,344 @@
+{% style %}
+  variant-selectors input[type='radio']:checked + label {
+    border: solid 2px #000;
+  }
+{% endstyle %}
+{% render 'vite-tag' with '@modules/product-form-v2.js' %}
+{% liquid
+  assign loadedVariant = product.selected_or_first_available_variant
+  assign variantAvailable = loadedVariant.available
+  if loadedVariant.price == 0
+    assign variantAvailable = false
+  endif
+%}
+
+
+{% assign reqPersonalisation = false %}
+
+{% for tag in product.tags %}
+  {% assign tg = tag | downcase %}
+  {% if tg == 'requires personalisation' %}
+    {% assign reqPersonalisation = true %}
+  {% endif %}
+{% endfor %}
+
+{% assign isTagPresent = false %}
+{% for tag in product.tags %}
+  {% assign tagItem = tag | downcase %}
+  {% if tagItem == 'requires personalisation' or tagItem == 'personalisation' %}
+    {% assign isTagPresent = true %}
+  {% endif %}
+{% endfor %}
+
+
+<product-form
+  {% if block_settings.update_image and block_settings.option_to_update != blank %}
+    data-updateImage="{{ block_settings.option_to_update }}"
+  {% endif %}
+  class="{{ class }} group/form"
+>
+  {% form 'product', product %}
+    <input type="hidden" name="id" value="{{ loadedVariant.id }}">
+    <input type="hidden" name="quantity" value="1">
+    {% unless product.has_only_default_variant %}
+      <variant-selectors
+        data-product="{{ product.handle }}"
+        data-section="{{ section.id }}"
+        {% if block_settings.update_image and block_settings.option_to_update != blank %}
+          data-updateOption="{{ block_settings.option_to_update }}"
+        {% endif %}
+      >
+        {%- liquid
+          assign variants_available_arr = product.variants | map: 'available'
+          assign variants_option1_arr = product.variants | map: 'option1'
+          assign variants_option2_arr = product.variants | map: 'option2'
+          assign variants_option3_arr = product.variants | map: 'option3'
+        -%}
+        {% for option in product.options_with_values %}
+          {% assign maxOptionDisplay = block_settings.options_level | plus: 0 %}
+          {% assign optName = option.name | downcase %}
+          {% if optName == 'color' or optName == 'colour' %}
+            {% assign colorList = shop.metaobjects.swatch_list['swatch-list'].swatch_list.value %}
+            <div
+              data-role="selector-wrapper"
+              class="{% if forloop.index > maxOptionDisplay %}hidden {% endif %} mb-[32px]"
+            >
+              <p class="font-shape text-[12px] font-medium text-[#868B8F] mb-3 uppercase">
+                {{ option.name }} :
+                <span class="text-[#222] capitalize text-[14px]" data-role="selectedopt">
+                  {{- option.selected_value -}}
+                </span>
+              </p>
+              <div
+                class="flex {% if option.values.size > 10 %} overflow-hidden options-slider-wrapper{% else %}flex-wrap gap-3 {% endif %}"
+              >
+                {% if option.values.size > 10 %}
+                  <button class="hidden group/btn lg:block disabled" data-role="opt-prev">
+                    {% render 'icon-v2',
+                      icon: 'icon-options-caret',
+                      classAttr: 'rotate-[180deg] group-[.disabled]/btn:opacity-[0.4]'
+                    %}
+                  </button>
+                  <div class="options-slider lg:max-w-[520px] keen-slider">
+                {% endif %}
+                {% for value in option.values %}
+                  {% liquid
+                    assign option_disabled = true
+
+                    for option1_name in variants_option1_arr
+                      case option.position
+                        when 1
+                          if variants_option1_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_disabled = false
+                          endif
+                        when 2
+                          if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_disabled = false
+                          endif
+                        when 3
+                          if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option3_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_disabled = false
+                          endif
+                      endcase
+                    endfor
+                  %}
+                  {% assign color_code = false %}
+                  {% for colorCode in colorList %}
+                    {% assign colorTitle = colorCode.color_title | downcase %}
+                    {% assign prdColorTitle = value | downcase %}
+                    {% if colorTitle == prdColorTitle %}
+                      {% assign color_code = colorCode.color_value %}
+                    {% endif %}
+                  {% endfor %}
+                  <input
+                    type="radio"
+                    class="hidden {% if option_disabled %}unavailable{% endif %}"
+                    name="{{ option.name }}"
+                    id="{{option.name }}-{{ value }}"
+                    value="{{ value }}"
+                    data-role="variant-selector"
+                    {% if value == option.selected_value %}
+                      checked
+                    {% endif %}
+                  >
+                  <label
+                    for="{{option.name }}-{{ value }}"
+                    class="max-w-10 aspect-1 min-w-10 {% if option.values.size > 10 %} keen-slider__slide {% endif %} flex justify-center items-center relative border-[2px] border-[#C3C5C7] before:w-[85%] before:aspect-1 before:bg-[{{ color_code }}] before:content-[''] before:rounded-full peer-checked:border-[#000] rounded-full cursor-pointer"
+                  ></label>
+                  <style>
+                    label[for="{{option.name }}-{{ value }}"]::before{background-color:{{color_code}}}
+                  </style>
+                {% endfor %}
+                {% if option.values.size > 10 %}
+                  </div>
+                  <button class="hidden lg:block group/btn" data-role="opt-next">
+                    {% render 'icon-v2', icon: 'icon-options-caret', classAttr: 'group-[.disabled]/btn:opacity-[0.4]' %}
+                  </button>
+                {%- endif %}
+              </div>
+            </div>
+          {% else %}
+            {% assign optName = option.name | downcase %}
+            <div
+              data-role="selector-wrapper"
+              class="{% if forloop.index > maxOptionDisplay %}hidden {% endif %} mb-[32px]"
+            >
+              <p class="font-shape text-[12px] font-medium text-[#868B8F] mb-3 uppercase">
+                {{ option.name }} :
+                {%- if optName == 'size' and block_settings.size_guide -%}
+                  {% render 'vite-tag' with '@modules/size-chart-v2.css' %}
+                  <span
+                    data-app="eastsideco_sizeGuides"
+                    data-shop="{{ shop.permanent_domain }}"
+                    data-tags="{{ product.tags | join:',' | escape }}"
+                    data-metafields="{{ product.metafields.esc-size-matters.tag }}"
+                    data-popup="link"
+                    class="text-[#222] uppercase text-[11px] underline cursor-pointer underline-offset-4 ml-[5px]"
+                  >
+                  </span>
+                {%- else -%}
+                  <span data-role="selectedopt" class="text-[#222] capitalize text-[14px] ml-[5px]">
+                    {{- option.selected_value -}}
+                  </span>
+                {%- endif -%}
+              </p>
+              <div
+                class="flex {% if option.values.size > 10 %} overflow-hidden options-slider-wrapper{% else %}flex-wrap gap-3 {% endif %}"
+              >
+                {% if option.values.size > 10 %}
+                  <button class="hidden group/btn lg:block disabled" data-role="opt-prev">
+                    {% render 'icon-v2',
+                      icon: 'icon-options-caret',
+                      classAttr: 'rotate-[180deg] group-[.disabled]/btn:opacity-[0.4]'
+                    %}
+                  </button>
+                  <div class="options-slider lg:max-w-[520px] keen-slider">
+                {% endif %}
+                {% for value in option.values %}
+                  {% liquid
+                    assign option_disabled = true
+
+                    for option1_name in variants_option1_arr
+                      case option.position
+                        when 1
+                          if variants_option1_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_disabled = false
+                          endif
+                        when 2
+                          if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_disabled = false
+                          endif
+                        when 3
+                          if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option3_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_disabled = false
+                          endif
+                      endcase
+                    endfor
+                  %}
+                  <div class="flex {% if option.values.size > 10 %} keen-slider__slide w-full {% endif %}">
+                    <input
+                      type="radio"
+                      class="hidden peer/input {% if option_disabled %} unavailable {% endif %}"
+                      name="{{ option.name }}"
+                      id="{{option.name }}-{{ value }}"
+                      value="{{ value }}"
+                      data-role="variant-selector"
+                      {% if value == option.selected_value %}
+                        checked
+                      {% endif %}
+                    >
+                    <label
+                      for="{{option.name }}-{{ value }}"
+                      class="font-shape whitespace-nowrap text-[12px] peer-[.unavailable]/input:bg-[#C3C5C7] peer-[.unavailable]/input:text-[#4B5259] text-[#222222] uppercase p-[10px] border-[1px] border-[#D5D5D5] peer-checked/input:bg-[#222] peer-checked/input:border-[#222] peer-checked/input:text-[#fff] cursor-pointer rounded-[2px] {% if option.values.size > 10 %} {% else %}min-w-[40px] max-h-[40px]{% endif %} text-center"
+                    >
+                      {{- value -}}
+                    </label>
+                  </div>
+                {% endfor %}
+                {% if option.values.size > 10 %}
+                  </div>
+                  <button class="hidden lg:block group/btn" data-role="opt-next">
+                    {% render 'icon-v2', icon: 'icon-options-caret', classAttr: 'group-[.disabled]/btn:opacity-[0.4]' %}
+                  </button>
+                {%- endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+        <script data-id="variants-data" type="application/json">
+          {{ product.variants | json }}
+        </script>
+        <script data-id="options-data" type="application/json">
+          {{ product.options_with_values | json }}
+        </script>
+      </variant-selectors>
+    {% endunless %}
+    <div
+      data-role="available-block"
+      {% unless variantAvailable %}
+        class="hidden"
+      {% endunless %}
+    >
+      {% unless block_settings.quantity_button %}
+        <input
+          type="hidden"
+          min="1"
+          value="1"
+          data-role="quantity"
+        >
+      {% endunless %}
+      {% if block_settings.quantity_button %}
+        <quantity-input>
+          <div class="flex justify-between w-full border-[1px] border-[#000] rounded-full py-4 px-4 mt-[32px]">
+            <button data-role="decrement">{% render 'icon-v2', icon: 'icon-qty-minus' %}</button>
+            <input
+              class="text-center font-shape text-[16px] font-light leading-[19px] p-0 ring-0 focus:ring-0 border-0"
+              type="number"
+              min="1"
+              value="1"
+              data-role="quantity"
+            >
+            <button data-role="increment">{% render 'icon-v2', icon: 'icon-qty-plus' %}</button>
+          </div>
+        </quantity-input>
+      {% endif %}
+
+    <!-- Personalised -->
+
+      {% if isTagPresent == true %}
+        <div class="flex items-center gap-[5px] flex-col mb-8 max-w-[400px]">
+          <label class="text-[12px] font-medium font-shape leading-5 uppercase w-full text-[#868B8F]"
+            >add Personalisation:</label
+          >
+          <input
+            {% if reqPersonalisation %}
+              data-required="true"
+            {% endif %}
+            class=" required w-full h-12 border border-[#D5D5D5] group-[.invalid]/form:border-[#FF0000] rounded-[4px] text-[14px] font-light font-shape leading-5 text-[#707070] focus:border-[#D5D5D5] focus:shadow-none focus:ring-0"
+            id="personalised"
+            type="text"
+            name="properties[_Personalised]"
+            maxlength="24"
+            placeholder="Message"
+          >
+          <div class="text-[14px] block group-[.invalid]/form:hidden font-light font-shape leading-[21px] w-full text-[#222222]">24 Characters max.</div>
+          <div class="text-[14px] hidden group-[.invalid]/form:block font-normal font-shape leading-[21px] w-full text-[#FF0000]">Please only use letters and numbers, no symbols.</div>
+
+        </div>
+      {% endif %}
+      <!-- End personalised -->
+
+      {% if block_settings.add_to_cart %}
+        <p class="text-[10px] text-[red] font-shape mb-4 text-left hidden" data-role="alert">Not added</p>
+        <button class="w-full font-shape text-[#fff] py-[15px] text-[16px] font-light leading-[19px] uppercase bg-[#000] text-center rounded-full relative overflow-hidden">
+          <div
+            role="status"
+            class="absolute hidden left-0 top-0 w-full h-full group-[&.loading]/form:flex justify-center items-center bg-[#000]"
+          >
+            {% render 'icon-v2', icon: 'icon-pdp-loader' %}
+            <span class="sr-only">Loading...</span>
+          </div>
+          Add To Bag
+        </button>
+      {% endif %}
+    </div>
+    <div
+      data-role="unavailable-block"
+      {% if variantAvailable %}
+        class="hidden"
+      {% endif %}
+    >
+      <div data-role="info-stock" class="flex flex-col gap-4 p-6 bg-[#F8F8F8] rounded-xl mt-[32px]">
+        <h3 class="font-gascogne-serial text-[20px] lg:text-[26px] font-light leading-[24px] capitalize">
+          {{ block_settings.out_stock_title }}
+        </h3>
+        <div class="*:text-[12px] lg:*:text-[14px] *:font-shape *:leading-[16px] *:font-light *:text-[#222222]">
+          {{ block_settings.out_stock_description }}
+        </div>
+        <div class="flex flex-col gap-4">
+          <whatsapp-btn
+            ><button class="text-[13px] relative font-light font-shape leading-4 uppercase bg-[#121212] w-full text-[#fff] flex items-center gap-[2px] px-[32px] py-[13px] rounded-full justify-center">
+              {% render 'icon-v2', icon: 'icon-pdp-whatsapp' -%}
+              <span class="whitespace-nowrap">Chat to a personal shopper</span>
+              <a
+                class="absolute top-0 left-0 h-full w-full block"
+                href="{{  block_settings.shopper_link }}"
+              ></a></button
+          ></whatsapp-btn>
+          {% if block_settings.notify_button %}
+            <notify-button data-product="{{ product.id }}">
+              <button class="text-[13px] font-light font-shape leading-[16px] uppercase bg-[#121212] text-center text-[#fff] w-full text-[#fff]px-[32px] py-[13px] rounded-full">
+                Notify me of new stock
+              </button>
+            </notify-button>
+          {% else %}
+            <button class="text-[13px] font-light font-shape leading-4 uppercase bg-[#393939] cursor-not-allowed w-full text-[#fff] flex items-center gap-[2px] px-[32px] py-[13px] rounded-full justify-center">
+              Sold Out
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endform %}
+</product-form>
+{% render 'notify-popup-v2', block_settings: block_settings %}

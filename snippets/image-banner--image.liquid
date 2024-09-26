@@ -1,0 +1,59 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:14+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            edb6917067e19d45e19510dc23c003cc
+//      Signature:      eyJpdiI6IllwbzFFd1lrQUs4bUY1cjFlU2FXR0E9PSIsInZhbHVlIjoibkgycmJTV0hUY0pHaiszY2RGTnZEd3dlTzY0S1VXWkV2bnl2SmJKVnZ4QXNUeWdmamRJYlM5ZXFLbEliM3hVdmRUcVhHM0tNTkhWaFhsMzFuNzQzcGNjZCtDS3E0UEJcL1FiNEM5Q2Jsb2h0VVwvYlNSY3BqN2c3d1VwamZFT1VnbjBlNkpmR2pJYlJocXZqRVFcL1NMZ1wvV0lEdllFTlZ5T09iamVwQmxYSjFFS1RJWG9rY0NZQW1WcW1mVWVqT2djQkpnWmUxVDUxV3haQmNtbkRhYjJkTjc1M1pPRVIyandwV2N5R2xFc2pYaUNhTTlRQXl6QWIrQmtNVHlDM2hON0lDOUQxaUx5Q1JMNDdlcFlTdkVXVFwvaTFVS2FPY1hOWVdqOUUrcFJkaXVhanFVQkVjbzZCaERMVGZaVVg3cHN0Q2RwWkNaK3F3OVdPV3YyXC9BM1NadkNHR01KeWY1TFwva0xcL0YrcXJSN3BhNGR5VjFwaDFxY1JkWDIyejRmQkw2SmJDdGMzTW1SYTZIZkZiK2ZDenhGQkNnaDVvRTRENUpKYlpcL2VoYVpRa0U3Zz0iLCJtYWMiOiJkODdhZGE5YjM3NjRlMWM5ZThjZTRjOGUwOTBmMTNlMTUzNGExMmM4ZDJjMzNkYTBhZDFiYjFmZjlmNjQ4NDViIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div id="image-banner__{{ section.id }}--image__{{ block.id }}"
+    class="image-banner__image-wrap"
+    {{ block.shopify_attributes }}>
+    {%- style -%}
+        #image-banner__{{ section.id }}--image__{{ block.id }} {
+            --icon-width: {{ block.settings.icon_width }}px;
+            --icon-bottom: {{ block.settings.icon_bottom }}%;
+            --icon-right: {{ block.settings.icon_right }}%;
+            --icon-x: {{ block.settings.icon_x }}%;
+            --icon-y: {{ block.settings.icon_y }}%;
+            --image-span: {{ block.settings.image_span }};
+            --padding: {{ block.settings.padding }}%;
+        }
+        @media screen and (max-width: 768px) {
+            #image-banner__{{ section.id }}--image__{{ block.id }} {
+                --icon-width: {{ block.settings.icon_width_tablet }}px;
+                --icon-bottom: {{ block.settings.icon_bottom_tablet }}%;
+                --icon-right: {{ block.settings.icon_right_tablet }}%;
+                --icon-x: {{ block.settings.icon_x_tablet }}%;
+                --icon-y: {{ block.settings.icon_y_tablet }}%;
+                --image-span: {{ block.settings.image_span_tablet }};
+                --padding: {{ block.settings.padding_tablet }}%;
+            }
+        }
+    {%- endstyle -%}
+    {%- liquid
+        if block.settings.image
+            echo block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'image-banner__image'
+        endif
+        if block.settings.icon
+            assign icon_class = 'image-banner__image-icon'
+            if block.settings.icon_display == 'desktop'
+                assign icon_class = icon_class | append: ' hide--tablet'
+            elsif block.settings.icon_display == 'tablet'
+                assign icon_class = icon_class | append: ' hide--above-tablet'
+            endif
+            echo block.settings.icon | image_url: width: 140 | image_tag: loading: 'lazy', class: icon_class
+        endif
+    -%}
+</div>

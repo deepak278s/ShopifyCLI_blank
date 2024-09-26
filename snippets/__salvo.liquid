@@ -1,0 +1,36 @@
+<script>
+  {% assign template_json = template | json | replace: '\/', '/' %}
+  {% if template_json == 'null' %}
+  window.SALVO_BINDINGS = {
+      template: "page",
+  };
+  {% else %}
+  window.SALVO_BINDINGS = {
+      template: {{ template_json }},
+  };
+  {% endif %}
+</script>
+{% render 'vite-tag' with '@@/theme.js' %}
+<script>
+  const faqAccordions = document.querySelectorAll('.faq-accordion');
+
+  function handleAccordion() {
+    const content = this.nextElementSibling;
+    const title = this;
+
+    if (content.style.display === 'block') {
+      content.style.display = 'none';
+      title.classList.remove('active');
+    } else {
+      content.style.display = 'block';
+      title.classList.add('active');
+    }
+  }
+
+  faqAccordions.forEach((accordion) => {
+    const titles = accordion.querySelectorAll('.faq-accordion-title');
+    titles.forEach((title) => {
+      title.addEventListener('click', handleAccordion);
+    });
+  });
+</script>

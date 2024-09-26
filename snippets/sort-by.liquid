@@ -1,0 +1,64 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:25+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            b3312283f7b054f49e1ad9ac6b215b5b
+//      Signature:      eyJpdiI6InIxZStNcTZ2VVRncmhBazV0WTJGSEE9PSIsInZhbHVlIjoiZER2Vk5ON3pPZ3RCR3JQXC9wbElYN1wvc1dsZnRZS1dnaVBqUktNQVpSeUJWalh0V2ZKKzFqNjJlMHN2ZEdYRFpcL281eDBTd0ZuY3hIQmdTRHVHaXNcLzBTVDcyUUVSVGQzYldsMnQzamk0VTROK0doZ3pPbUFySkVnbFB6YWJwVzk3bUZkbFh5VmpZUXZXQ25SZVlXODlveTJ0ZTFQVGpReTdhSjRkQVNCd3N4MVRtVmhLU2ZyNUl4OWdXNWNBXC9ZR0tJeHNhV3h6dTBhQjQ3Mm5nbHpGV2pSSmJQcFVtNTdZSkpxRFBPUkdFSHVcLzYrZWluZDNHT0FwNHFXYlwvc0lnUmIzRmJpUHI1WUhOcXppRWRhYmt0Q1QxYUlkbHQ1SmxGTHI4NXE2WGNCSUJkXC8wSUVnWWJmbG9ickdZTjNDRnZHbEJuZVZYT0N2cUlRZklRMnZjTzRVeWxyT3drVU1SOFU0M09YWXdEQWdkd2JNQk9FQzhzeWM1SGR3bWZUV3IzaFZydDNid2ZwMVVJdVh6VzZUaENwd2l3PT0iLCJtYWMiOiIxMDVhZWM0YzVmZGQ2Y2U2MmEzZTdmYzNkOTQxMDNhOWRmOWI0ODYzOGJlY2Q2MDRiNDIzYjM0OTBjNDkxY2RkIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+
+<div class="sort-by custom-dropdown fnt-sec flex {% if class %} {{ class }}{% endif %}">
+<label for="sort-by" class="fnt-sec italic sm uc">Sort by:</label>
+<select name="sort_by" id="sort-by" class="mobile-filter-button fnt-sec sm grey-text fw-300 uc" data-sort-by>
+  {% for option in collection.sort_options %}
+    <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+      {{ option.name }}
+    </option>
+  {% endfor %}
+</select>
+<span class="custom-arrow">
+  {% render 'icons', icon: 'arrow-right', class: 'title-icon--xs' %}
+  </span>
+</div>
+
+<script>
+const selectElement = document.getElementById('sort-by');
+
+// Set the width of the select element to the width of the selected option
+const setSelectedOptionWidth = () => {
+  const selectedOption = selectElement.options[selectElement.selectedIndex];
+  
+  // Create a temporary element, clone the selected option, and append it to the temporary element
+  const tempEl = document.createElement('span');
+  tempEl.style.position = 'absolute';
+  tempEl.style.visibility = 'hidden';
+  tempEl.style.display = 'inline-block';
+  tempEl.appendChild(selectedOption.cloneNode(true));
+  document.body.appendChild(tempEl);
+  
+  // Set the width of the select element to the width of the cloned option
+  selectElement.style.width = `${tempEl.offsetWidth + 20}px`;
+  
+  // Remove the temporary element
+  tempEl.parentNode.removeChild(tempEl);
+};
+
+setSelectedOptionWidth();
+
+// Update the width of the select element when the option is changed
+selectElement.addEventListener('change', () => {
+  setSelectedOptionWidth();
+});
+</script>

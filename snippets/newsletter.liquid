@@ -1,0 +1,49 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:01+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            96b24d96798fb2ba910190796d65939f
+//      Signature:      eyJpdiI6InM3SUlpZWVtVlNpemViemVvais1c1E9PSIsInZhbHVlIjoiNjBTZVwvUXV4Nkd1bVwvRW9jdWZSMGxsMlo0K0JSbzdMdms4MlwvNnozdkg4U1p4VCswdzRtMHA0T0ZVUHNaSzhSQWduVVAxNTVJZGhPcjllaFZlMWRMc1BcLzFuUnM1cG1udDdQa3lMZmJVUW84MFhmeUF4NGpkYmtLRFQ2VEltT0JtMjIrbzF3NWlvdHd0NnFLV2crWDlzWnV0VjBROTNvaWdBNnhmN0dRSFhUR09jYXhYSDJ4V0lTb3NrWHZcLzkyTmdhbHZpQ3NYaEd5Z1wvRThBMFJVMmNQNU9vWnRYNnJ3TWtCRTVPeFN4b0todGlZZU1aOEdyV0xla01KTUZQMFlob1VkZWVLamVJbFRaZ0l1RmZjSnc3cEdTZG9EOEk1VlJHZEZDWU5CTGhlUlwvbFNuRTdObCtzOXI1c1V5RzBMZG1zUndWVWRieWlHemlaSTlwcmZxUWlIVDRxMldhRnliRDN3cXVRNDZLbzR0aEpzaDNHNU80OTRrVGY0aTFZRUJLSFJLeXgxQXdtMWs4NWhlRmtPNVBlQ3c9PSIsIm1hYyI6ImYxNmQzOWUyZTExYjAxYjMxMzJlYjEzMTg5YjNhODM1YjhiOWU2NTYxMjczNWQxZjNjOTViMWYzNmZhZjVmZmQifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- form 'customer', class: 'flex--above-tablet f-flex-start f-vertical-middle black mb-lg--tablet pb-xl--above-tablet' -%}
+    {%- if form.posted_successfully? -%}
+
+        <p class="white">{{ 'general.newsletter_form.confirmation' | t }}</p>
+
+    {%- else -%}
+
+        {%- for error in form.errors -%}
+
+            <p class="white">{{ error | default_errors }}</p>
+
+        {%- endfor -%}
+
+        <input
+            type="email"
+            name="contact[email]" 
+            placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+            {% if form.errors %}autofocus{% endif %}
+            {% if customer %}value="{{ customer.email }}"{% endif %}
+            class="mr-sm--above-tablet mb-xs--tablet white" />
+        <button type="submit" class="ml-sm--above-tablet mt-sm--tablet flex f-vertical-middle f-center--above-tablet f-space-between--tablet px-md--tablet fnt-sec">
+            <span class="hide--above-tablet uc fw-300">{{ 'general.newsletter_form.submit' | t }}</span>
+
+            {%- render 'icons', icon: 'arrow--short' -%}
+
+        </button>
+
+    {%- endif -%}
+
+{%- endform -%}

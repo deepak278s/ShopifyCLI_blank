@@ -1,0 +1,29 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:22+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            3b137d1f3de106cdb874ce49d9e68fa7
+//      Signature:      eyJpdiI6IlwvR0w0SVYreWV3ZGpzaFArbExSTk5nPT0iLCJ2YWx1ZSI6ImRzcDB3NjAzUTBlYjh1OWpzdFZNXC84SkVlRHBoMHFiRGVaclZseVE3aW9XUlhWNzF5ZzJ0TTFzWmh2UEpRSGJ1QTBFUjIrTEIzWlZGbDB3MnkyMkpnVGFQZjZUSjhPTDZXUmJzZW91UTBtT2swYmN6cE9mYzFBNzBcL0NRcElmcjdwR2k1MWJyb1ByQ1dvem9kejF4TWJrR2RKWGJVcURWZkhsMXlCMmxhZlwvZmN4ekUrMjk2RkxZYmR2dFwvZkNFSnFyMnlHSWVqaEFubmszbjVDR0NSNWpvQVhGUHNhZmh2KzlId0pyTkZpaDlBVmRLZDIxME4wTloyZHptXC95NTRuZmtSb25mNlUzaVdGS0U3M1ZhVmVJNUtOYkJrQVwvb0NMU0hTSzQrRmZzNE40cVwvXC9hNGg2dXgzQWJMbUx5TTNGaGtXY0Z0UkdVdXBJM1pmVFkzNlJcL01IaVlicmorR0RxT0UrS1hoSzlHek5nOXpZYncxMlNoOHBlTng3NTJ5a3FNc2o5TVJjSjQzaGpuNHpyeW92ZUxOOXgyeHA4V0VuekJ0UXh5a3lkcCtjWFk9IiwibWFjIjoiNDIxZDNkNjA3ZDhlNGEwZjFhMjAxNjJjYjc3MWU3NWE2ODAxYjY4ZjEyNmMxNTA5YjQ5NDU5MDg0NTdkZjBkNCJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<ul class="collection__sidebar">
+    {%- for link in side_menu.links -%}
+        {%- comment %}<locksmith:863a>{% endcomment -%}
+          {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: side_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+        {%- comment %}</locksmith:863a>{% endcomment -%}
+        <li class="collection__sidebar--list-item{% if link.url == collection.url %} active{% endif %}">
+            <a href="{{ link.url }}">{{ link.title }}</a>
+        </li>
+    {%- endfor -%}
+</ul>

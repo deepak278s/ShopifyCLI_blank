@@ -1,0 +1,46 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:15+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            caf9c4b24ec47c86a54e351df8537aeb
+//      Signature:      eyJpdiI6IjVxXC9KWW5JWXM2bVwvN3J5dUpwd05mZz09IiwidmFsdWUiOiJmdlk1bnA3T0lRRWI2MVJkVlM0bDc3UlJcL0pQSHNyOUoyYUtUNWZWbTNqYUk2UG9GckxNZVwvXC91dXdxWStqcFd5alR4Z3ZcL0doalY1K28zTzA2TU1DOCtLRVVhcllQTXZkWEI5V3BLVlJPUVhhenhISDJ3b0RCOFQrRGI1YlwvSGxXNEVPcWgwanFiYjdmTXE3RFdmRVJkVHdrU09vYzFINkJcL1VhMW83MjRJTkZQTmQ3UHU2eUVCMjJmYlVrRElIK1BlaE1NT01Ienh4WHl0TEdPbmZBUjJFY3lrUjdQRTJySTZXb1daVmRTMVFVVmNIWHUzd3RpeWZMeDhmRjBjYzUyT1hvTk80K25FK3ZXTGFqUGQxQWhpRWhiWEIyaWo2TkRncDRXVHd3R1F1NjJlSUhxdGRrU2tcL2w3N24rSVFKK3dnRENoQklJSGVoVCtLS1FvZzg0eWNSQmJ1dnJ6ZjVTZDhrZWI5aGRHQXRDZDF1bGZNWkV1UWNHUDhLQ0pVNHhhdHM5eUNrdVwvVndYY2JyNFwvUlNXcEZnPT0iLCJtYWMiOiI3MzEzMDYwNjA5NGE4MDExYmVjNGMzNTIyZTU3MzUwNDIzZGQ3OTUwNjgwMzcwZGFmNmQ5ZmJjMjZhOTNhYjZiIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{% liquid
+    assign article_image_dimensions = '100x100'
+    assign article_excerpt_length = 45
+    assign article_excerpt = article.content | strip_html | truncatewords: article_excerpt_length
+    if article.excerpt != blank
+        assign article_excerpt = article.excerpt | strip_html | truncatewords: article_excerpt_length
+    endif
+%}
+
+<div class="{% if class %}{{ class }} {% endif %}article-item">
+    {%- if article.image -%}
+        <a href="{{ article.url }}" class="article-item__image object-cover">
+            {% if article.image contains '.jpg' %}
+                <img data-preload="{{ article.image | img_url: article_image_dimensions, format: 'pjpg' }}" src="{{ article.image | img_url: '50x', format: 'pjpg' }}" alt="{{ article.image.alt }}">
+            {% else %}
+                <img data-preload="{{ article.image | img_url: article_image_dimensions }}" src="{{ article.image | img_url: '50x' }}" alt="{{ article.image.alt }}">
+            {% endif %}
+        </a>
+    {%- endif -%}
+    <h2 class="article-item__title title--sm"><a href="{{ article.url }}">{{ article.title }}</a></h2>
+    {%- unless hide_excerpt -%}
+        <div class="article-item__excerpt rte">
+            <p>{{ article_excerpt }}</p>
+        </div>
+    {%- endunless -%}
+    <a href="{{ article.url }}" class="article-item__cta">{{ 'blogs.article.read_more' | t }}</a>
+</div>

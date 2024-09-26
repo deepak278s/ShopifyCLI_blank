@@ -1,0 +1,226 @@
+{% liquid
+  assign x = false
+  for image in item.product.images
+    assign imageSrc = image.src | downcase
+    if imageSrc contains '-x-'
+      assign product_image = image
+      assign x = true
+      break
+    endif
+  endfor
+  unless x
+    for image in item.product.images
+      assign imageSrc = image.src | downcase
+      if imageSrc contains '-a-'
+        assign product_image = image
+        assign x = true
+      endif
+    endfor
+  endunless
+
+  unless x
+    assign product_image = item.product.images[0]
+  endunless
+%}
+<cart-item
+  data-key="{{ item.key }}"
+  data-id="{{ item.id }}"
+  data-productId="{{ item.product.id }}"
+  data-variantId="{{ item.variant.id }}"
+  data-productHandle="{{ item.product.handle }}"
+  class="relative bg-white flex flex-col gap-5 py-3 border-b border-[rgba(213,_213,_213,_0.28)]"
+>
+  <div class="flex gap-3 lg:gap-[30px]">
+    <div class="relative w-[114px] flex-shrink-0 aspect-[100/137]">
+      {% if item.image != blank %}
+        <picture>
+          <a href="{{ item.url }}" tabindex="-1" aria-hidden="true" class="absolute inset-0 z-10"></a>
+          {{
+            item.image
+            | image_url: width: 250
+            | image_tag: loading: 'lazy', sizes: sizes, widths: '54, 74,150,250', id: item.image.id, alt: item.image.alt
+            | escape
+          }}
+        </picture>
+      {% endif %}
+    </div>
+    <div class="md:grid md:grid-cols-2 md:justify-between items-start w-full md:gap-6">
+      <div class="flex flex-col justify-center gap-[21px] lg:gap-4 w-full md:flex-[0_0_50%]">
+        <div class="flex flex-col gap-[18px]">
+          <div>
+            <h4 class="font-shape text-[12px] font-[500] leading-[166.667%] uppercase text-[#222222] mb-1">
+              {{ item.product.vendor }}
+            </h4>
+            <h3 class="font-shape text-[16px] font-[300] leading-[112.5%] text-[#222222] line-clamp-2 tracking-[0.15px]">
+              <a
+                href="{{ item.url }}"
+                class="block"
+              >
+                {{- item.product.title | escape -}}
+              </a>
+            </h3>
+          </div>
+          <div class="md:hidden">
+            <p class="font-shape text-[16px] md:text-[18px] font-[300] leading-[150%] text-[#222222]">
+              {{ item.final_price | money }}
+            </p>
+            {% if item.variant.inventory_quantity < 3 and item.variant.inventory_quantity > 0 %}
+              <p class="text-[#771228] text-[10px] lg:text-[12px] font-normal leading-[16px] ">
+                {% comment %} {{ 'sections.cart.last_available' | t }} {% endcomment %}
+                Low in Stock only 1 left
+              </p>
+            {% endif %}
+          </div>
+
+          <div class="product-labels flex gap-[4px] flex-col lg:flex-row">
+            {% if item.product.tags %}
+              {% liquid
+                assign tagList = ''
+                assign settingtags = settings.product_tags | split: ','
+                for tag in item.product.tags
+                  assign productTag = tag | downcase
+                  for sTag in settingtags
+                    assign tagToDisplay = sTag | downcase
+                    if productTag == tagToDisplay
+                      assign tagList = tagList | append: sTag | append: ','
+                    endif
+                  endfor
+                endfor
+                assign tagArr = tagList | split: ','
+              %}
+              {% for tag in tagArr limit: 2 %}
+                <p class="h-[24px] flex items-center font-shape first:bg-[#F8F8F8] bg-[#F6F3EC] px-[8px] text-[12px] font-[500] leading-[135%] w-[fit-content] rounded-[4px] uppercase tracking-[0.06px] text-[#222222]">
+                  {{ tag }}
+                </p>
+              {% endfor %}
+            
+            {% endif %}
+          </div>
+        </div>
+        <!-- Start varient option -->
+        {%- unless item.product.has_only_default_variant %}
+          <div class="cart__item hidden lg:block">
+            <ul class="flex flex-col gap-[21px]">
+              {% for option in item.options_with_values -%}
+                <li class="font-shape text-[16px] font-[300] leading-[112.5%] text-[#222222] line-clamp-2 tracking-[0.15px]">
+                  {{ option.name }}: {{ option.value }}
+                </li>
+              {%- endfor %}
+            </ul>
+          </div>
+        {% endunless %}
+        <!-- End varient option -->
+        {% if item.variant.inventory_quantity < 3 and item.variant.inventory_quantity > 0 %}
+          <div class="hidden md:block">
+            <p class="text-[#771228] text-[10px] lg:text-[12px] font-normal leading-[16px]">
+              {% comment %} {{ 'sections.cart.last_available' | t }} {% endcomment %}
+              Low in Stock only 1 left
+            </p>
+          </div>
+        {% endif %}
+
+        <div class="flex flex-col gap-[21px] xl:flex-row">
+          <div
+            data-role="item-actions"
+            class="item-actions md:!hidden item-actions !mt-0 flex gap-4 items-center flex-wrap group"
+          >
+            <qty-input
+              data-max="{{ item.variant.inventory_quantity }}"
+              data-key="{{ item.key }}"
+              data-id="{{  item.variant.id }}"
+              class="item-actions__input min-h-8 flex gap-2 border-[1px] border-[#000] rounded-full items-center px-[15px] py-2 max-h-[38px]"
+            >
+              <button data-role="decrement">{% render 'icon-v2', icon: 'icon-mini-cart-dec' %}</button>
+              <input
+                class="item-actions__input-value max-w-[38px] p-0 text-center border-0 outline-none focus:outline-none focus:ring-0 hover:outline-none appearance-none hover:appearance-none focus:appearance-none text-[11px] min-h-3 text-[#222222] opacity-[1]"
+                type="number"
+                min="0"
+                value="{{ item.quantity }}"
+                data-role="quantity"
+                disabled
+              >
+              <button data-role="increment">{% render 'icon-v2', icon: 'icon-mini-cart-inc' %}</button>
+            </qty-input>
+            <p
+              class="error_message group-[.error]:block hidden w-full flex-[0_0_100%] text-[red] leading-3 text-[14px] font-normal font-shape lg:max-w-[200px]"
+              data-role="qn-error"
+            ></p>
+          </div>
+          <div class="flex flex-col gap-[21px] xl:flex-row">
+            <div>
+              <remove-button data-key="{{ item.key }}">
+                <a
+                  href="{{ item.url_to_remove }}"
+                  class="flex flex-row font-shape text-[13px] font-light text-[#222222] tracking-[0.15px] gap-2"
+                >
+                  {%- render 'icon-v2', icon: 'delete-icon-v2' %}
+                  <span class="border-b border-[#222] leading-[17px] lg:leading-6"> Remove </span>
+                </a>
+              </remove-button>
+            </div>
+
+            <div>
+              <wishlist-btn
+                class="group cursor-pointer flex flex-row font-shape text-[13px] font-light text-[#222222] tracking-[0.15px] gap-2"
+                data-productid="{{ item.variant.product.id }}"
+                data-productlink="{{ item.variant.product.url }}"
+                data-variantid="{{ item.variant.id }}"
+                data-price="{{ item.variant.price }}"
+                data-title="{{ item.variant.product.title }}"
+                data-image="{{ item.variant.product.featured_image | image_url : 300 }}"
+              >
+                <div class="wishlist z-[1] cursor-pointer">
+                  {% render 'icon-v2', icon: 'icon-wishlist', classAttr: 'group-[&.active]:hidden w-[20px]' %}
+                  {% render 'icon-v2',
+                    icon: 'icon-wishlist-fill',
+                    classAttr: 'hidden group-[&.active]:block w-[20px]'
+                  %}
+                </div>
+                <span class="border-b border-[#222] leading-[23px] group-[&.active]:hidden"> Add to Wishlist </span>
+                <span class="border-b border-[#222] leading-[23px] hidden group-[&.active]:block">
+                  Remove From Wishlist
+                </span>
+              </wishlist-btn>
+            </div>
+          </div>
+          <p
+            class="error_message group-[.error]:block hidden w-full flex-[0_0_100%] text-[red] leading-3 text-[14px] font-normal font-shape "
+            data-role="qn-error"
+          >
+            {{ settings.sku_error_message }}
+          </p>
+        </div>
+      </div>
+      <div class="hidden md:!flex justify-between items-center md:flex-[0_0_50%]">
+        <div data-role="item-actions" class="item-actions !mt-0 flex gap-4 items-center flex-wrap group relative">
+          <qty-input
+            data-max="{{ item.variant.inventory_quantity }}"
+            data-key="{{ item.key }}"
+            data-id="{{  item.variant.id }}"
+            class="item-actions__input min-h-8 flex gap-2 border-[1px] border-[#000] rounded-full items-center px-4 py-2 max-h-[38px]"
+          >
+            <button data-role="decrement">{% render 'icon-v2', icon: 'icon-mini-cart-dec' %}</button>
+            <input
+              class="item-actions__input-value max-w-[38px] p-0 text-center border-0 outline-none focus:outline-none focus:ring-0 hover:outline-none appearance-none hover:appearance-none focus:appearance-none text-[11px] min-h-3  text-[#222222]"
+              type="number"
+              min="0"
+              value="{{ item.quantity }}"
+              data-role="quantity"
+              disabled
+            >
+            <button data-role="increment">{% render 'icon-v2', icon: 'icon-mini-cart-inc' %}</button>
+          </qty-input>
+          <p
+            class="error_message group-[.error]:block hidden w-full flex-[0_0_100%] text-[red] leading-4 text-[14px] font-normal font-shape lg:max-w-[200px] absolute top-[115%] min-w-[287px]"
+            data-role="qn-error"
+          ></p>
+        </div>
+        <div>
+          <p class="font-shape text-[16px] md:text-[18px] font-[300] leading-[150%] md:leading-[133.333%] text-[#222222] tracking-[0.15px]">
+            {{ item.final_price | money }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</cart-item>

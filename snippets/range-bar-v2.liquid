@@ -1,0 +1,325 @@
+{% style %}
+  :root {
+    --font-light: 'Shape';
+    --font-semiBold: 'Shape';
+    --font-bold: 'Shape';
+    --font-regular: 'Shape';
+    --font-heading: 'Gascogne Serial';
+  }
+
+  range-bar {
+    min-height: 106px;
+  }
+  .double_range_slider_box {
+    position: relative;
+    width: 100%;
+    /* height: 100%; */
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+  }
+
+  .double_range_slider {
+    width: 90%;
+    height: 4px;
+    position: relative;
+    background-color: #dddddd;
+    border-radius: 20px;
+  }
+  .range_track {
+    height: 100%;
+    position: absolute;
+    border-radius: 20px;
+    background-color: #95d564;
+  }
+
+  .minvalue {
+    padding: 6px 15px;
+  }
+  .maxvalue {
+    padding: 6px 15px;
+  }
+  range-bar input[type='range'] {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 5px;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  range-bar input::-webkit-slider-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background-color: #000;
+    pointer-events: auto;
+    -webkit-appearance: none;
+    cursor: pointer;
+    margin-bottom: 1px;
+  }
+  #range_track {
+    position: absolute;
+    height: 100%;
+    background: #000;
+  }
+  range-bar input::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    border: 3px solid #cbffa3;
+    background-color: #95d564;
+    pointer-events: auto;
+    -moz-appearance: none;
+    cursor: pointer;
+    margin-top: 30%;
+  }
+  .minvalue,
+  .maxvalue {
+    width: max-content;
+    padding: 8px 12px;
+    width: 100%;
+    border: 0.25px solid #d5d5d5;
+    display: flex;
+    justify-content: center;
+    font-family: var(--font-regular);
+    font-size: 12px;
+  }
+  .number-inputs {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 35px;
+    margin-bottom: 15px;
+  }
+  .dash {
+    width: 100%;
+    height: 2px;
+    background: #000;
+    max-width: 16px;
+  }
+  .desktop-reset-btn {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    [data-action='Price Range'] .filter-inputs__wrapper {
+      padding: 16px;
+      min-width: 260px;
+    }
+    .desktop-reset-btn {
+      font-family: var(--font-regular);
+      font-size: 14px;
+      text-decoration: underline;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      color: #222222;
+      cursor: pointer;
+    }
+    .minvalue,
+    .maxvalue {
+      min-width: 87px;
+      justify-content: flex-start;
+      padding: 9px 12px;
+    }
+  }
+{% endstyle %}
+<details data-action="{{ filter.label }}">
+  <summary>
+    <span class="filter-value__title">
+      {{ filter.label }}
+    </span>
+    <span class="filter-forward">
+      {%- render 'icon-v2', icon: 'fitler-down-v2' -%}
+    </span>
+  </summary>
+  <div class="filter-inputs">
+    <div class="filter-form__header">
+      <button>
+        <nested-toggle>{% render 'icon-v2', icon: 'icon-back' %}</nested-toggle>
+      </button>
+      <p class="filter-form__heading">{{ filter.label }}</p>
+    </div>
+    <div class="filter-inputs__wrapper">
+      <range-bar>
+        <input
+          name="{{ filter.min_value.param_name }}"
+          value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+          type="number"
+          data-role="min-input"
+        >
+        <input
+          name="{{ filter.max_value.param_name }}"
+          value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+          type="number"
+          data-role="max-input"
+        >
+        {% liquid
+          assign maxPrice = filter.range_max | divided_by: 100
+          assign inputMaxVal = filter.max_value.value | divided_by: 100
+          assign inputMinVal = filter.min_value.value | divided_by: 100
+          if inputMaxVal == 0
+            assign inputMaxVal = maxPrice
+          endif
+        %}
+        <div class="double_range_slider_box">
+          <div class="double_range_slider">
+            <span data-role="range_track" id="range_track"></span>
+
+            <input
+              type="range"
+              data-role="range-input"
+              class="min"
+              min="0"
+              max="{{ maxPrice }}"
+              value="{{ inputMinVal }}"
+              step="1"
+            >
+            <input
+              type="range"
+              data-role="range-input"
+              class="max"
+              min="0"
+              max="{{ maxPrice }}"
+              value="{{ inputMaxVal }}"
+              step="1"
+            >
+            <div class="number-inputs">
+              <div data-role="minvalue" class="minvalue" data-currency="{{ currency.symbol }}"></div>
+              <span class="dash"></span>
+              <div data-role="maxvalue" class="maxvalue" data-currency="{{ currency.symbol }}"></div>
+            </div>
+            <a class="desktop-reset-btn" data-role="price-reset">Reset</a>
+          </div>
+        </div>
+      </range-bar>
+    </div>
+    <div class="filter-input__footer">
+      <button class="btn-reset" data-role="removeFilters">Reset</button>
+      <button class="btn-apply" data-role="filter-toggle">Apply</button>
+    </div>
+  </div>
+</details>
+<script>
+  class RangeBar extends HTMLElement {
+    constructor() {
+      super();
+      this.minRangeValueGap = 6;
+      this.range = this.querySelector('[data-role="range_track"]');
+      this.minval = this.querySelector('[data-role="minvalue"]');
+      this.maxval = this.querySelector('[data-role="maxvalue"]');
+      this.rangeInput = this.querySelectorAll('[data-role="range-input"]');
+      this.resetBtn = this.querySelectorAll('[data-role="price-reset"]');
+      this.minInput = this.querySelector('[data-role="min-input"]');
+      this.maxInput = this.querySelector('[data-role="max-input"]');
+      this.minRange;
+      this.maxRange;
+      this.minPercentage;
+      this.maxPercentage;
+      this.setMinValueOutput.call(this);
+      this.setMaxValueOutput.call(this);
+      this.minRangeFill.call(this);
+      this.maxRangeFill.call(this);
+      this.MinVlaueBubbleStyle.call(this);
+      this.MaxVlaueBubbleStyle.call(this);
+      this.rangeInput.forEach((input) => {
+        input.addEventListener('input', (e) => {
+          this.setMinValueOutput.call(this);
+          this.setMaxValueOutput.call(this);
+
+          this.minRangeFill.call(this);
+          this.maxRangeFill.call(this);
+
+          this.MinVlaueBubbleStyle.call(this);
+          this.MaxVlaueBubbleStyle.call(this);
+
+          if (this.maxRange - this.minRange < this.minRangeValueGap) {
+            if (e.target.className === 'min') {
+              this.rangeInput[0].value = this.maxRange - this.minRangeValueGap;
+              this.setMinValueOutput.call(this);
+              this.minRangeFill.call(this);
+              this.MinVlaueBubbleStyle.call(this);
+              e.target.style.zIndex = '2';
+            } else {
+              this.rangeInput[1].value = this.minRange + this.minRangeValueGap;
+              e.target.style.zIndex = '2';
+              this.setMaxValueOutput.call(this);
+              this.maxRangeFill.call(this);
+              this.MaxVlaueBubbleStyle.call(this);
+            }
+          }
+        });
+
+        input.addEventListener(
+          'input',
+          this.debounce((e) => {
+            let inputType = e.target.className;
+            this.updatePriceInput(inputType, e.target.value);
+          }, 300).bind(this)
+        );
+      });
+
+      this.resetBtn.forEach((el) => el.addEventListener('click', this.resetPrice.bind(this)));
+    }
+    minRangeFill = () => {
+      this.range.style.left = (this.rangeInput[0].value / this.rangeInput[0].max) * 100 + '%';
+    };
+    maxRangeFill = () => {
+      this.range.style.right = 100 - (this.rangeInput[1].value / this.rangeInput[1].max) * 100 + '%';
+    };
+    MinVlaueBubbleStyle = () => {
+      // this.minPercentage = (this.minRange / this.rangeInput[0].max) * 100
+      // this.minval.style.left = this.minPercentage + "%"
+    };
+    MaxVlaueBubbleStyle = () => {
+      // this.maxPercentage = 100 - (this.maxRange / this.rangeInput[1].max) * 100
+    };
+
+    setMinValueOutput = () => {
+      this.minRange = parseInt(this.rangeInput[0].value);
+      let currencyPrice = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: Shopify.currency.active,
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(this.rangeInput[0].value);
+      this.minval.innerHTML = currencyPrice;
+    };
+    setMaxValueOutput = () => {
+      this.maxRange = parseInt(this.rangeInput[1].value);
+      let currencyPrice = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: Shopify.currency.active,
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(this.rangeInput[1].value);
+      this.maxval.innerHTML = currencyPrice;
+    };
+    resetPrice = () => {
+      this.rangeInput[0].value = 0;
+      this.rangeInput[1].value = this.rangeInput[1].getAttribute('max');
+      this.dispatchEvent(new Event('input', { bubbles: true }));
+      this.minInput.value = 0;
+      this.maxInput.value = this.rangeInput[1].getAttribute('max');
+    };
+    updatePriceInput(role, value) {
+      let inp = role == 'min' ? this.minInput : this.maxInput;
+      inp.value = value;
+      inp.dispatchEvent(new Event('input'));
+    }
+    debounce(fn, wait) {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+  }
+
+  customElements.define('range-bar', RangeBar);
+</script>

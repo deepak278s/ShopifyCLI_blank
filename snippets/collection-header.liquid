@@ -1,0 +1,23 @@
+{%- liquid
+    assign collection_image_class = 'collection__header-image hide--tablet'
+-%}
+
+<header class="collection__header flex--tablet f-vertical-middle">
+    <div class="container">
+        <div class="collection__header-content py-lg--above-tablet">
+            {%- liquid
+                assign title_class = 'collection__title title--sm fnt-sec uc fw-500 title--lg--tablet '
+                if collection.description != empty
+                    assign title_class = title_class | append: ' mb-sm'
+                endif
+                if collection.title != empty
+                    render 'title', title: collection.title, tag: 'h1', class: title_class
+                endif
+                if collection.description != empty
+                    assign description_class = 'mt-xs mb-md more'
+                    render 'collection-description', content: collection.description, class: description_class
+                endif
+            -%}
+        </div>
+    </div>
+</header>

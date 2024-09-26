@@ -1,0 +1,38 @@
+{%- comment %}<locksmith:baaf>{% endcomment -%}
+  {%- assign locksmith_caf2_product__first_available_variant = nil %}{% assign locksmith_caf2_product__selected_variant = nil %}{% assign locksmith_caf2_product__selected_or_first_available_variant = nil %}{% for variant in product.variants %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% if locksmith_caf2_product__first_available_variant == nil and variant.available %}{% assign locksmith_caf2_product__first_available_variant = variant %}{% endif %}{% if locksmith_caf2_product__selected_variant == nil and variant.selected %}{% assign locksmith_caf2_product__selected_variant = variant %}{% endif %}{% if variant == product.selected_or_first_available_variant %}{% assign locksmith_caf2_product__selected_or_first_available_variant = product.selected_or_first_available_variant %}{% endif %}{% endfor %}{% if locksmith_caf2_product__selected_or_first_available_variant == nil %}{% assign locksmith_caf2_product__selected_or_first_available_variant = locksmith_caf2_product__first_available_variant %}{% endif -%}
+{%- comment %}</locksmith:baaf>{% endcomment -%}
+
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:15+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            e14f8cfea3159f6430bc1a9636a74fda
+//      Signature:      eyJpdiI6IkFZRHBRaTNtcVZ5SVFcL1RoRldYQjhRPT0iLCJ2YWx1ZSI6InJ6S3BuaHQzMkZNQnJvT3ozOG0wQStLWVM5ZjhyV1phQmhUXC80b1J0SnFxcFJHcCtQelRJMFIyc0hYcGZzUU5hQ3RhUFd0NUR1SGdBYkFyK2hMR3ZcL0g2YU9qUEJzdXpxQnhjWFVTV1JNWmF3WUhZaFJIbGV0XC9PTnhBeWFwMEgxZzV2Qis3cE80MnVtdGJ3MGgyZlViT3p2UEUyZTFxTG0zUWpsTTZMM1dZaDhhSlJEcDJBS0l4Q280UURldlp1ekFoSkFvQkFSTWtVbk1FVFB5QnF2aVwvVnFJZkV1STZQdzlHRXZwKzVmSm5iZE9DV0hNb21lbWdZYVFKSmJLUHZZNlRsMXk3MlFMd2JSMVRGOWtTeWNybm12QUpyRGJXNnI4ajJRV3BOR3JyWnBiNWM3dVJLRDhvSjZWVDBTRmhGSDNDNktOMTdBNW1TcW4xVVhQVlNRUmxlamJGdEk5VUd3UVNBUDVDaWdSVnZDbTZGUVFkWW9SaVhaMmRrTEV2aGJWdFAxTmxlRktmSWRONXRCeXlHU2NyZE1GYVZwXC9WR0ZGZmNTZWdhT3FFbz0iLCJtYWMiOiI1MjNmODQzZWZmZDFmZjJiOGMwOWRlNzQxMDdhM2FiOTQ0ZDk4ZDI1NmM2MDI2OWQ3MjNjZTVkY2U1MWQ5YmFhIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="product-quantity flex f-vertical-center">
+    <button class="product-quantity__button" data-quantity='{ "action": "decrease" }'>{%- include 'icons', icon: 'minus' -%}</button>
+    <input
+    type="number"
+    id="productQuantity"
+    value="{% if item %}{{ item.quantity }}{% else %}1{% endif %}"
+    min="1"
+    {% if locksmith_caf2_product__selected_or_first_available_variant.inventory_policy == 'deny' %} max="{{ locksmith_caf2_product__selected_or_first_available_variant.inventory_quantity }}"{% endif %}
+    class="product-quantity__input"
+    data-product-quantity
+    data-quantity='{ "event": "keyup" }'
+    {%- if item -%} data-cart-update='{ "action": "updateQuantity", "variantID": {{ item.id }}, "event": "change" }'{%- endif -%}
+    >
+    <button class="product-quantity__button" data-quantity='{ "action": "increase" }'>{%- include 'icons', icon: 'plus' -%}</button>
+</div>

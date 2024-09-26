@@ -1,0 +1,44 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:16+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            1d97f62e18f55f80cbbc340fc1cfc057
+//      Signature:      eyJpdiI6InBPVXQyYWJqWXozU0lTcnFaR2pHYlE9PSIsInZhbHVlIjoid3hnS0hKc3RsdCtVbzJ1UFwvXC9Ba21hWk1mSHMwcTUrNmVCbkZPa3NkRnpqdzRLSmxCY1Z5Nm1NbW9iekFFb2Q5V011QklsUXhjaGs2aVM2TVhkSStFZE1SYk5oSWxKY2o3eEFPOXN1M0lzdjhoNk9RM1ZkWmVFUXpqOWszYjl1c290Tk9RdFBIbGNhNGNkWHF5RlFIR0xnTkgwTTZyUlBaOFJKYVhsZzJwa2hYd1pvTGtqaUdqYTFwaVhsZzJhZmFwR3p2V015S1ZzOGlDaTF5NGh1WHRCWXVKRVZIblJhVlEydHZnNzdWTUJGblVXeEUwSER5MnlHbVZGZWF3a3BZcno0VGFINVZrNTNsWnhienNcL2JJbG5mXC9wUzVMSndoWk9LTFN0OUNwaU9yZURvYURqaXRXR21KTHEwOEZVa3k0ZWNBWVNXczJWdit6M1JpUlo0OXVoUWRXMTJKaXVmd01nUjV0Sm1rOHNwdWQyMnZCc2tvekJZMHN1UGpFSUIyOTNqZWxic09NUndma1pOYlwvNzJDMm83RDV6Qitoa2tsUEFydEVZaWdYSW5nPSIsIm1hYyI6ImI0NTU2ZmM4ZDk1M2NmNDY3ZTZhYWJmZDI5MmJlMjIyNTk3YmVhMWJhMmMxYWIzZjZiNzhmOWVhOGMzYWU0YTMifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="banner-column__collection px-md px-xl--above-tablet" id="block--{{ block.id }}" {{ block.shopify_attributes }}>
+    <ul class="grid grid--2">
+        {%- liquid
+            assign column_collection = collections[block.settings.collection]
+            for column_product in column_collection.products limit: 4
+                render 'product-item', product: column_product
+            endfor
+        -%}
+    </ul>
+    <div class="hide--above-tablet text-align-center mt-md">
+
+        {%- liquid    
+            assign link_style = 'button'
+            assign link_icon = 'arrow'
+            render 'link', style: link_style, text: 'View All', link: column_collection.url, icon: link_icon
+        -%}
+
+    </div>
+
+    {%- style -%}
+        #block--{{ block.id }} {
+            --width: {{ block.settings.width }}%;
+        }
+    {%- endstyle -%}
+</div>

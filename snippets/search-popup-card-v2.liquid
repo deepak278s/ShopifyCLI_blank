@@ -1,0 +1,306 @@
+{% liquid
+  assign product = searchPrd
+  assign img = product.featured_image
+  assign vendor = product.vendor
+  assign title = product.title
+  assign price = product.price | money
+  assign ratio = 0.87
+  if img != blank
+    if settings.card_ratio == 'adaptive'
+      assign ratio = img.aspect_ratio
+    else
+      assign ratio = 0.87
+    endif
+  endif
+  if product == blank
+    assign title = 'TITLE'
+    assign price = 1600 | money
+  endif
+%}
+{% if template contains 'index'
+  or template contains 'collection'
+  or template contains 'product'
+  or template contains 'cart'
+  or template contains '404'
+  or template contains 'static-page-v2'
+  or template contains 'delivery-v2'
+  or template contains 'faq-v2'
+  or template contains 'about-us-v2'
+  or template contains 'contact-v2'
+  or template contains 'our-services-v2'
+  or template contains 'careers-v2'
+  or template contains 'search'
+%}
+  <div class="relative">
+    <div class="grid grid-cols-[92px_1fr_1fr] lg:grid-cols-1 gap-4 lg:gap-0">
+      <div
+        class="relative bg-[#F8F8F8] after:block after:content-[''] after:w-full after:h-full after:bg-[#000] after:absolute after:contrast-[0.1] after:opacity-[.06] after:left-0 after:top-0 after:pointer-events-none"
+        style="padding-bottom:{{ 1 | divided_by : ratio | times : 100 }}%"
+      >
+        {% if img != blank %}
+          <picture>
+            <img
+              srcset="
+                {%- if img.width >= 165 -%}{{ img | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if img.width >= 360 -%}{{ img | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if img.width >= 533 -%}{{ img | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if img.width >= 720 -%}{{ img | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if img.width >= 940 -%}{{ img | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if img.width >= 1066 -%}{{ img | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ img | image_url }} {{ img.width }}w
+              "
+              src="{{ img | image_url: width: 533 }}"
+              sizes="(min-width: 1600px) {{ 1600 | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+              alt="{{ img.alt | escape }}"
+              {% unless lazy_load == false %}
+                loading="lazy"
+              {% endunless %}
+              class="absolute top-0 left-0 w-full h-full max-w-[unset]"
+              width="{{ img.width | divided_by : 4 }}"
+              height="{{ img.height }}"
+            >
+          </picture>
+        {% endif %}
+        <div class="hidden lg:flex lg:flex-col lg:gap-1 absolute bottom-0 left-0 pl-2 pb-2">
+          {% liquid
+            assign tagList = ''
+            assign settingtags = settings.product_tags | split: ','
+            for tag in product.tags
+              assign productTag = tag | downcase
+              for sTag in settingtags
+                assign tagToDisplay = sTag | downcase
+                if productTag == tagToDisplay
+                  assign tagList = tagList | append: sTag | append: ','
+                endif
+              endfor
+            endfor
+            assign tagArr = tagList | split: ','
+          %}
+          {% for label in tagArr limit: 2 %}
+            <div class="text-[12px] leading-[16px] font-shape px-2 py-[5px] rounded-[4px] w-max font-[500] {% if forloop.index == 2 %}text-[#fff] bg-[#000]{% else %}text-[#000] bg-[#fff]{% endif %}">
+              {{ label }}
+            </div>
+          {% endfor %}
+        </div>
+        <wishlist-btn
+          class="group"
+          data-productid="{{ product.id }}"
+          data-productlink="{{ product.url }}"
+          data-variantid="{{ product.selected_or_first_available_variant.id }}"
+          data-price="{{ product.selected_or_first_available_variant.price }}"
+          data-title="{{ product.title }}"
+          data-image="{{ product.featured_image | image_url : 300 }}"
+        >
+          <div class="wishlist absolute top-[12px] right-[12px] z-[1] cursor-pointer">
+            {% render 'icon-v2', icon: 'icon-wishlist', classAttr: 'group-[&.active]:hidden' %}
+            {% render 'icon-v2', icon: 'icon-wishlist-fill', classAttr: 'hidden group-[&.active]:block' %}
+          </div>
+        </wishlist-btn>
+      </div>
+      <div class="py-[13px] lg:py-3 lg:pr-2 col-span-2">
+        <h3 class="text-[14px] font-shape font-normal leading-[21px] uppercase text-[#222222]">{{ vendor }}</h3>
+        <p class="text-[14px] font-shape font-light leading-[21px] text-[#222222]">{{ title }}</p>
+        <p class="text-[14px] lg:text-[16px] font-shape font-light leading-[21px] mt-2 text-[#222222]">{{ price }}</p>
+      </div>
+    </div>
+    <a href="{{ product.url }}" class="absolute top-0 left-0 w-full h-full block"></a>
+  </div>
+{% else %}
+  {% style %}
+    #shopify-section-search-popup-v2 mark {
+      background: transparent;
+      font-weight: bold;
+      color: #222222;
+    }
+    .search-product_card {
+      position: relative;
+    }
+    .search-product_card-wrapper {
+      display: grid;
+      grid-template-columns: 92px 1fr 1fr;
+      gap: 16px;
+    }
+    .search-product_card-image {
+      position: relative;
+      background-color: #f8f8f8;
+    }
+    .search-product_card-image::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      opacity: 0.06;
+      filter: contrast(0.1);
+      background: #000;
+    }
+    .search-product_card-image img {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      max-width: unset;
+    }
+    .search-product_card-labels {
+      display: none;
+    }
+    .search-product_card-label {
+      font-size: 12px;
+      font-family: var(--secondary-font);
+      padding: 5px 8px;
+      border-radius: 4px;
+      width: max-content;
+      font-weight: 500;
+    }
+    .search-product_card-wishlist {
+      display: none;
+    }
+    .search-product_card-content {
+      padding: 13px 0px;
+      grid-column: span 2 / span 2;
+    }
+    .search-product_card-title,
+    .search-product_card-shortDes {
+      font-size: 14px;
+      font-family: var(--secondary-font);
+      font-weight: 300;
+      line-height: 21px;
+    }
+    .search-product_card-vendor {
+      font-size: 14px;
+      font-family: var(--secondary-font);
+      font-weight: 400;
+      line-height: 21px;
+      text-transform: uppercase;
+    }
+    .search-product_card-price {
+      font-size: 14px;
+      font-family: var(--secondary-font);
+      line-height: 21px;
+      margin-top: 8px;
+    }
+    @media (min-width: 1024px) {
+      .search-product_card-wrapper {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+
+      .search-product_card-labels {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        padding-left: 8px;
+        padding-bottom: 8px;
+      }
+      .search-product_card-wishlist {
+        display: block;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        margin: 12px;
+      }
+
+      .search-product_card-content {
+        padding: 12px 0px;
+        padding-right: 8px;
+      }
+    }
+  {% endstyle %}
+  <div class="search-product_card">
+    <div class="search-product_card-wrapper grid grid-cols-[92px_1fr_1fr] lg:grid-cols-1 gap-4 lg:gap-0">
+      <div
+        class="search-product_card-image relative bg-[#F8F8F8]"
+        style="padding-bottom:{{ 1 | divided_by : ratio | times : 100 }}%"
+      >
+        {% if img != blank %}
+          <picture>
+            <img
+              srcset="
+                {%- if img.width >= 165 -%}{{ img | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if img.width >= 360 -%}{{ img | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if img.width >= 533 -%}{{ img | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if img.width >= 720 -%}{{ img | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if img.width >= 940 -%}{{ img | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if img.width >= 1066 -%}{{ img | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ img | image_url }} {{ img.width }}w
+              "
+              src="{{ img | image_url: width: 533 }}"
+              sizes="(min-width: 1600px) {{ 1600 | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+              alt="{{ img.alt | escape }}"
+              {% unless lazy_load == false %}
+                loading="lazy"
+              {% endunless %}
+              class="absolute top-0 left-0 w-full h-full"
+              width="{{ img.width | divided_by : 4 }}"
+              height="{{ img.height }}"
+            >
+          </picture>
+        {% endif %}
+        <div class="search-product_card-labels hidden lg:flex lg:flex-col lg:gap-1 absolute bottom-0 left-0 pl-2 pb-2">
+          {% liquid
+            assign tagList = ''
+            assign settingtags = settings.product_tags | split: ','
+            for tag in product.tags
+              assign productTag = tag | downcase
+              for sTag in settingtags
+                assign tagToDisplay = sTag | downcase
+                if productTag == tagToDisplay
+                  assign tagList = tagList | append: sTag | append: ','
+                endif
+              endfor
+            endfor
+            assign tagArr = tagList | split: ','
+          %}
+          {% for label in tagArr limit: 2 %}
+            <div
+              {% if forloop.index == 2 %}
+                style="color:#fff;background-color:#000;"
+              {% else %}
+                style="color:#000;background-color:#fff;"
+              {% endif %}
+              class="search-product_card-label text-[12px] leading-[16px] font-shape px-2 py-[5px] rounded-[4px] w-max font-[500] {% if forloop.index == 2 %}text-[#fff] bg-[#000]{% else %}text-[#000] bg-[#fff]{% endif %}"
+            >
+              {{ label }}
+            </div>
+          {% endfor %}
+        </div>
+        <wishlist-btn
+          class="group"
+          data-productid="{{ product.id }}"
+          data-productlink="{{ product.url }}"
+          data-variantid="{{ product.selected_or_first_available_variant.id }}"
+          data-price="{{ product.selected_or_first_available_variant.price }}"
+          data-title="{{ product.title }}"
+          data-image="{{ product.featured_image | image_url : 300 }}"
+        >
+          <div class="wishlist absolute top-[12px] right-[12px] z-[1] cursor-pointer">
+            {% render 'icon-v2', icon: 'icon-wishlist', classAttr: 'group-[&.active]:hidden' %}
+            {% render 'icon-v2', icon: 'icon-wishlist-fill', classAttr: 'hidden group-[&.active]:block' %}
+          </div>
+        </wishlist-btn>
+      </div>
+      <div class="search-product_card-content py-[13px] lg:py-3 lg:pr-2 col-span-2">
+        <h3 class="search-product_card-vendor text-[14px] font-shape font-normal leading-[21px] text-[#222222]">
+          {{ vendor }}
+        </h3>
+        <p class="search-product_card-title text-[14px] font-shape font-normal leading-[21px] text-[#222222]">
+          {{ title }}
+        </p>
+        <p class="search-product_card-price text-[14px] font-shape font-light leading-[21px] mt-2 text-[#222222]">
+          {{ price }}
+        </p>
+      </div>
+    </div>
+    <a
+      href="{{ product.url }}"
+      class="absolute top-0 left-0 w-full h-full block"
+      style="position:absolute;top:0px;left:0px;width:100%;height:100%;display:block;"
+    ></a>
+  </div>
+{% endif %}

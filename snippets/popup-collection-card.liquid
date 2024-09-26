@@ -1,0 +1,42 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:13+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            205a0c9c1b51f2097215387e2d83d348
+//      Signature:      eyJpdiI6IjRsNVByV1FGT2swcDFUaURCT09EY2c9PSIsInZhbHVlIjoieHphWkhMUUZKazBuRU1FajFoemp2T0FTK1dqQmRSSzE3STdQWFpkcEJMNWVmR1FZMTIyTVJidzVuUzlKS2NWWUl2UjlVeVMyYk0yTmVIdzZUR3lJY3ZHbWFBbGIzYVdheVM5MjBoS1BcL2x4QUdBREwwSGFWbUNSRlJaMXlhZzNHMnFPZkFmXC9SXC9hNWhPWTY2b2MyNGk2MHNlT1hITmZYYTNhRVo2Yyt4MU12dVwvRW1Sc0p5bmhPbnFOZGxQanBYbU9JQzdVeUNcLzlGdFJsQnprSm1sMVwvZjBkRWdDM0NtQUhYXC9XQ1RESUZ0SFJ6dWhhclwvVTNHc003VTU4bE92bzlzZnE0SG9ic0pGYzB1SHdWZ3dpcHJ2VkhIazBpd1VFUkJqamFxWGxadzg0dEZKT3ozOTc5RFdOMnkwdmFtUkl4R2VraVVBRXRtUlpmbFloZzF3XC9CeEFzUjRnRktXdWQ2YXpMM0tpNnpOYUVpeXpuRm9BZjJEVk5FOXZFeG9jSlVSMjl2cDNWR01HWWFRaUVTNllMQkRQUlBuRjNpTHgwVEVaUWJVdmhVRmtyQT0iLCJtYWMiOiIyZDYxYjBkZjdkNjQ1Mzc5OTU5ZWQ3ZGIwN2RjY2UwOTM5MDIzMmRiN2ViYzU2MmZjMDgzMTlhMzIzY2FiYjg5In0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="popup-collection__card popup-collection__card--{{index}}" data-start-date="{{collection.metafields.popup.start_date}}" data-end-date="{{collection.metafields.popup.end_date}}">
+    <div class="popup-collection__card-image" style="background-image: url({{collection.image | img_url: '590x'}})">
+        {% if collection.metafields.popup.notify == true %}
+            <span class="popup-collection__card-notify">Launches Soon</span>
+        {% elsif collection.metafields.popup.homepage_badge != blank %}
+            <span class="popup-collection__card-badge">{{collection.metafields.popup.homepage_badge}}</span>
+        {% endif %}
+    </div>
+    <h3 class="popup-collection__title">{{collection.title}}</h3>
+    {% if collection.description != '' %}
+        <p class="popup-collection__description">{{collection.description}}</p>
+    {% endif %}
+    {% if collection.metafields.popup.notify == true %}
+        <a class="popup-collection__btn btn" data-notify-popup="{{collection.title}}">Notify Me</a>
+    {% else %}
+        <a class="popup-collection__btn btn" href="{{collection.url}}">Shop Now</a>
+    {% endif %}
+</div>
+<style>
+    .popup-collection__card--{{index}} .popup-collection__card-badge {
+        background-color: {{collection.metafields.popup.homepage_badge_colour}};
+    }
+</style>

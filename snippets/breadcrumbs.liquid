@@ -1,0 +1,89 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:11+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            8c28ce9260af84c6cb948a5a4d95e9f3
+//      Signature:      eyJpdiI6InVWbnJER2FicFRlUlVYQ0lJcFlpWEE9PSIsInZhbHVlIjoiWDBObmQyRTQ2T1RRVE00Mnh2SzU3M2JQem9iWWxKTittbmpHNHl3NGFTcVptd21ja2Y5Wll0Uzg2U1lqZTJoYVJweHJ2d1QyZStoMTlxYnhVTGNiYTRYQkZGR05FYlRTSUVSSnU3d0gxbWQyc0J2NjBiaVdjOFZ0RnlZXC91RWtZajRcL2FET25EYjhQVXRmS0o4TGhJZ0Z5QjJqU1pGQzQ2Y3o5ZDBjVFBIUkZNUmhMSHdveVZ6XC9US2ZlWERtUmEwc0Z5elp0QXNQOHJpZG13VHdFalhjWko1QisxOXJvbVplcVpIQmJIbHdPUjFMXC9EWTlDcmppRWJwRFNXQnVvWXBlN0ViVGdzTzFvaTZcL3FGM3FSdTYyXC9ibVAyNFk1OXBvYWdueWxvUFE3WXIxcHZwZ056QXp6eTNsWWFzWnhZb0kzTk04XC96bGNqVVdObHRkTWx2NCtCVnV4eUFVUlFSOFwvUHp1ZUZ2K2x1djV6c2YxRW9Ta2kxdnBCeEpKOTJmTzkxSnBsd1AzUEJKUU9sXC9TcWpHdndCUT09IiwibWFjIjoiYjA3MTEwODA0NTA0NzNjYTE2ODk3NzYzNTU0ZTA3Mzc5OTRiOGM4MTUwZGZlMzJlMWZhN2QzNDAxOGEwMzc3MCJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{% assign separator = ' > ' %}
+
+<nav class="breadcrumbs{%- if class %} {{ class }}{%- endif %}" role="navigation">
+    <ul class="flex{% unless align != 'center' %} f-center{% endunless %}{%- if list_class %} {{ list_class }}{%- endif %}">
+        <li>
+            <a href="{{ shop.url }}">
+                <span>Home</span>
+            </a>
+            <span class="breadcrumbs-separator">{{ separator }}</span>
+        </li>
+        {%- if template contains 'page' -%}
+            <li>
+                <span>{{ page.title }}</span>
+            </li>
+        {%- elsif template contains 'cart' -%}
+            <li>
+                <span>Basket</span>
+            </li>
+        {%- elsif template contains 'product' -%}
+            <li>
+                <span>{{ product.title }}</span>
+            </li>
+        {%- elsif template contains 'collection' and collection.handle -%}
+            <li>
+                {%- if current_tags -%}<a href="/collections/{{ collection.handle }}">{%- endif -%}
+                    <span>{{ collection.title }}</span>
+                {%- if current_tags -%}</a>{%- endif -%}
+            </li>
+            {%- if current_tags -%}
+            <span class="breadcrumbs-separator">{{ separator }}</span>
+            <li>
+                <a href="/collections/{{ collection.handle }}/{{ current_tags }}">
+                    <span>{{ current_tags | join: " + " }}</span>
+                </a>
+            </li>
+            {%- endif -%}
+        {%- elsif template == 'blog' -%}
+            <li>
+                {%- if current_tags -%}<a href="{{ blog.url }}">{%- endif -%}
+                    <span>{{ blog.title }}</span>
+                {%- if current_tags -%}</a>{%- endif -%}
+            </li>
+            {%- if current_tags -%}
+                <span class="breadcrumbs-separator">{{ separator }}</span>
+                <li>
+                    <a href="{{ blog.url }}/tagged/{{ current_tags }}">
+                        <span>{{ current_tags | join: " + " }}</span>
+                    </a>
+                </li>
+            {%- endif -%}
+        {%- elsif template == 'article' -%}
+            <li>
+                <a href="{{ blog.url }}">
+                    <span>{{ blog.title }}</span>
+                </a>
+            </li>
+            <span class="breadcrumbs-separator">{{ separator }}</span>
+            <li>
+                <span>{{ article.title }}</span>
+            </li>
+        {%- else -%}
+            <li>
+                <span>{{ page.title }}</span>
+            </li>
+        {%- endif -%}
+    </ul>
+</nav>
+
+
+{%- include 'marketing', get: 'breadcrumbs' -%}

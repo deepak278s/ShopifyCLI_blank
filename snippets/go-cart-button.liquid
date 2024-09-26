@@ -1,0 +1,71 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:17+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            d88a1090f571dcae0ebcc50f549131a9
+//      Signature:      eyJpdiI6ImJXVE1kN0xnb0d1eUV4WFBNeVFBU3c9PSIsInZhbHVlIjoiUDNWS1ZySWVGVGpCd1g1ak5raFkzUmRcLyt3VjJqNDJkYzJlZWFJdmhkRVdHOFwvWW1qa3B3cVNwRHd3NnYrVjVTYkowT0FCcXloZ203XC8xV09YbVBTU2lNbmVFRnFxbndaMlNlTUl2d2hpXC9mMG9yQnR1aExWc2xjWUdkK285enR5WVJjc2IxZ25ROVFJYmg5SThpUndMWkFWc2EyWHUzRGpLYkdZbjNOZjU3enFUbUR0NFRzclwvVGw3KzExRm9XZUlpVVBnQWhZU1gyeDJXcWpReHROWHArb1BtQ3Rua0ZYTUlJdG5Kc3ozczZ1UmU0a1ZNeFZIdU5tNUkxaitBc3JzOUNueDJNaGQ4VkYyU0FCaTBaZTRKQVJSRUVHVWRLZjVmN1hZYm5YTGRUMGY5S2NzQXVpaHd2YmFPRytFZnh0ZDlMem1tcGdTaFFyUysxVmdjRCtsQjVMYmxEK2VlU3hEd2VvcG95OUlPSjRkYmxUb3Vtd1RmaDR0QlJaZ0xLWjdLUkF4enNFNDF0d29GajFcLzRmUXllQT09IiwibWFjIjoiMGEyOWJiM2VhYTlhODUxZTAwYWIwYjZjMzRmNzk0NGNlMDJlMGYyNmE0YmMxNWU4NTBlMmJhMDdkNDJmMzEzNyJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<!--cart button-->
+<div class="go-cart__trigger js-go-cart-trigger block p-sm--above-tablet p-xs--tablet flex f-vertical-middle px-sm--above-tablet py-sm--tablet px-xs--tablet">
+
+    {%- render 'icons', icon: 'bag', class: 'cart-icon--size' -%}
+    <span class="sm fnt-sec fw-300 uc flex hide--tablet-lg">
+        <span class="pr-xs">Bag</span>
+        (<span class="js-go-cart-counter">{{- cart.item_count -}}</span>)
+    </span>
+    <span class="hide--above-tablet mobile--item-count fnt-sec js-go-cart-counter">{{- cart.item_count -}}</span>
+
+    {%- comment -%}
+
+    <!--go cart mini cart-->
+    <div class="go-cart__mini-cart js-go-cart-mini-cart">
+
+        <div class="go-cart-mini-cart">
+
+            <!--go cart mini cart content-->
+            <div class="go-cart-mini-cart__content js-go-cart-mini-cart-content">
+            </div>
+            <!--end go cart mini cart content-->
+
+            <!--go cart mini cart subtotal-->
+            <div class="go-cart-mini-cart__subtotal">
+                <span>Subtotal: </span>
+                <span class="go-cart-mini-cart__subtotal-price js-go-cart-mini-cart-subtotal"></span>
+            </div>
+            <!--end go cart mini cart subtotal-->
+
+            <!--go cart mini cart buttons-->
+            <div class="go-cart-mini-cart__footer js-go-cart-mini-cart-footer">
+
+                <a href="/checkout/" class="go-cart__button">
+                    Proceed to checkout
+                </a>
+
+                <a href="/cart/" class="go-cart__button">
+                    View cart
+                </a>
+
+            </div>
+            <!--end go cart mini cart buttons-->
+
+        </div>
+
+    </div>
+    <!--end go cart mini cart-->
+
+    {%- endcomment -%}
+
+</div>
+<!--end cart button-->

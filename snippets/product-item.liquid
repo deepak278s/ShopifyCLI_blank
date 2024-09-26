@@ -1,0 +1,81 @@
+{%- liquid
+    if collection
+        assign product_url = product.url | within: collection
+    endif
+    assign product_url = product.url
+
+    assign featured_image = product.featured_image
+
+    for filter in collection.filters
+        assign product_option = product.options_by_name[filter.label]
+        if product_option
+            if filter.active_values.size > 0
+                assign active_filter_value = filter.active_values | first
+                assign option_position = 'option' | append: product_option.position
+                assign selected_variant = product.variants | where: option_position, active_filter_value.value | first
+                if selected_variant and selected_variant.image
+                    assign featured_image = selected_variant.image
+                endif
+            endif
+        endif
+        continue
+    endfor
+
+    assign image_width = image_width | default: 1280
+    assign image_alt = featured_image.alt | default: product.title
+-%}
+
+<li class="product-item mb-lg{% if class %} {{ class }}{% endif %}" data-sal="slide-up">
+    {% render 'wishlisthero-collection-product' with product: product %}
+    {%- liquid
+        assign image_class = 'product-item__image bg-grey'
+        if product.images.size > 0
+            assign image_extension = featured_image.src | split: '.' | last
+            if image_extension == 'jpg'
+                assign image_class = image_class | append: ' object-cover'
+            else
+                assign image_class = image_class | append: ' object-contain'
+            endif
+            echo featured_image | image_url: width: image_width | image_tag: loading: 'lazy', alt: image_alt | link_to: product_url, class: image_class
+            if product.images.size > 1
+                assign image = product.images[1]
+                assign image_alt = image.alt | default: product.title
+                assign image_class = 'product-item__image bg-grey'
+                assign image_extension = image.src | split: '.' | last
+                if image_extension == 'jpg'
+                    assign image_class = image_class | append: ' object-cover'
+                else
+                    assign image_class = image_class | append: ' object-contain'
+                endif
+                echo image | image_url: width: image_width | image_tag: loading: 'lazy', alt: image_alt | link_to: product_url, class: image_class
+            endif
+        else
+            assign image_class = image_class | append: ' object-contain'
+            echo 'product-1' | placeholder_svg_tag | link_to: product_url, class: image_class
+        endif
+    -%}
+
+    <div class="product-item__info mt-sm px-sm pt-sm">
+
+        {%- liquid
+            render 'product-tag', product: product 
+            
+            if product.vendor
+                assign vendor_url = product.vendor | url_for_vendor
+                assign brand_handle = product.vendor | handle
+                assign brand_collection = collections[brand_handle]
+                if brand_collection
+                    assign vendor_url = brand_collection.url
+                endif
+                echo product.vendor | link_to: vendor_url, class: 'product-item__brand block fnt-sec md uc fw-500 mb-xs'
+            endif
+
+            assign title = product.title | link_to: product_url
+            render 'title', title: title, title_tag: 'h2', class: 'product-item__title title--sm mb-xs fnt-sec fw-300'
+
+            render 'product__price', class: 'product-item__price', product: product
+        -%}
+
+    </div>
+
+</li>

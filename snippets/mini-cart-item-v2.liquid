@@ -1,0 +1,261 @@
+{% if template contains 'index'
+  or template contains 'collection'
+  or template contains 'cart'
+  or template contains 'product'
+  or template contains '404'
+  or template contains 'static-page-v2'
+  or template contains 'delivery-v2'
+  or template contains 'faq-v2'
+  or template contains 'about-us-v2'
+  or template contains 'contact-v2'
+  or template contains 'our-services-v2'
+  or template contains 'careers-v2'
+  or template contains 'search'
+
+%}
+  <div
+    data-role="cart-item"
+    data-key="{{ item.key }}"
+    class="pl-4 pr-[14px] origin-top transition-[max-height] ease-in-out duration-300 max-h-[1000px] [&.removing]:max-h-0 [&.removing]:opacity-0"
+  >
+    <div class="flex gap-4">
+      <div class="flex-[0_0_20%] lg:flex-[0_0_27%]">
+        {% if item.image != blank %}
+          {{
+            item.image
+            | image_url: width: 250
+            | image_tag: loading: 'lazy', sizes: sizes, widths: '54, 74,150,250', id: item.image.id, alt: item.image.alt
+            | escape
+          }}
+        {% endif %}
+      </div>
+      <div>
+        <h3 class="text-[14px] font-shape font-normal leading-[21px] uppercase text-[#222222]">
+          {{ item.product.vendor }}
+        </h3>
+        <p class="text-[14px] font-shape leading-[21px] font-light text-[#222222]">{{ item.title }}</p>
+        <p class="font-shape text-[14px] lg:text-[16px] leading-[21px] font-light mt-2 text-[#222222]">
+          {{ item.final_price | money }}
+        </p>
+        <div data-role="item-actions" class="flex gap-4 items-center mt-4 flex-wrap group">
+          <qty-input
+            data-max="{{ item.variant.inventory_quantity }}"
+            data-key="{{ item.key }}"
+            data-id="{{  item.variant.id }}"
+            class="flex gap-2 border-[1px] border-[#000] rounded-full items-center px-4 py-2 max-h-[38px]"
+          >
+            <button data-role="decrement">{% render 'icon-v2', icon: 'icon-mini-cart-dec' %}</button>
+            <input
+              class="max-w-[38px] p-0 text-center border-0 outline-none focus:outline-none focus:ring-0 hover:outline-none appearance-none hover:appearance-none focus:appearance-none text-[11px] min-h-3 text-[#222222] opacity-[1]"
+              type="number"
+              min="0"
+              value="{{ item.quantity }}"
+              data-role="quantity"
+              disabled
+            >
+            <button data-role="increment">{% render 'icon-v2', icon: 'icon-mini-cart-inc' %}</button>
+          </qty-input>
+          <remove-button data-key="{{ item.key }}">
+            <a
+              href="{{ item.url_to_remove }}"
+              class="font-shape text-[11px] leading-[12px] font-normal uppercase underline underline-offset-2 text-[#222222]"
+              >Remove</a
+            >
+          </remove-button>
+          <p
+            data-role="qn-error"
+            class="error_message group-[.error]:block hidden w-full flex-[0_0_100%] text-[red] leading-3 text-[14px] font-normal font-shape "
+          >
+            {{ settings.sku_error_message }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <div
+    data-role="cart-item"
+    data-key="{{ item.key }}"
+    class="cart-item"
+  >
+    <div class="cart-item__wrapper">
+      <div class="cart-item__img">
+        {% if item.image != blank %}
+          {{
+            item.image
+            | image_url: width: 250
+            | image_tag: loading: 'lazy', sizes: sizes, widths: '54, 74,150,250', id: item.image.id, alt: item.image.alt
+            | escape
+          }}
+        {% endif %}
+      </div>
+      <div class="cart-item__detail">
+        <h3>{{ item.product.vendor }}</h3>
+        <p class="cart-item__subtitle">{{ item.title }}</p>
+        <p class="cart-item__price">
+          {{ item.final_price | money }}
+        </p>
+        <div data-role="item-actions" class="item-actions">
+          <qty-input
+            data-max="{{ item.variant.inventory_quantity }}"
+            data-key="{{ item.key }}"
+            data-id="{{  item.variant.id }}"
+            class="item-actions__input"
+          >
+            <button data-role="decrement">{% render 'icon-v2', icon: 'icon-mini-cart-dec' %}</button>
+            <input
+              class="item-actions__input-value"
+              type="number"
+              min="0"
+              value="{{ item.quantity }}"
+              data-role="quantity"
+              disabled
+            >
+            <button data-role="increment">{% render 'icon-v2', icon: 'icon-mini-cart-inc' %}</button>
+          </qty-input>
+          <remove-button data-key="{{ item.key }}">
+            <a
+              href="{{ item.url_to_remove }}"
+              class="item-actions__remove"
+              >Remove</a
+            >
+          </remove-button>
+          <p class="error_message" data-role="qn-error">
+            {{ settings.sku_error_message }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% style %}
+    .cart-item {
+      padding-left: 1rem;
+      padding-right: 14px;
+      transform-origin: top;
+      transition-property: max-height;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 300ms;
+      max-height: 1000px;
+    }
+    .cart-item.removing {
+      max-height: 0px;
+      opacity: 0;
+    }
+    .cart-item__wrapper {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+    }
+    .cart-item__img {
+      flex: 0 0 20%;
+    }
+    .cart-item__img img {
+      max-height: 60px;
+      max-width: 60px;
+    }
+    .cart-item__detail h3 {
+      font-size: 14px;
+      font-family: var(--secondary-font);
+      font-weight: 400;
+      line-height: 21px;
+      text-transform: uppercase;
+    }
+    .cart-item__subtitle {
+      font-size: 14px;
+      font-family: var(--secondary-font);
+      line-height: 21px;
+      font-weight: 300;
+    }
+    .cart-item__price {
+      font-family: var(--secondary-font);
+      font-size: 14px;
+      line-height: 21px;
+      font-weight: 300;
+      margin-top: 0.5rem;
+    }
+    .item-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    .item-actions__input {
+      display: flex;
+      gap: 0.5rem;
+      border: 1px solid #000;
+      border-radius: 9999px;
+      align-items: center;
+      padding: 5.8px 15px;
+      min-height: 38px;
+    }
+    .item-actions__input-value {
+      max-width: 38px;
+      padding: 0px;
+      font-size: 11px;
+      height: 0.75rem;
+      text-align: center;
+      border-width: 0px;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      appearance: none;
+      color: #222222;
+      opacity: 1;
+    }
+    .item-actions__input-value:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+      box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+    }
+    .item-actions__input-value:hover {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      appearance: none;
+    }
+    .item-actions__remove {
+      font-family: var(--secondary-font);
+      font-size: 11px;
+      line-height: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+      text-decoration-line: underline;
+      text-underline-offset: 2px;
+    }
+    .item-actions {
+      flex-wrap: wrap;
+    }
+    .error_message {
+      flex: 0 0 100%;
+      color: red;
+      line-height: 12px;
+      font-size: 14px;
+      font-weight: 400;
+      font-family: var(--primary-font);
+      display: none;
+    }
+    .item-actions.error .error_message {
+      display: block;
+    }
+    /* media querry */
+    @media (min-width: 1024px) {
+      .cart-item__img {
+        flex: 0 0 27%;
+      }
+      .cart-item__price {
+        font-size: 16px;
+      }
+      .cart-item__img img {
+        max-height: 122px;
+        max-width: 100%;
+      }
+
+      .cart-item {
+        padding-left: 32px;
+        padding-right: 32px;
+      }
+    }
+  {% endstyle %}
+{% endif %}

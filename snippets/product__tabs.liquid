@@ -1,0 +1,282 @@
+{%- liquid
+    assign tabs_object = product.description | split: '<h1>'
+    assign first = true
+    assign index = 0
+    assign menu_blocks = section.blocks | where: 'type', 'menu'
+    assign tab_blocks = section.blocks | where: 'type', 'tab'
+-%}
+
+{%- if menu_blocks.size > 0 -%}
+    
+    {%- capture section_menu -%}
+
+        <ul class="product-tabs__section-menu flex f-flex-start f-vertical-middle f-wrap mt-sm">
+
+            {%- for block in menu_blocks -%}
+
+                <li>
+                    {%- liquid
+                        assign section_id = '#' | append: block.settings.section_id
+                        assign menu_link_class = 'fnt-sec fw-300 uc underline xs blue my-sm'
+                        unless forloop.first
+                            assign menu_link_class = menu_link_class | append: ' px-md'
+                        endunless
+                        unless forloop.last
+                            assign menu_link_class = menu_link_class | append: ' pr-md'
+                        endunless
+                        echo block.settings.title | link_to: section_id, class: menu_link_class
+                    -%}
+                </li>
+
+            {%- endfor -%}
+
+        </ul>
+
+    {%- endcapture -%}
+
+{%- endif -%}
+
+{%- capture size_guide_menu -%}
+
+    <ul class="product-tabs__section-menu flex f-flex-start f-vertical-middle f-wrap mt-sm">
+
+        <li class="product-tabs__sizeGuide my-sm"
+            data-app="eastsideco_sizeGuides"
+            data-shop="{{ shop.permanent_domain }}"
+            data-tags="{{ product.tags | join:',' | escape }}"
+            data-metafields="{{ product.metafields.esc-size-matters.tag }}"
+            data-popup="link">
+            {%- style -%}
+            .product-tabs__sizeGuide > a {
+                color: var(--color-blue);
+                text-transform: uppercase;
+                font-family: var(--secondary-font);
+                font-weight: 300;
+                text-decoration: underline;
+                font-size: 12px;
+                line-height: 16px;
+                letter-spacing: .123em;
+            }
+            {%- endstyle -%}
+        </li>
+
+</ul>
+
+{%- endcapture -%}
+
+<div class="faq-accordion product__tabs mt-lg pt-sm">
+
+    {%- if product.description contains '<h1>' -%}
+
+        {%- comment -%}
+            ----------------------
+            -- Description tabs --
+            ----------------------
+        {%- endcomment -%}
+
+        {%- for tab_string in tabs_object -%}
+            {%- liquid
+                if tab_string == empty
+                    continue
+                endif
+                if tab_string contains '</h1>'
+                    assign tab_object = tab_string | split: '</h1>'
+                    assign tab_title = tab_object | first | strip | strip_html
+                    assign tab_content = tab_object | last
+                else
+                    assign tab_title = 'products.product.description' | t
+                    assign tab_content = tab_string
+                endif
+            -%}
+
+            {%- capture css_logic -%}
+                
+                {{- css_logic -}}
+
+                #{{ section.id }}{{ product.id }}{{ index }}--control:checked ~ [role="tablist"] [for="{{ section.id }}{{ product.id }}{{ index }}--control"] {
+                    border-color: var(--color-black);
+                    color: #000;
+                }
+                #{{ section.id }}{{ product.id }}{{ index }}--control:checked ~ #{{ section.id }}{{ product.id }}{{ index }}--tab {
+                    display: block;
+                    visibility: visible;
+                }
+
+            {%- endcapture -%}
+
+
+            <h2 class="faq-accordion-title py-xs fnt-sec md uc">
+            {{- tab_title -}}
+                    <span class="arrow">
+                        {% render 'icons', icon: 'chevron-right' %}
+                    </span>
+                </h2>
+                <div class="accordion-content mb-md lg">
+                    {{ tab_content }}
+                    {% if tab_title contains 'Size' %}
+                    <div data-app="eastsideco_sizeGuides"
+                            class="text-link"
+                            data-shop="{{ shop.permanent_domain }}"
+                            data-tags="{{ product.tags | join:',' | escape }}"
+                            data-metafields="{{ product.metafields.esc-size-matters.tag }}"
+                            data-popup="link">
+                    </div>
+                    {% endif %}
+                </div>
+
+            {%- liquid
+                assign first = false
+                assign index = index | plus: 1
+            -%}
+
+        {%- endfor -%}
+
+    {%- else -%}
+
+        {%- comment -%}
+            ------------------------
+            -- Description as tab --
+            ------------------------
+        {%- endcomment -%}
+
+        {%- capture css_logic -%}
+                    
+            {{- css_logic -}}
+
+            #{{ section.id }}{{ product.id }}{{ index }}--control:checked ~ [role="tablist"] [for="{{ section.id }}{{ product.id }}{{ index }}--control"] {
+                border-color: var(--color-black);
+            }
+            #{{ section.id }}{{ product.id }}{{ index }}--control:checked ~ #{{ section.id }}{{ product.id }}{{ index }}--tab {
+                display: block;
+                visibility: visible;
+            }
+
+        {%- endcapture -%}
+
+        <input
+            type="radio"
+            name="product-tabs__{{ section.id }}--{{ product.id }}" id="{{ section.id }}{{ product.id }}{{ index }}--control"
+            {% if first %}checked{% endif %}>
+
+        {%- liquid
+            assign tab_title = 'products.product.description' | t
+            capture tab
+                render 'product__tabs-tab', section_id: section.id, product_id: product.id, index: index, tab_title: tab_title
+            endcapture
+            assign tabs = tabs | append: tab
+        -%}
+
+        {%- capture tab_contents -%}
+
+            {{- tab_contents -}}
+
+            <div
+                tabindex="0"
+                role="tabpanel"
+                id="{{ section.id }}{{ product.id }}{{ index }}--tab"
+                class="my-md--tablet sm--tablet">
+
+                {%- liquid
+                    render 'richtext', content: product.description
+                    if first
+                        echo section_menu
+                    endif
+                    if tab_title contains 'Size'
+                        echo size_guide_menu
+                    endif
+                -%}
+
+            </div>
+
+        {%- endcapture -%}
+
+        {%- liquid
+            assign first = false
+            assign index = index | plus: 1
+        -%}
+
+    {%- endif -%}
+    
+    {%- comment -%}
+        ---------------------
+        -- Customiser tabs --
+        ---------------------
+    {%- endcomment -%}
+
+    {%- for block in tab_blocks -%}
+
+        {%- capture css_logic -%}
+                    
+            {{- css_logic -}}
+
+            #{{ section.id }}{{ product.id }}{{ index }}--control:checked ~ [role="tablist"] [for="{{ section.id }}{{ product.id }}{{ index }}--control"] {
+                border-color: var(--color-black);
+            }
+            #{{ section.id }}{{ product.id }}{{ index }}--control:checked ~ #{{ section.id }}{{ product.id }}{{ index }}--tab {
+                display: block;
+                visibility: visible;
+            }
+
+        {%- endcapture -%}
+
+        <input
+            type="radio"
+            name="product-tabs__{{ section.id }}--{{ product.id }}" id="{{ section.id }}{{ product.id }}{{ index }}--control"
+            {% if first %}checked{% endif %}>
+
+        {%- liquid
+            assign tab_title = block.settings.title | default: block.settings.page.title
+            capture tab
+                render 'product__tabs-tab', section_id: section.id, product_id: product.id, index: index, tab_title: tab_title
+            endcapture
+            assign tabs = tabs | append: tab
+        -%}
+
+        {%- capture tab_contents -%}
+
+            {{- tab_contents -}}
+
+            <div
+                tabindex="0"
+                role="tabpanel"
+                id="{{ section.id }}{{ product.id }}{{ index }}--tab"
+                class="my-md--tablet lg sm--tablet">
+
+                {%- liquid
+                    assign content = block.settings.content
+                    if block.settings.content == '' and block.settings.page
+                        assign content = block.settings.page.content
+                    endif
+                    render 'richtext', content: content
+                    if first
+                        echo section_menu
+                    endif
+                -%}
+
+            </div>
+
+        {%- endcapture -%}
+
+        {%- liquid
+            assign first = false
+            assign index = index | plus: 1
+        -%}
+
+    {%- endfor -%}
+
+    <div role="tablist" class="flex f-stretch f-equal-width mb-md">
+    
+        {{- tabs -}}
+
+    </div>
+
+    {{- tab_contents -}}
+
+</div>
+
+{%- style -%}
+
+    {{- css_logic -}}
+
+{%- endstyle -%}
+

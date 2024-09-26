@@ -1,0 +1,14 @@
+<button class="currency-switcher__button fnt-sec uc sm fw-300" onclick="changeCurrency()">
+    <span class="hide--tablet-lg ">{{ localization.country.iso_code }} / {{ localization.country.currency.iso_code }} ({{ localization.country.currency.symbol }})</span>
+    <span class="hide--above-tablet-lg md sm--above-tablet fnt-sec uc fw-500 px-md--above-tablet">{{ localization.country }} / {{ localization.country.currency.iso_code }} ({{ localization.country.currency.symbol }})</span>
+</button>
+
+<script>
+    // Change currency
+    function changeCurrency() {
+        geoModal.classList.remove('isHidden'); // Display country switcher pop up
+        geoModal.classList.add('center-align'); // Display country switcher pop up
+        changeCountry(); // Switch to the country selector form content
+        countrySelector.value = "{{ localization.country.iso_code }}"; // Change form to user's previously selected country
+    }
+</script>

@@ -1,0 +1,313 @@
+{%- liquid
+  assign image_link_size = 0
+  assign link_block = false
+  assign header_title = ''
+  assign child_menu = section.blocks | where: 'type', 'image'
+  for block in child_menu
+    if block.settings.matching_parent_text == parent_link.title
+      assign image_link_size = image_link_size | plus: 1
+      assign link_block = block
+      assign header_title = block.settings.megamenu_header
+      break
+    endif
+  endfor
+  assign text_block_text = section.blocks | where: 'type', 'text_block'
+  assign stories_block = section.blocks | where: 'type', 'stories_block'
+-%}
+{% comment %} Check if text block exist {% endcomment %}
+{%- liquid
+  for block in text_block_text
+    if block.settings.matching_parent_text == parent_link.title and block.settings.brand == menu_brand
+      assign text_block_exist = true
+      break
+    else
+      assign text_block_exist = false
+    endif
+  endfor
+-%}
+
+<input type="checkbox" id="megamenu__{{ parent_link.title | handle }}--{{ parent_link.object.id | handle }}" hidden>
+
+<label
+  for="megamenu__{{ parent_link.title | handle }}--{{ parent_link.object.id | handle }}"
+  class="flex f-vertical-middle md fnt-sec uc fw-500 px-lg--above-tablet px-sm--tablet f-center--above-tablet f-space-between--tablet hide--above-tablet-lg"
+>
+  {{- parent_link_text -}}
+  {%- render 'icons', icon: 'chevron-right', class: 'hide--above-tablet-lg margin-fix' -%}
+</label>
+
+<div class="site-header__nav-megamenu container">
+  <div class="site-header__nav-megamenu-main f-space-between f-vertical-top f-stretch--tablet">
+    {% for block in stories_block %}
+      {% if block.settings.matching_parent_text == parent_link.title and block.settings.brand == menu_brand %}
+        {% if block.settings.stories_title != blank %}
+          <h3 class="fnt-sec uc fw-500 md">Latest Stories</h3>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    <div class="site-header__nav-megamenu-content flex">
+      {% if parent_link.links.size > 0 or text_block_exist == true %}
+        <div class="megamenu__nav">
+          {% comment %} Text Block (Intro) {% endcomment %}
+          <div class="site-header__text-block">
+            {% for block in text_block_text %}
+              {% if block.settings.matching_parent_text == parent_link.title and block.settings.brand == menu_brand %}
+                <h3 class="block sm italic uc fnt-sec fw-300 mb-sm">{{ block.settings.text_block_title }}</h3>
+                <div class="text-block__description mb-lg">
+                  {{ block.settings.text_block_text }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% comment %} Linklists (menus) {% endcomment %}
+          <ul class="megamenu__nav--main-navlist">
+            {% for link in parent_link.links %}
+              {%- comment %}<locksmith:48c2>{%- endcomment %}
+              {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: parent_link, variable: 'transparent' %}{% endcapture -%}
+              {%- if var == 'true' %}{% else %}{% continue %}{% endif -%}
+              {%- comment %}</locksmith:48c2>{%- endcomment %}
+              <li class="link-list__link">
+                <div class="block sm italic uc fnt-sec fw-300 mb-sm">{{ link.title }}</div>
+                {% if link.links != blank %}
+                  <ul>
+                    {% for sublinks in link.links %}
+                      {%- comment %}<locksmith:60b8>{%- endcomment %}
+                      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: sublinks, subject_parent: link, variable: 'transparent' %}{% endcapture -%}
+                      {%- if var == 'true' %}{% else %}{% continue %}{% endif -%}
+                      {%- comment %}</locksmith:60b8>{%- endcomment %}
+                      <li>
+                        {{-
+                          sublinks.title
+                          | link_to: sublinks.url, class: 'block uc md fw-500 fnt-sec py-xs px-sm--tablet'
+                        -}}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {% comment %} Images {% endcomment %}
+      {% for block in child_menu %}
+        {% if block.settings.matching_parent_text == parent_link.title and block.settings.brand == menu_brand %}
+          {% if block.settings.image_one != blank %}
+            <div>
+              <a href="{{block.settings.image_one_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_one | image_url: width: 500 }}"
+                  class="megamenu__link-image object-cover rounded-corners"
+                  loading="lazy"
+                >
+                {% if block.settings.matching_text_image_one != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_one }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_one_text != blank %}
+                  <p class="mb-md">{{ block.settings.image_one_text }}</p>
+                {% endif %}
+                {% if block.settings.image_one_button != blank %}
+                  <span class="btn mb-md">{{ block.settings.image_one_button }}</span>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+          {% if block.settings.image_two != blank %}
+            <div>
+              <a href="{{block.settings.image_two_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_two | image_url: width: 500 }}"
+                  loading="lazy"
+                  class="megamenu__link-image object-cover rounded-corners"
+                >
+                {% if block.settings.matching_text_image_two != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_two }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_two_text != blank %}
+                  <p class="mb-md">{{ block.settings.image_two_text }}</p>
+                {% endif %}
+                {% if block.settings.image_two_button != blank %}
+                  <span class="btn mb-md">{{ block.settings.image_two_button }}</span>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+          {% if block.settings.image_three != blank %}
+            <div>
+              <a href="{{block.settings.image_three_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_three | image_url: width: 500 }}"
+                  loading="lazy"
+                  class="megamenu__link-image object-cover rounded-corners"
+                >
+                {% if block.settings.matching_text_image_three != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_three }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_three_text != blank %}
+                  <p class="mb-md">{{ block.settings.image_three_text }}</p>
+                {% endif %}
+                {% if block.settings.image_three_button != blank %}
+                  <span class="btn mb-md">{{ block.settings.image_three_button }}</span>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+          {% if block.settings.image_four != blank %}
+            <div>
+              <a href="{{block.settings.image_four_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_four | image_url: width: 500 }}"
+                  loading="lazy"
+                  class="megamenu__link-image object-cover rounded-corners"
+                >
+                {% if block.settings.matching_text_image_four != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_four }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_four_text != blank %}
+                  <p class="mb-md">{{ block.settings.image_four_text }}</p>
+                {% endif %}
+                {% if block.settings.image_four_button != blank %}
+                  <span class="btn mb-md">{{ block.settings.image_four_button }}</span>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% comment %} Stories {% endcomment %}
+      {% for block in stories_block %}
+        {% if block.settings.matching_parent_text == parent_link.title and block.settings.brand == menu_brand %}
+          {% if block.settings.image_one != blank %}
+            <div>
+              <a href="{{block.settings.image_one_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_one | image_url: width: 500 }}"
+                  class="megamenu__link-image-story  object-cover "
+                  loading="lazy"
+                >
+                {% if block.settings.matching_text_image_one != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_one }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_one_text != blank %}
+                  <p class="mb-md fnt-sec uc fw-500 md">{{ block.settings.image_one_text }}</p>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+          {% if block.settings.image_two != blank %}
+            <div>
+              <a href="{{block.settings.image_two_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_two | image_url: width: 500 }}"
+                  class="megamenu__link-image-story object-cover"
+                  loading="lazy"
+                >
+                {% if block.settings.matching_text_image_two != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_two }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_two_text != blank %}
+                  <p class="mb-md fnt-sec uc fw-500 md">{{ block.settings.image_two_text }}</p>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+          {% if block.settings.image_three != blank %}
+            <div>
+              <a href="{{block.settings.image_three_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_three | image_url: width: 500 }}"
+                  class="megamenu__link-image-story object-cover"
+                  loading="lazy"
+                >
+                {% if block.settings.matching_text_image_three != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_three }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_three_text != blank %}
+                  <p class="mb-md fnt-sec uc fw-500 md">{{ block.settings.image_three_text }}</p>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+          {% if block.settings.image_four != blank %}
+            <div>
+              <a href="{{block.settings.image_four_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_four | image_url: width: 500 }}"
+                  class="megamenu__link-image-story object-cover"
+                  loading="lazy"
+                >
+                {% if block.settings.matching_text_image_four != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_four }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_four_text != blank %}
+                  <p class="mb-md fnt-sec uc fw-500 md">{{ block.settings.image_four_text }}</p>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+          {% if block.settings.image_five != blank %}
+            <div>
+              <a href="{{block.settings.image_five_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_five | image_url: width: 500 }}"
+                  class="megamenu__link-image-story object-cover"
+                  loading="lazy"
+                >
+                {% if block.settings.matching_text_image_five != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_five }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_five_text != blank %}
+                  <p class="mb-md fnt-sec uc fw-500 md">{{ block.settings.image_five_text }}</p>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+          {% if block.settings.image_six != blank %}
+            <div>
+              <a href="{{block.settings.image_six_link}}" class="megamenu__link">
+                <img
+                  src="{{block.settings.image_six | image_url: width: 500 }}"
+                  class="megamenu__link-image-story object-cover"
+                  loading="lazy"
+                >
+                {% if block.settings.matching_text_image_six != blank %}
+                  <p class="megamenu__link-text fnt-sec uc sm mt-md mb-sm">
+                    {{ block.settings.matching_text_image_six }}
+                  </p>
+                {% endif %}
+                {% if block.settings.image_six_text != blank %}
+                  <p class="mb-md fnt-sec uc fw-500 md">{{ block.settings.image_six_text }}</p>
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% for block in stories_block %}
+      {% if block.settings.matching_parent_text == parent_link.title and block.settings.brand == menu_brand %}
+        {% if block.settings.button_text != blank %}
+          <a href="{{ block.settings.button_url }}" class="btn mb-lg">{{ block.settings.button_text }}</a>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

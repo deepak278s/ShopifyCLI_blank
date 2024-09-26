@@ -1,0 +1,284 @@
+{% style %}
+  .usp-content li {
+    position: relative;
+    margin-left: 22px;
+  }
+  .usp-content li::before {
+    position: absolute;
+    width: 8px;
+    content: '';
+    height: 14px;
+    border: solid 2px #222222;
+    border-top: 0px;
+    border-left: 0px;
+    transform: rotate(45deg);
+    left: -20px;
+  }
+{% endstyle %}
+<div data-role="product-info">
+  <div class="mt-[24px] px-5 lg:flex lg:flex-wrap lg:items-end">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'vendor' %}
+          <p class="text-[12px] font-shape uppercase font-medium leading-[20px] text-[#868B8F] mb-2 lg:flex-[0_0_100%]">
+            {{ product.vendor }}
+          </p>
+        {% when 'title' %}
+          <h3 class="font-shape text-[24px] leading-[29px] font-light mb-4 lg:flex-[0_0_100%] capitalize text-[#222222]">
+            {{ product.title }}
+          </h3>
+        {% when 'price' %}
+          {% if block.settings.sale_price
+            and product.selected_or_first_available_variant.price
+              < product.selected_or_first_available_variant.compare_at_price
+          %}
+            <div class="flex gap-3">
+              <h3 class="text-[18px] line-through font-shape font-light leading-[22px] mb-1 lg:flex-[0_0_100%]">
+                {{ product.selected_or_first_available_variant.compare_at_price | money }}
+              </h3>
+              <h3 class="text-[18px] font-shape text-[#A40909] font-light leading-[22px] mb-1 lg:flex-[0_0_100%]">
+                {{ product.selected_or_first_available_variant.price | money }}
+              </h3>
+            </div>
+          {% else %}
+            <h3 class="text-[18px] font-shape font-light leading-[22px] mb-1 lg:flex-[0_0_100%] text-[#222222]">
+              {{ product.selected_or_first_available_variant.price | money }}
+            </h3>
+          {% endif %}
+        {% when 'shipping_text' %}
+          <p class="text-[12px] font-light font-shape leading-[18px] text-[#868B8F] mb-4 lg:mb-[32px] lg:flex-[0_0_50%] lg:max-w-[50%] tracking-[0.06px]">
+            {{ block.settings.shipping_text }}
+          </p>
+        {% when 'tags' %}
+          {% liquid
+            assign tagList = ''
+            assign settingtags = settings.product_tags | split: ','
+            for tag in product.tags
+              assign productTag = tag | downcase
+              for sTag in settingtags
+                assign tagToDisplay = sTag | downcase
+                if productTag == tagToDisplay
+                  assign tagList = tagList | append: sTag | append: ','
+                endif
+              endfor
+            endfor
+            assign tagArr = tagList | split: ','
+          %}
+          {% if tagArr.size > 0 %}
+            <div class="flex gap-1 mb-[32px] lg:flex-[0_0_50%] lg:max-w-[50%] lg:justify-end">
+              {% for tag in tagArr limit: 2 %}
+                {% assign tagDowncase = tag | downcase %}
+                {% if tag == 'sale' %}
+                  <div class="text-[12px] font-shape font-medium uppercase leading-[16px] bg-[#A40909] text-[#fff] rounded-[4px] h-[24px] flex justify-center items-center px-2">
+                    {{ tag }}
+                  </div>
+                {% else %}
+                  <div class="text-[12px] font-shape font-medium uppercase leading-[16px] bg-[#F6F3EC] rounded-[4px] h-[24px] flex justify-center items-center px-2">
+                    {{ tag }}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% when 'description' %}
+          {% assign content = product.description %}
+          {% if block.settings.description_content == 'metafield' %}
+            {% assign content = block.settings.description %}
+          {% endif %}
+          {% if content != blank %}
+            <div class="pt-4 border-t-[#D5D5D5] border-t-[0.5px] mb-[32px] lg:flex-[0_0_100%]">
+              <toggle-expand class="group/toggle relative" data-count="4">
+                <p
+                  data-role="summary"
+                  class="text-[14px] relative group-[.active]/toggle:max-h-0 group-[.active]/toggle:opacity-0 overflow-hidden  max-h-[1000px] opacity-100   font-shape font-light leading-[21px] group-[.mount]/toggle:line-clamp-4 text-[#222222]"
+                >
+                  {% if block.settings.description_content == 'description' %}
+                    {{ product.description }}
+                  {% else %}
+                    {{ block.settings.description }}
+                  {% endif %}
+                </p>
+                <p
+                  data-role="content"
+                  class="
+                    text-[14px] absolute group-[.active]/toggle:relative top-0 font-shape font-light leading-[21px] max-h-0 opacity-0 overflow-hidden group-[.active]/toggle:max-h-[1000px] group-[.active]/toggle:opacity-100 text-[
+                    #222222]
+                  "
+                >
+                  {% if block.settings.description_content == 'description' %}
+                    {{ product.description }}
+                  {% else %}
+                    {{ block.settings.description }}
+                  {% endif %}
+                </p>
+                <span
+                  data-role="toggle-btn"
+                  class="
+                    text-[14px] font-shape mt-2 font-normal leading-[21px] cursor-pointer text-[
+                    #222222]
+                  "
+                  ><span class="group-[.active]/toggle:hidden">Read More</span>
+                  <span class="hidden group-[.active]/toggle:block">Read Less</span>
+                </span>
+              </toggle-expand>
+            </div>
+          {% endif %}
+        {% when 'product_form' %}
+          {% render 'product-form-v2', product: product, class: 'lg:flex-[0_0_100%]', block_settings: block.settings %}
+          {% assign lead_times_text_array = product.metafields.my_fields.testing | split: '' %}
+          {% assign lead_times_array = '' %}
+          {% assign some = %}
+          {% for text in lead_times_text_array %}
+            {% assign count = text | times: 1 %}
+            {% if count > 0 %}
+              {% assign lead_times_array = lead_times_array | append: count %}
+            {% endif %}
+          {% endfor %}
+          {% assign lead_times_array = lead_times_array | split: '' %}
+          {% if lead_times_array.size > 0 %}
+            <div class="bg-[rgba(246,_243,_236,_0.70);] px-6 py-4 mt-8 w-full flex flex-col gap-3">
+              <span
+                class="text-[14px] font-shape font-normal leading-[21px] text-[#222222]"
+                >When can I expect delivery?</span
+              >
+              <div>
+                {% if block.settings.dispatch_message %}
+                  <p
+                    class="text-[12px] font-shape font-medium leading-[20px] text-[#868B8F] uppercase"
+                  >
+                    {{ product.metafields.my_fields.testing }}
+                  </p>
+                {% else %}
+                  <p
+                    class="text-[12px] font-shape font-medium leading-[20px] text-[#868B8F] uppercase"
+                  >
+                    Estimated dispatch time
+                  </p>
+                  <span
+                    class="text-[12px] font-shape font-normal leading-[16.2px] text-[#222222] tracking-[0.06px]"
+                  >
+                    {% if lead_times_array.size > 1 %}
+                      {{ lead_times_array | join: '-' }}
+                    {% else %}
+                      {{ lead_times_array }}
+                    {% endif %}
+                    {% assign mes = product.metafields.my_fields.testing | downcase %}
+                    {% if mes contains 'weeks' %}
+                      Weeks
+                    {% elsif mes contains 'week' %}
+                      Week
+                    {% elsif mes contains 'days' %}
+                      Days
+                    {% elsif mes contains 'day' %}
+                      Day
+                    {% endif %}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% when 'stock_text' %}
+          <div class="mt-[32px] flex flex-col gap-3 lg:flex-[0_0_100%]">
+            {%- if product.selected_or_first_available_variant.inventory_quantity <= 3
+              and block.settings.low_inventory_count
+              and product.selected_or_first_available_variant.inventory_quantity > 0
+            %}
+              <p class="text-[14px] leading-[21px] font-shape font-light text-[#222222]">
+                Only {{ product.selected_or_first_available_variant.inventory_quantity }} left in stock. Order soon.
+              </p>
+            {% endif %}
+          </div>
+        {% when 'usp' %}
+          <div class="mb-[32px] mt-3 usp-content">
+            <div class="text-[14px] leading-[21px] font-shape font-light text-[#222222] ">
+              {{ block.settings.usp }}
+            </div>
+            {% comment %}
+              <p class="text-[14px] leading-[21px] font-shape font-light flex gap-4 items-center text-[#222222] mb-[3px]">
+                <span>{% render 'icon-v2', icon: 'icon-pdp-check' %}</span>Free delivery and shipping
+              </p>
+              <p class="text-[14px] leading-[21px] font-shape font-light flex gap-4 items-center text-[#222222]">
+                <span>{% render 'icon-v2', icon: 'icon-pdp-check' %}</span>Secure online payment
+              </p>
+            {% endcomment %}
+          </div>
+
+        {% when 'content_tab' %}
+          {% assign content = block.settings.content %}
+          {% if content != blank %}
+            <div class="border-b-[#D5D5D5] border-b-[0.5px] pb-4 mb-4 lg:flex-[0_0_100%]">
+              <content-tab>
+                <details class="group/detail">
+                  <div class="text-[14px] font-shape font-light leading-[21px] py-[20px] text-[#222222]">
+                    {{ content }}
+                  </div>
+                  <summary class="text-[14px] font-shape font-normal leading-[21px] uppercase flex justify-between cursor-pointer text-[#222222]">
+                    {{ block.settings.title -}}
+                    <span class="transition-all duration-300 group-[[open]]/detail:-rotate-180">
+                      {%- render 'icon-v2', icon: 'icon-pdp-caret' -%}
+                    </span>
+                  </summary>
+                </details>
+              </content-tab>
+            </div>
+          {% endif %}
+      {% endcase %}
+    {% endfor %}
+  </div>
+</div>
+<script>
+  class ToggleExpand extends HTMLElement {
+    constructor() {
+      super();
+      this.summary = this.querySelector("[data-role='summary']");
+      this.content = this.querySelector("[data-role='content']");
+      this.toggleBtn = this.querySelector('[data-role="toggle-btn"]');
+
+      this.toggleBtn.addEventListener('click', this.toggle.bind(this));
+      this.init.call(this);
+    }
+    init() {
+      this.contentStyle = window.getComputedStyle(this.summary);
+      this.maxCount = Number(this.dataset.count);
+      const lineHeight = parseFloat(this.contentStyle.lineHeight);
+      const height = parseFloat(this.contentStyle.height);
+      const lines = Math.round(height / lineHeight);
+      this.classList.add('mount');
+
+      if (lines <= this.maxCount) {
+        this.toggleBtn.classList.add('hidden');
+      }
+    }
+    toggle() {
+      if (this.classList.contains('active')) {
+        this.classList.remove('active');
+      } else {
+        this.classList.add('active');
+      }
+    }
+  }
+
+  customElements.define('toggle-expand', ToggleExpand);
+
+  class ContentTab extends HTMLElement {
+    constructor() {
+      super();
+
+      this.detail = this.querySelector('details');
+      this.detail.addEventListener('click', () => {
+        console.log('details has been changed');
+        document.querySelectorAll('content-tab').forEach((el) => {
+          if (el != this) {
+            el.querySelector('details').removeAttribute('open');
+          }
+        });
+      });
+    }
+
+    handleToggle() {
+      console.log('handling toggle');
+    }
+  }
+
+  customElements.define('content-tab', ContentTab);
+</script>
