@@ -14,51 +14,6 @@
       "settings": {
       }
     },
-    "hero_banner_h6VPGR": {
-      "type": "hero-banner",
-      "blocks": {
-        "banner_TKq38R": {
-          "type": "banner",
-          "settings": {
-            "pre_title": "",
-            "title": "",
-            "text": "",
-            "title_tag": "h2",
-            "icon": "",
-            "icon_link": "",
-            "video_filename": "",
-            "video_filename_mobile": "",
-            "link_text": "",
-            "link": "",
-            "overlay": false
-          }
-        },
-        "banner_q6cbFK": {
-          "type": "banner",
-          "settings": {
-            "pre_title": "",
-            "title": "",
-            "text": "",
-            "title_tag": "h2",
-            "icon": "",
-            "icon_link": "",
-            "video_filename": "",
-            "video_filename_mobile": "",
-            "link_text": "",
-            "link": "",
-            "overlay": false
-          }
-        }
-      },
-      "block_order": [
-        "banner_TKq38R",
-        "banner_q6cbFK"
-      ],
-      "settings": {
-        "spacing_top": "0",
-        "spacing_bottom": "0"
-      }
-    },
     "hero_banner_v2_W8Drnh": {
       "type": "hero-banner-v2",
       "blocks": {
@@ -93,7 +48,6 @@
   },
   "order": [
     "main",
-    "hero_banner_h6VPGR",
     "hero_banner_v2_W8Drnh"
   ]
 }
