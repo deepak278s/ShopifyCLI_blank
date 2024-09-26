@@ -13,9 +13,87 @@
       "type": "demo",
       "settings": {
       }
+    },
+    "hero_banner_h6VPGR": {
+      "type": "hero-banner",
+      "blocks": {
+        "banner_TKq38R": {
+          "type": "banner",
+          "settings": {
+            "pre_title": "",
+            "title": "",
+            "text": "",
+            "title_tag": "h2",
+            "icon": "",
+            "icon_link": "",
+            "video_filename": "",
+            "video_filename_mobile": "",
+            "link_text": "",
+            "link": "",
+            "overlay": false
+          }
+        },
+        "banner_q6cbFK": {
+          "type": "banner",
+          "settings": {
+            "pre_title": "",
+            "title": "",
+            "text": "",
+            "title_tag": "h2",
+            "icon": "",
+            "icon_link": "",
+            "video_filename": "",
+            "video_filename_mobile": "",
+            "link_text": "",
+            "link": "",
+            "overlay": false
+          }
+        }
+      },
+      "block_order": [
+        "banner_TKq38R",
+        "banner_q6cbFK"
+      ],
+      "settings": {
+        "spacing_top": "0",
+        "spacing_bottom": "0"
+      }
+    },
+    "hero_banner_v2_W8Drnh": {
+      "type": "hero-banner-v2",
+      "blocks": {
+        "image_QGrcfx": {
+          "type": "image",
+          "settings": {
+            "mob_image": "shopify://shop_images/moblile.png",
+            "desk_image": "shopify://shop_images/Desktop.png",
+            "title": "Elevate your elegance with our luxurious rings",
+            "desc": "Whether you're looking for something low-key or bolder, colour-pop styles, you'll find it in our edit.",
+            "btn_text": "SHOP JWELLERY",
+            "text_position_mob": "bottom",
+            "text_position_desk": "center",
+            "redirection_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_QGrcfx"
+      ],
+      "settings": {
+        "animation_time": 2,
+        "dots": false,
+        "margin_top_mob": 0,
+        "margin_top_desktop": 0,
+        "margin_bottom_mob": 0,
+        "margin_bottom_desktop": 0,
+        "horizontal_padding_mobile": 0,
+        "horizontal_padding_desktop": 0
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "hero_banner_h6VPGR",
+    "hero_banner_v2_W8Drnh"
   ]
 }
