@@ -1,0 +1,8 @@
+{% if product.metafields.my_fields.testing != blank %}
+    <label class="sm--tablet grey-text fnt-sec uc xs mr-sm fw-300 mb-xs block">
+        Estimated dispatch time
+    </label>
+    <p class="fnt-sec md fw-300 mb-lg">
+        {{- product.metafields.my_fields.testing | replace: 'Estimated Delivery Time:', '' | replace: 'Estimated Dispatch Time:', '' | replace: 'Estimated dispatch time:', '' | replace: 'Estimated Dispatch Time : ', '' -}}
+    </p>
+{% endif %}

@@ -1,0 +1,43 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:14+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            5e0707180d8257d526f19ca2e8cd8ea1
+//      Signature:      eyJpdiI6IlVMOHZMczkxXC9FZmZQbmIxNEQzSEtRPT0iLCJ2YWx1ZSI6IkltUFA1WnJXemFNckl5M3Btak9hR2N0QTYwTlVTbTBqMkZKVXl4OVJoNzMzck5zT0RKZmI4WkhubVBScGZDRXMwemI5R00wZkFIMFwvUUZlMmZKcDNlK1MycmVFM09HREFhOUNkTCs4bTh1Mjc2TTk4XC9qMEc0Q2VHTm5xa3BCVnIyUXhHUzRhMnJ1NXJJSE5RU0pPaUErRUl0cnBHbGxcL3c4KzhWcUI5REJVM3RmWUord3hVQWZzTDN4OXhHeDlXTjNPVDNMWnFuTU10QUJwUm4rdnBBRHdqYkJHSmJPajQxWWVHYWZtNWtMMlpnUjFRenVsYWdobWN2ejlScFJKZzNTM2YxR0t0OXNkbEJWUEY1NVVtRUhhSkhVckE0b1NlZ2VJQVpvXC9kYkk1SVZoU0JKeWJcL2tKZHhGVmczWnpwSnJKN3V3cGVyU0p2dFwvVU56RkVvdm5Tb2poU3M5UW0wRlYwYmNLa3lYd2FZYmxCakJrOWVPREowTWhrcnVLRmo1QWsraWk3R0xLTkg1V3dqcHk4SjZHZHc9PSIsIm1hYyI6ImQyMDA1NDE1Y2Y2YjVlYjdlOTlmYjM4MmJjYWY1NmE5YTYzZDgxNmM5NjZiNWU4M2MzZGE4YmQ5NmZhMzExN2EifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<header class="page__header text-align-center flex--tablet f-vertical-middle">
+    {%- liquid
+        if header_image
+            echo header_image | image_url: width: 2560 | image_tag: preload: true
+        endif
+    -%}
+
+    <div class="page__header-content container py-lg white">
+   
+        {%- liquid
+            assign title_class = 'page__title title--md title--lg--tablet '
+            if header_subtitle != empty
+                assign title_class = title_class | append: ' mb-sm'
+            endif
+            if header_title != empty
+                render 'title', title: header_title, tag: 'h1', class: title_class
+            endif
+            if header_subtitle != empty
+                render 'richtext', content: header_subtitle, class: 'mb-md mt-xs mx-a'
+            endif
+        -%}
+        
+    </div>
+</header>

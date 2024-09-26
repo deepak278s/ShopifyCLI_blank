@@ -1,0 +1,211 @@
+{%- comment %}<locksmith:adf9>{% endcomment -%}
+  {%- assign locksmith_c82f_product__available = false %}{% assign locksmith_c82f_product__has_only_default_variant = false %}{% assign _variants_count = 0 %}{% assign locksmith_c82f_product__first_available_variant = nil %}{% assign locksmith_c82f_product__selected_variant = nil %}{% assign locksmith_c82f_product__selected_or_first_available_variant = nil %}{% for variant in product.variants %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% if locksmith_c82f_product__available == false and variant.available %}{% assign locksmith_c82f_product__available = true %}{% endif %}{% assign _variants_count = _variants_count | plus: 1 %}{% if locksmith_c82f_product__first_available_variant == nil and variant.available %}{% assign locksmith_c82f_product__first_available_variant = variant %}{% endif %}{% if locksmith_c82f_product__selected_variant == nil and variant.selected %}{% assign locksmith_c82f_product__selected_variant = variant %}{% endif %}{% if variant == product.selected_or_first_available_variant %}{% assign locksmith_c82f_product__selected_or_first_available_variant = product.selected_or_first_available_variant %}{% endif %}{% endfor %}{% if _variants_count == 1 %}{% assign locksmith_c82f_product__has_only_default_variant = true %}{% endif %}{% if locksmith_c82f_product__selected_or_first_available_variant == nil %}{% assign locksmith_c82f_product__selected_or_first_available_variant = locksmith_c82f_product__first_available_variant %}{% endif -%}
+{%- comment %}</locksmith:adf9>{% endcomment -%}
+
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:18+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            e53ba4e89c2c14655347c3cca30d446c
+//      Signature:      eyJpdiI6InNGcExyNWRqZmRNSXRsZ0VqXC9hUGVnPT0iLCJ2YWx1ZSI6InI5YjJrVzFoNUFneml0dVM1MUpXNTZ4TWZ1OGUzK1wvdm5kc1dMYTNQNURjRjFEbUpQWU9JeUtvcVZ1SFRKV1FpMzFPeUFoVFwvNjd6WkxPbjI5XC9qMzJGSXZka2ZGMVg2NTdScWhZNjhhNUtFTldtUitVdGxPdFNUbjhzYjRyaTFWeVVNVGpZQkluc0F0NGs5ZzNMNHFhRGxjb2V0SDJDQ1d0TUQ1TzR3MENad0cxYlJWM2NaNlB5dWR6TitEdm1Gdm1tekpqN09uWmhyaU9YVW9rYmJkYnd3T203QVN1YURTb25zOGVwOFlaQk5qU2FIakhqQTVSVk1jNTBia29VM2FYdkFWWWJac3RwVDVnWVBRXC9HTVZFWWt2blRRT002TEcyY2NnMjNKR1hKT1Jqc0NBV0ErTGlTeThZdExVU1ZrZ1U5SGJuVUFtTE1URXg0MkxUNm9kQ1pmQWd4YVhIczc5VWFsbXRiNzRCUUlcL2ZON1I3ZEwrWm84UE9xaUcxVEx4aEc3UFZKaE03Qm9XZUpVaDllKzRsZz09IiwibWFjIjoiNmM1NzgzOWVmM2M3ZDRhMjk2YzFlYzIzNTkyMjc0OWJjNWI4ZGQwMzUxYjhhMDVmOTA4YzBkNDFiMjViMjBkZCJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign current_variant = locksmith_c82f_product__selected_or_first_available_variant
+    assign form_id = 'add-to-cart-' | append: product.handle | append: '-' | append: collection.handle | append: '-' | append: section.id
+-%}
+
+{%- form "product", product, id: form_id, class: 'product__form', data-product-form: '', data-product-handle: product.handle -%}
+
+    {%- if locksmith_c82f_product__has_only_default_variant -%}
+
+        <input type="hidden" name="id" value="{{ locksmith_c82f_product__selected_or_first_available_variant.id }}">
+
+    {%- else -%}
+
+        {%- for option in product.options_with_values -%}
+
+            {% assign no_of_variants = 1 %}
+            {% for value in option.values %}
+                {%- comment %}<locksmith:f3be>{% endcomment -%}
+                  {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: value, subject_parent: option, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                {%- comment %}</locksmith:f3be>{% endcomment -%}
+                {% assign no_of_variants = forloop.length %}
+            {% endfor %}
+
+            <div class="js input-field mb-sm">
+
+                    {%- if no_of_variants < 5 or product.tags contains 'TSC'-%}
+
+                    <fieldset class="flex f-wrap f-stretch mb-lg">
+                        <legend class="flex f-vertical-middle f-flex-start grey-text mb-xs">
+
+                            {%- assign option_name = option.name | downcase -%}
+
+                            <span class="sm--tablet fnt-sec uc sm mr-sm fw-300">{{ option_name }}</span>
+
+                            {%- if option.name == 'Size' -%}
+
+                                <span class="xs fnt-sec fw-300">({{ 'products.product.option_quantity' | t: quantity: option.values.size }})</span>
+
+                            {%- endif -%}
+                            
+                        </legend>
+
+                        <div class="product-variants__wrapper flex f-wrap flex-gap--20">
+                            {%- assign sorted_values = option.values | sort -%}
+                            {%- for value in sorted_values -%}
+                            <label {% if option.name == 'Color' %}class="option-color color-{{ option.name | handleize }}"{% endif %}>
+                                {%- liquid
+                                    assign option_variants = product.variants
+                                
+                                    for position in (1..product.options.size)
+                                        assign option_position = 'option' | append: position
+                                        assign option_value = current_variant[option_position]
+                                        if position == option.position
+                                            assign option_value = value
+                                        endif
+                                        assign option_variants = option_variants | where: option_position, option_value
+                                    endfor
+                                -%}
+                                <input type="radio"
+                                    name="options[{{ option.name | escape }}]"
+                                    value="{{ value | escape }}"
+                                    data-option="{{ option.name | escape }}"
+                                    {% if option_variants.size > 0 %}
+                                        {% if option.selected_value == value %}checked{% endif %}
+                                        data-related-image="Media--{{ option_variants.first.featured_media.id }}"
+                                        onclick="scrollToSelectedImage('Media--{{ option_variants.first.featured_media.id }}')"
+                                    {% else %}
+                                        disabled
+                                    {% endif %}/>
+                                <span class="fnt-sec md fw-300 product-option product-option__{{ option.name | handleize }}--{{ value | handleize }}">{{ value | escape }}</span>
+                            </label>
+                        {%- endfor -%}
+                        </div>
+                    </fieldset>
+
+                    {%- else -%}
+
+                    <label for="Option{{ option.position }}" class="flex f-vertical-middle f-flex-start mb-sm">
+
+                        {%- assign option_name = option.name | downcase -%}
+
+                        <span class="sm--tablet grey-text fnt-sec uc xs mr-xs fw-300 block">{{ 'products.product.option_label' | t: option: option_name }}</span>
+
+                        {%- if option.name == 'Size' -%}
+
+                            <span class="sm--tablet grey-text fnt-sec uc xs mr-xs fw-300 block">({{ 'products.product.option_quantity' | t: quantity: option.values.size }})</span>
+
+                        {%- endif -%}
+
+                    </label>
+                    <select class="block fnt-sec md fw-300 product-option"
+                        id="Option{{ option.position }}"
+                        name="options[{{ option.name | escape }}]">>
+
+                        {%- for value in option.values -%}
+                            {%- comment %}<locksmith:ae7e>{% endcomment -%}
+                              {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: value, subject_parent: option, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                            {%- comment %}</locksmith:ae7e>{% endcomment -%}
+                            {%- liquid
+                                assign option_variants = product.variants
+                                
+                                for position in (1..product.options.size)
+                                    assign option_position = 'option' | append: position
+                                    assign option_value = current_variant[option_position]
+                                    if position == option.position
+                                        assign option_value = value
+                                    endif
+                                    assign option_variants = option_variants | where: option_position, option_value
+                                endfor
+                            -%}
+
+                            <option 
+                                data-option="{{ option.name | escape }}"
+                                value="{{ value | escape }}"
+                                {% if option_variants.size > 0 %}
+                                    {% if option.selected_value == value %}selected{% endif %}
+                                {% else %}
+                                    disabled
+                                {% endif %}>
+                                {{ value | escape }}
+                            </option>
+
+                        {%- endfor -%}
+
+                    </select>
+
+                {%- endif -%}
+
+            </div>
+                
+        {%- endfor -%}
+
+        <select name="id" class="no-js">
+            {%- for variant in product.variants -%}
+              {%- comment %}<locksmith:bac3>{% endcomment -%}
+                {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+              {%- comment %}</locksmith:bac3>{% endcomment -%}
+              <option value="{{ variant.id }}" {% if variant.id == current_variant.id %}selected{% endif %}>{{ variant.title }}</option>
+            {%- endfor -%}
+          </select>
+
+    {%- endif -%}
+
+    <input type="hidden" name="quantity" value="1"/>
+
+    {% if product.template_suffix contains 'price-on-request' %}
+    <p class="product-price product-price__on-request mt-md pt-md fnt-{% if font %}{{ font }}{% else %}sec{% endif %} sm{% if class %} {{ class }}{% endif %}">
+            {{ 'products.product.price_on_request' | t }}
+        </p>
+        <a href="#" class="product__cta btn btn--full mt-md fw-300" data-contact-pop-up data-change-class='[{"elem": ".contact-popup", "class":"open"}]'>{{ 'products.product.make_an_enquiry' | t }}</a>
+    {% elsif product.template_suffix contains 'coming-soon' %}
+    <button
+        class="product__cta js-go-cart-add-to-cart btn btn--full mt-sm fw-300"
+        type="submit"
+        data-add-to-cart
+        {% unless locksmith_c82f_product__available %} disabled{% endunless %}
+        >
+            <span>
+                {%- liquid
+                    if locksmith_c82f_product__available
+                        echo 'products.product.add_to_cart' | t
+                    else
+                        echo 'Coming soon'   
+                    endif
+                -%}
+            </span>
+        </button>
+    {% else %}
+        <button
+        class="product__cta js-go-cart-add-to-cart btn btn--full mt-md fw-300"
+        type="submit"
+        data-add-to-cart
+        {% unless locksmith_c82f_product__available %} disabled{% endunless %}
+        >
+            <span data-add-to-cart-text>
+                {%- liquid
+                    if locksmith_c82f_product__available
+                        echo 'products.product.add_to_cart' | t
+                    else
+                        echo 'products.product.sold_out' | t    
+                    endif
+                -%}
+            </span>
+        </button>
+        {% endif %}
+
+
+{%- endform -%}

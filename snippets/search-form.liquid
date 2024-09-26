@@ -1,0 +1,22 @@
+{% render 'vite-tag' with '@@/predictive-search.js' %}
+<predictive-search>
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+    <input
+      id="Search"
+      type="search"
+      name="q"
+      value="{{ search.terms | escape }}"
+      role="combobox"
+      aria-expanded="false"
+      aria-owns="predictive-search-results"
+      aria-controls="predictive-search-results"
+      aria-haspopup="listbox"
+      aria-autocomplete="list"
+      placeholder="{{ 'general.search.placeholder' | t }}"
+    >
+    <input name="options[prefix]" type="hidden" value="last">
+    <input type="hidden" name="type" value="product">
+
+    <div id="predictive-search" class="pb-lg" tabindex="-1"></div>
+  </form>
+</predictive-search>

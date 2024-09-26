@@ -1,0 +1,47 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T14:59:59+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            b6bcab3fa1f7986c784091cf82f4bdd8
+//      Signature:      eyJpdiI6IkVOTCtXS0V4b3A5Q21VUmk1TDZnWXc9PSIsInZhbHVlIjoiVXMwUDNXQ0JFSDRXVytGcW9xVmFhb0ZZdldnR0Z4WVVsNm5Nc2RjVHZKNVRCVXZKd2dadTFtSVR2QWFrRzlMbExHVzlzXC9uUUxHV1c3R1B0UjBzUVZoSWRxYndhR2pXd0hRbnpPdzA3VG1GVFV5UldMVllVMDZZQmNxSkxtaGtrRElzN1phZDY5Qmk4bXZUUWozTWl4SFVVS0xvK0YrXC9MM2hMcllXMmVcL2JBVTh4MlJMQ09vckRwNWtNY1hrOW1cLzl0NVpJblJ4VU5cL2xRY0srWWNTbitcL0R1azFrbGJGY0d4c01McG1TbG9GcXJYZm1ZR0hUWnEyZUU3U1Y3RmNBXC9NTFBHZU82UWpwemNYSVhpODJhVjRUa2dCTTBCY2FBcU9TaTBFXC9vTVRrcllmQmx2ZkhkckpcL0ZjWUpNbUF3V0hpUE9qdkM2K1NCTmtuanh0ZGVlT3MwVkEyY3RaY0xVWFFiYjZrZDlkSE15ZHBXZ05YTjI4bk5XVU92V0s5M2s3NmVPd3I4VURqNnJyUWQ5bTV3cmJibWIxUkx3U29HbnZLMmZpbGUwVVdQdz0iLCJtYWMiOiI0NDdhNDVmYTRhMjBlZjhkNjc0OGYwNGIyMGU3YjliNjkzN2QxYzJiMWE0NTNkMzI4NGY3NmU2ZGQ2Zjc5MDY3In0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="megamenu-collection__card megamenu-collection__card--{{card_name}}">
+    <a href="{{collection.url}}">
+        <div class="megamenu-collection__card-container">
+            <div class="megamenu-collection__card-image" style="background-image: url({{collection.image | img_url: '320x'}})">
+                {% if collection.metafields.popup.homepage_badge != blank %}
+                    <span class="megamenu-collection__card-badge">{{collection.metafields.popup.homepage_badge}}</span>
+                {% endif %}
+            </div>
+            <div class="megamenu-collection__card-cta">
+                <h3 class="megamenu-collection__title fnt-sec">{{collection.title}}</h3>
+                {%- render 'icons', icon: 'triangle-arrow', class: 'hide--tablet' -%}
+                {% if collection.metafields.popup.homepage_badge != blank %}
+                    <span class="megamenu-collection__card-badge--mobile hide--above-tablet">{{collection.metafields.popup.homepage_badge}}</span>
+                {% endif %}
+            </div>
+        </div>
+
+    </a>
+    <style>
+        .megamenu-collection__card--{{card_name}} .megamenu-collection__card-badge {
+            background-color: {{collection.metafields.popup.homepage_badge_colour}};
+        }
+
+        .megamenu-collection__card-badge--mobile {
+            color: {{collection.metafields.popup.homepage_badge_colour}};
+        }
+    </style>
+</div>

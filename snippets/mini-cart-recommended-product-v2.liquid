@@ -1,0 +1,65 @@
+{% style %}
+  #mini-recommended-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+
+  @media(min-width:768px){
+    #mini-recommended-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_desktop }}px;
+    margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+  }
+{% endstyle %}
+{% if section.settings.enable == true %}
+  <section class="best-sellers-hero-slider" id="mini-recommended-{{ section.id }}">
+    <div class="m-container:max-w-[1600px] m-container:mx-auto">
+      <div class="w-full flex items-start justify-between heading-view-all px-4 md-px-8">
+        <h2 class="w-full font-gascogne-serial text-[26px] font-light leading-[120%] capitalize mb-8 lg:mb-[52px] text-[#222222]">
+          {{ section.settings.heading }}
+        </h2>
+      </div>
+      <div class="relative">
+        <div
+          class="keen-slider flex flex-row"
+          id="best-sellers-{{ section.id }}"
+        >
+          {% if section.settings.collection == blank %}
+            <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+              {%- render 'mini-product-cart-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00' -%}
+            </div>
+            <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+              {%- render 'mini-product-cart-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00' -%}
+            </div>
+            <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+              {%- render 'mini-product-cart-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00' -%}
+            </div>
+            <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+              {%- render 'mini-product-cart-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00' -%}
+            </div>
+          {% else %}
+            {% assign cardCount = 0 %}
+
+            {% for product in collections[section.settings.collection].products %}
+              {% assign display = true %}
+              {% for item in cart.items %}
+                {% if product == item.variant.product %}
+                  {% assign display = false %}
+                {% endif %}
+              {% endfor %}
+              {% if cardCount >= 10 %}
+                {% assign display = false %}
+              {% endif %}
+              {% if display %}
+                {% assign cardCount = cardCount | plus: 1 %}
+                <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+                  {%- render 'mini-product-cart-v2', card_product: product -%}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}

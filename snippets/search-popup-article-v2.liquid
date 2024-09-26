@@ -1,0 +1,65 @@
+{% liquid
+    assign article = searchArticle
+    assign img = article.image
+    assign title = article.title
+    assign short_des = article.content
+    assign ratio = 0.8
+    assign link = article.url
+    if img != blank
+      assign ratio = img.aspect_ratio
+    endif
+    if title == blank
+      assign title = 'KAYMEN'
+    endif
+    if short_des == blank
+      assign short_des = 'Lorem ipsum dolor sit amet consectetur. Aliquam ut massa quam velit. Nisl senectus ornare ac in risus.'
+    endif
+  %}
+  <div>
+    <div class="grid grid-cols-[92px_1fr_1fr] lg:grid-cols-1 gap-4 lg:gap-0 relative ">
+      <div class="relative bg-[#F8F8F8]" style="padding-bottom:{{ 1 | divided_by : ratio | times : 100 }}%">
+        {% if img != blank %}
+          <picture>
+            <img
+              srcset="
+                {%- if img.width >= 165 -%}{{ img | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if img.width >= 360 -%}{{ img | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if img.width >= 533 -%}{{ img | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if img.width >= 720 -%}{{ img | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if img.width >= 940 -%}{{ img | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if img.width >= 1066 -%}{{ img | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ img | image_url }} {{ img.width }}w
+              "
+              src="{{ img | image_url: width: 533 }}"
+              sizes="(min-width: 1600px) {{ 1600 | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+              alt="{{ img.alt | escape }}"
+              {% unless lazy_load == false %}
+                loading="lazy"
+              {% endunless %}
+              class="absolute top-0 left-0 w-full h-full"
+              width="{{ img.width | divided_by : 4 }}"
+              height="{{ img.height }}"
+            >
+          </picture>
+        {% endif %}
+      </div>
+      <div class="py-[13px] lg:py-3 lg:px-2 col-span-2">
+        <h3 class="text-[14px] lg:text-[18px] font-gascogne-serial font-normal leading-[21px] line-clamp-1 text-[#222] capitalize">
+          {{ title }}
+        </h3>
+        <p class="text-[14px] font-shape font-light leading-[21px] line-clamp-2 text-[#222]">{{ short_des | strip_html }}</p>
+        <a
+          href="{{ link }}"
+          class="font-shape pb-1 uppercase text-[11px] leading-[12px] border-b-[1px] border-b-[#000] mt-3 text-[#121212]" 
+          >Read More</a
+        >
+      </div>
+      <a
+        href="{{ link }}"
+        class="absolute top-0 left-0 w-full h-full block"
+        style="position:absolute;top:0px;left:0px;width:100%;height:100%;display:block;"
+      ></a>
+      
+    </div>
+  </div>
+  

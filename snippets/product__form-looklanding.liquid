@@ -1,0 +1,91 @@
+{%- comment %}<locksmith:5782>{% endcomment -%}
+  {%- assign locksmith_e365_product__available = false %}{% assign locksmith_e365_product__has_only_default_variant = false %}{% assign _variants_count = 0 %}{% assign locksmith_e365_product__first_available_variant = nil %}{% assign locksmith_e365_product__selected_variant = nil %}{% assign locksmith_e365_product__selected_or_first_available_variant = nil %}{% for variant in product.variants %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% if locksmith_e365_product__available == false and variant.available %}{% assign locksmith_e365_product__available = true %}{% endif %}{% assign _variants_count = _variants_count | plus: 1 %}{% if locksmith_e365_product__first_available_variant == nil and variant.available %}{% assign locksmith_e365_product__first_available_variant = variant %}{% endif %}{% if locksmith_e365_product__selected_variant == nil and variant.selected %}{% assign locksmith_e365_product__selected_variant = variant %}{% endif %}{% if variant == product.selected_or_first_available_variant %}{% assign locksmith_e365_product__selected_or_first_available_variant = product.selected_or_first_available_variant %}{% endif %}{% endfor %}{% if _variants_count == 1 %}{% assign locksmith_e365_product__has_only_default_variant = true %}{% endif %}{% if locksmith_e365_product__selected_or_first_available_variant == nil %}{% assign locksmith_e365_product__selected_or_first_available_variant = locksmith_e365_product__first_available_variant %}{% endif %}{% assign _e365_safe_variants = '' %}{% for _variant in product.variants %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: _variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% capture _e365_safe_variants %}{% if _e365_safe_variants != blank %}{{ _e365_safe_variants }},{% endif %}{{ _variant | json }}{% endcapture %}{% endfor %}{% capture _e365_safe_variants %}[{{ _e365_safe_variants }}]{% endcapture %}{% assign _e365_unsafe_variants = product.variants | json %}{% assign _e365_safe_options = product.options | json %}{% assign _e365_unsafe_options = product.options | json %}{% for _option in product.options %}{% assign _safe_values = '' %}{% for _value in _option.values %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: _value, subject_parent: _option, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% capture _safe_values %}{% if _safe_values != blank %}{{ _safe_values }},{% endif %}{{ _value | json }}{% endcapture %}{% endfor %}{% capture _safe_values %}[{{ _safe_values }}]{% endcapture %}{% assign _unsafe_values = _option.values | json %}{% assign _unsafe_option = _option | json %}{% assign _safe_option = _unsafe_option | replace: _unsafe_values, _safe_values %}{% assign _e365_safe_options = _e365_safe_options | replace: _unsafe_option, _safe_option %}{% endfor %}{% assign _e365_unsafe_options = product.options | json -%}
+{%- comment %}</locksmith:5782>{% endcomment -%}
+
+{% comment %} HIDE
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+
+{%- liquid
+    assign productOptions = 0
+    assign current_variant = locksmith_e365_product__selected_or_first_available_variant
+    assign form_id = 'add-to-cart-' | append: product.handle | append: '-' | append: collection.handle | append: '-' | append: section.id
+-%}
+
+
+{% for option in product.options_with_values %}
+    {% assign productOptions = forloop.length %}
+{% endfor %}
+
+
+{%- form "product", product, id: form_id, class: 'product__form', data-product-form: '', data-product-handle: product.handle -%}
+
+    {%- if locksmith_e365_product__has_only_default_variant -%}
+
+        <input type="hidden" name="id" value="{{ locksmith_e365_product__selected_or_first_available_variant.id }}">
+
+    {%- else -%}
+
+        <div class="js input-field mt-md mb-md">
+            <select id="product-select-{{ product.id }}" name="id">
+                {% for variant in product.variants %}
+                  <option value="{{ variant.id }}"
+                    {% if variant == locksmith_e365_product__selected_or_first_available_variant %}selected="selected"{% endif %}
+                  >
+                    {{ variant.title }}
+                  </option>
+                {% endfor %}
+              </select>
+        </div>
+
+    {%- endif -%}
+
+    <input type="hidden" name="quantity" value="1"/>
+
+    {% if product.template_suffix contains 'price-on-request' %}
+    <p class="product-price product-price__on-request mt-md pt-md fnt-{% if font %}{{ font }}{% else %}sec{% endif %} sm{% if class %} {{ class }}{% endif %}">
+            {{ 'products.product.price_on_request' | t }}
+        </p>
+        <a href="#" class="product__cta btn btn--full mt-md fw-300" data-contact-pop-up data-change-class='[{"elem": ".contact-popup", "class":"open"}]'>{{ 'products.product.make_an_enquiry' | t }}</a>
+    {% else %}
+        <button
+        class="product__cta js-go-cart-add-to-cart btn btn--full mt-md fw-300"
+        type="submit"
+        data-add-to-cart
+        {% unless locksmith_e365_product__available %} disabled{% endunless %}
+        >
+            <span data-add-to-cart-text>
+                {%- liquid
+                    if locksmith_e365_product__available
+                        echo 'products.product.add_to_cart' | t
+                    else
+                        echo 'products.product.sold_out' | t    
+                    endif
+                -%}
+            </span>
+        </button>
+        {% endif %}
+{%- endform -%}
+
+<script>
+    var selectCallback = function(variant, selector) {
+        var outOfStock = variant.available;
+        var addToCardButton = jQuery('#' + selector.domIdPrefix).closest('form').find("button");
+        if (variant.available) {
+            $(addToCardButton).prop('disabled', false);
+            $(addToCardButton).text('Add to bag');
+        } else {
+            $(addToCardButton).prop('disabled', true);
+            $(addToCardButton).text('Out of stock');
+        }
+    }
+
+    jQuery(function($) {
+        new Shopify.OptionSelectors('product-select-{{ product.id }}', {
+        product: {%- comment %}<locksmith:b31a>{% endcomment -%}{{- product | json | replace: _e365_unsafe_variants, _e365_safe_variants | replace: _e365_unsafe_options, _e365_safe_options -}}{%- comment %}original: {{ product | json }}{%- endcomment %}{%- comment %}</locksmith:b31a>{% endcomment -%},
+        onVariantSelected: selectCallback,
+        enableHistoryState: true
+        });
+    });
+  </script>
+
+  {% endcomment %}

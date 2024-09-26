@@ -1,0 +1,139 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:04+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            a065f9dbac88e980d0c5b5d4e278af8d
+//      Signature:      eyJpdiI6Ikc1Uzg2ODRBK3RrRm94c2ZjV0FFZEE9PSIsInZhbHVlIjoiSGQwVXEwK2s3SE5DQnJSaXhBSWY2QVRKM3poTjA1YXY0NktyVVJFSDFZdG5uaWZLVlZ5OFVpWWJkVUNcL0lnSWZJamQ0YU9hVDhxRjkwVnRtcERMcmdodWp3VXVCK21UQkl0WEJCaExJS296N2UwY2xYclFJUmNQeGxTdzZXb2hhUktFTkhGTFRFUHhtdTh4U2syVldtUkFabG9ya2pzNUhkaW9SemtGK3pvNXg5VHdMREE0Y2dcL08wYWppRVY4UlZkd3FIMmVrdGNcLzlaUm80ZEJQN3lXQjI1ZlB4T0FcLzhYZG9HQThQbndNa2V3aEVTcXBFMXRvMlZHcjNXMDZyK2ZUdkdRSUQzRzczaUI2cUFlUVBBVmVUUWhTYlJ2RHBwSjlHaUx5dTF4VjVXRVh0NUpINThUUFM4U3pzT1JUNlNnN1hKcHlJdU5WS1dUa0pkdFFGWUxsZUhPQUNTRXdoUWJURTV3amZ3VXhraWFXUFNUbVlBYTBHRnJMVTZkd1JVTkJRaTBoSEkxVDlia1EzVHJcL1h0dUIxSHV1ZmdSbFJ4Z1c4MXhBQ3RIUkxjPSIsIm1hYyI6IjIxODgxYjEyZDI3NmNmNjEzNDQ3ZTNkYjMyNGZjM2JiNGEzNTFkNGNlMzEwNTllYjNhMTQ4NDRiOTIyMzU3MDEifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign has_background = false
+    if block.settings.background or block.settings.video_filename != ''
+        assign has_background = true
+    endif
+    assign collection_blocks = section.blocks | where: 'type', 'collection' | size
+
+    assign title = block.settings.title
+    assign subtitle = block.settings.subtitle
+    assign content = block.settings.content
+    if request.page_type == 'collection'
+        assign subtitle = collection.metafields.banner.title | default: subtitle
+        assign content = collection.metafields.banner.content | default: content
+    endif
+-%}
+
+<div class="banner-column__content px-lg px-sm--tablet
+    py-{% if section.blocks.size > 1 %}lg--above-tablet pb-{% if collection_blocks > 0 %}0--tablet {% if forloop.first %} mb{% else %}mt{% endif %}-md{% elsif request.page_type == 'collection' %}lg{% else %}xl{% endif %}--tablet{% else %}xl{% endif %}
+    {% if block.settings.front %}
+        banner-column__content--front
+    {% endif %}
+    {% if has_background %}
+        banner-column__content--has-background
+    {% else %}
+        banner-column__content--has-color
+        {% if block.settings.strech %}
+            banner-column__content--stretch
+        {% elsif request.page_type == 'collection' %}
+            banner-column__content--center
+        {% endif %}
+    {% endif %}
+    {% if request.page_type == 'collection' %}
+        mr-xxl--above-tablet
+        banner-column__content--center
+        pt-lg--tablet
+    {% endif %}"
+    id="block--{{ block.id }}" {{ block.shopify_attributes }}>
+
+    {%- liquid
+        if title != '' and has_background == false
+            assign title_class = 'banner-column__content-title mb-lg title--' | append: block.settings.title_size
+            if block.settings.title_link
+                assign title = title | link_to: block.settings.title_link
+            endif
+            render 'title', title: title, tag: block.settings.title_tag, class: title_class
+        endif
+        if has_background
+            if block.settings.video_filename != ''
+                assign video_url = block.settings.video_filename | file_url
+                render 'video', url: video_url, class: 'banner-column__content-background'
+            else
+                echo block.settings.background | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'banner-column__content-background'
+            endif
+        endif
+    -%}
+
+    <div class="banner-column__content-container {% if block.settings.title_dash %}title-dash{% endif %} {% if has_background %}text-align-center white my-lg{% if section.blocks.size == 1 %}--above-tablet{% endif %}{% endif %}">
+
+        {%- liquid
+            if title != '' and has_background
+                assign title_class = 'mb-md title--' | append: block.settings.title_size
+                if block.settings.title_link
+                    assign title = title | link_to: block.settings.title_link
+                endif
+                render 'title', title: title, tag: block.settings.title_tag, class: title_class
+            endif
+            if subtitle != ''
+                assign subtitle_class = 'mb-sm title--' | append: block.settings.subtitle_size
+                if title == '' and section.blocks.size == 1
+                    assign subtitle_class = subtitle_class | append: ' mt-lg'
+                endif
+                assign subtitle = block.settings.subtitle
+                if block.settings.subtitle_url
+                    assign subtitle = subtitle | link_to: block.settings.subtitle_url
+                endif
+                render 'title', title: subtitle, tag: block.settings.subtitle_tag, class: subtitle_class
+            endif
+            if content != ''
+                assign content_class = 'mb-lg'
+                if request.page_type == 'collection'
+                    assign content_class = content_class | append: '--above-tablet ls'
+                endif
+                render 'richtext', content: content, class: content_class
+            endif
+            if block.settings.link_text != ''
+                assign link_icon = false
+                assign link_style = 'button'
+                if block.settings.link_icon
+                    assign link_icon = 'arrow'
+                endif
+                if block.settings.link_light
+                    assign link_style = 'button-light'
+                endif
+                if section.blocks.size > 1
+                    assign link_class = 'hide--tablet'
+                    assign link_class = ''
+                endif
+                render 'link', style: link_style, text: block.settings.link_text, link: block.settings.link, icon: link_icon, link_class: link_class
+            endif
+        -%}
+
+    </div>
+
+    {%- liquid
+        if block.settings.link
+            assign link_text = block.settings.link_text | default: block.settings.title | default: 'Learn more'
+            echo link_text | link_to: block.settings.link, class: 'banner-column__content--link'
+        endif
+    -%}
+
+    {%- style -%}
+
+        #block--{{ block.id }} {
+            --width: {{ block.settings.width }}%;
+            --background: {% if block.settings.background_color != '' %}{{ block.settings.background_color }}{% else %}var(--color-blue--light){% endif %};
+        }
+
+    {%- endstyle -%}
+
+</div>

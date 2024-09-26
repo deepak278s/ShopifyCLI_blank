@@ -1,0 +1,89 @@
+{% render 'vite-tag' with '@modules/keen-v2.js' %}
+
+<script type="text/javascript">
+  const boxes = document.querySelectorAll('.shop-look-btn');
+  const closePopup = document.querySelectorAll('.contact-popup__close');
+
+  for (const box of boxes) {
+    box.addEventListener('click', function handleClick(event) {
+      event.preventDefault();
+      const lookStyleId = box.dataset.relatedPopup;
+      document.getElementById(lookStyleId).classList.add('open');
+    });
+  }
+
+  for (const popup of closePopup) {
+    popup.addEventListener('click', function handleClick(event) {
+      event.preventDefault();
+      popup.parentNode.closest('.contact-popup').classList.remove('open');
+    });
+  }
+</script>
+
+<script>
+  {% comment %} $(document).ready(function () {
+    // Slick Slider
+    $('.complete-look__carousel').each(function () {
+      $(this).slick({
+        prevArrow: $(this).parent().find('.arrow__prev'),
+        nextArrow: $(this).parent().find('.arrow__next'),
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        infinite: false,
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1,
+              infinite: true,
+            },
+          },
+          {
+            breakpoint: 767,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+            },
+          },
+        ],
+      });
+    });
+  }); {% endcomment %}
+   document.addEventListener("custom:keenLoaded",(e) =>{
+    let Slider = e.detail.slider;
+    let carouselList = Array.from(document.querySelectorAll('.complete-look__carousel'));
+    carouselList.forEach(el =>{
+      let dataSelector = el.dataset.selector;
+      let carousel = new Slider(`[data-selector="${dataSelector}"]`,{
+        slides:{
+          perView:1
+        },
+        breakpoints: {
+          '(min-width: 767px)': {
+            loop: false,
+            slides:{
+              perView: 2
+            }
+          },
+          '(min-width: 1024px)': {
+            loop: false,
+            slides:{
+              perView:3
+            }
+          },
+        },
+      })
+      let arrowLeft = el.closest('.complete_the_look__section').querySelector('.arrow__prev');
+       let arrowRight = el.closest('.complete_the_look__section').querySelector('.arrow__next');
+       arrowLeft.addEventListener('click',(e) =>{
+        e.preventDefault();
+        carousel.prev();
+      })
+       arrowRight.addEventListener('click',(e) =>{
+        e.preventDefault()
+        carousel.next();
+      })
+    })
+  })
+</script>

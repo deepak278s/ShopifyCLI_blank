@@ -1,0 +1,7 @@
+{%- capture title_html -%}<h2 class="{{ class }}" data-sal="slide-up">{{ title }}</h2>{%- endcapture -%}
+{%- liquid
+    if tag
+        assign title_html = title_html | replace: 'h2', tag
+    endif
+    echo title_html 
+-%}

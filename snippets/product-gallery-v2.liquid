@@ -1,0 +1,151 @@
+{% style %}
+  [data-role='main-slider'] img,
+  [data-role='popup-main-slider'] img,
+  [data-role='main-slider'] img {
+    cursor: none;
+  }
+  zoom-box img {
+    cursor: grab;
+  }
+{% endstyle %}
+{% liquid
+  assign selected_variant = product.selected_or_first_available_variant
+  if selected_variant != blank and selected_variant.featured_media != blank
+    assign featured_media = selected_variant.featured_media
+  else
+    assign featured_media = product.featured_media
+  endif
+%}
+{% comment %}
+  {% for media in product.media %}
+    {{ media.id -}}
+    <br>
+  {% endfor %}
+  Variants
+  {% for variant in product.variants %}
+    {{ variant.featured_media.id -}}
+    <br>
+  {% endfor %}
+{% endcomment %}
+<product-gallery data-product="{{ product.handle }}" class="lg:h-max lg:sticky lg:top-0 overflow-hidden">
+  <div class="flex flex-nowrap max-w-full overflow-hidden keen-slider relative" data-role="main-slider">
+    <wishlist-btn
+      class="group"
+      data-productid="{{ product.id }}"
+      data-productlink="{{ product.url }}"
+      data-variantid="{{ product.selected_or_first_available_variant.id }}"
+      data-price="{{ product.selected_or_first_available_variant.price }}"
+      data-title="{{ product.title }}"
+      data-image="{{ product.featured_image | image_url : 300 }}"
+    >
+      <div class="wishlist absolute top-[12px] right-[12px] z-[1] cursor-pointer">
+        {% render 'icon-v2', icon: 'icon-wishlist', classAttr: 'group-[&.active]:hidden w-[30px] h-[30px]' %}
+        {% render 'icon-v2', icon: 'icon-wishlist-fill', classAttr: 'hidden group-[&.active]:block w-[30px] h-[30px]' %}
+      </div>
+    </wishlist-btn>
+
+    {% liquid
+      assign variantsImage = ''
+      for variant in product.variants
+        if variant.featured_media.id == featured_media.id
+          assign variantsImage = variantsImage | append: ',' | append: variant.id
+        endif
+      endfor
+    %}
+    <div
+      class="flex-[0_0_100%] keen-slider__slide"
+      data-variant="{{ variantsImage }}"
+      data-media="{{ featured_media.id }}"
+    >
+      {% render 'product-media-v2', media: featured_media %}
+    </div>
+    {% for media in product.media %}
+      {% if media.id != featured_media.id %}
+        {% liquid
+          assign variantsImage = ''
+          for variant in product.variants
+            if variant.featured_media.id == media.id
+              assign variantsImage = variantsImage | append: ',' | append: variant.id
+            endif
+          endfor
+        %}
+        <div class="flex-[0_0_100%] keen-slider__slide" data-variant="{{ variantsImage }}" data-media="{{ media.id }}">
+          {% render 'product-media-v2', media: media %}
+        </div>
+      {% endif %}
+    {% endfor %}
+    <div class="lg:hidden" data-role="navigation">
+      <div class="">
+        <button
+          class="bg-[#fff] absolute left-5 top-[50%] translate-y-[-50%] rounded-full p-[10px] shadow-[0px_4px_24px_0px_rgba(34,_34,_34,_0.08)] h-max"
+          data-role="nav-arrow"
+          data-behave="prev"
+        >
+          {% render 'icon-v2', icon: 'icon-pdp-nav-left' %}
+        </button>
+        <button
+          class="bg-[#fff] rounded-full absolute right-5 top-[50%] translate-y-[-50%] p-[10px] shadow-[0px_4px_24px_0px_rgba(34,_34,_34,_0.08)] h-max"
+          data-role="nav-arrow"
+          data-behave="next"
+        >
+          {% render 'icon-v2', icon: 'icon-pdp-nav-right' %}
+        </button>
+      </div>
+      <div class="flex justify-center absolute left-0 w-full gap-1 bottom-0 pb-2" data-role="thumbs-dots">
+        {% for media in product.media %}
+          <button
+            class="w-6 h-[2px] bg-[#C3C5C7] [&.active]:bg-[#000] {% if forloop.index == 1 %} active {% endif %}"
+          ></button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% if product.media.size > 0 %}
+    <div
+      class="flex flex-nowrap py-2 px-2 lg:max-w-[420px] lg:mx-auto keen-slider lg:shadow-[0px_4px_12px_0px_rgba(0,_0,_0,_0.08)] lg:my-3"
+      data-role="thumb-slider"
+    >
+      <div class="cursor-pointer relative keen-slider__slide active-thumb h-max [&.active-thumb]:border-[1px] [&.active-thumb]:border-[#000] lg:w-[72px]">
+        {{
+          featured_media.preview_image
+          | image_url: width: 250
+          | image_tag: loading: 'lazy', sizes: sizes, widths: '54, 74', id: thumbnail_id, alt: media.alt
+          | escape
+        }}
+        {% if media.media_type == 'video' %}
+          <button class="bg-[#fff] p-[10px] rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+            {% render 'icon-v2', icon: 'icon-pdp-video' %}
+          </button>
+        {% endif %}
+      </div>
+      {% for media in product.media %}
+        {% if media.id != featured_media.id %}
+          <div class="cursor-pointer relative keen-slider__slide h-max [&.active-thumb]:border-[1px] [&.active-thumb]:border-[#000] lg:w-[72px] flex justify-center items-center">
+            {{
+              media.preview_image
+              | image_url: width: 250
+              | image_tag: loading: 'lazy', sizes: sizes, widths: '54, 74', id: thumbnail_id, alt: media.alt
+              | escape
+            }}
+            {% if media.media_type == 'video' %}
+              <button class="bg-[#fff] p-[10px] rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex justify-center items-center">
+                {% render 'icon-v2', icon: 'icon-pdp-video' %}
+              </button>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</product-gallery>
+<div class="group/zoom hidden" data-role="zoom-loader">
+  <div class="fixed top-0 left-0 w-full h-full bg-[#fff] z-[110]">
+    <div
+      role="status"
+      class="absolute flex left-0 top-0 w-full h-full group-[&.loading]/form:flex justify-center items-center bg-[#fff]"
+    >
+      {% render 'icon-v2', icon: 'icon-popup-loader' %}
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</div>

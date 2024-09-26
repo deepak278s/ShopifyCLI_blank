@@ -1,0 +1,27 @@
+<header class="section__header mb-lg relative flex f-center f-wrap f-vertical-middle mb-md flex--tablet f-dir-column featured__collection">
+
+    {%- if title or content -%}
+
+        <div {% if title_dash %}class="title-dash"{% endif %}>
+
+            {%- liquid
+                if title
+                    render 'title', title: title, tag: title_tag, class: 'title--md'
+                endif
+            -%}
+
+        </div>
+
+    {%- endif -%}
+
+    {%- if link_text -%}
+
+        <div>
+
+            {%- render 'link', style: 'text-link', text: link_text, link: link -%}
+
+        </div>
+
+    {%- endif -%}
+
+</header>

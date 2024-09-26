@@ -1,0 +1,78 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-06T11:01:21+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156244
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            24ec7f04dcfeed26692eb5cd2b701b16
+//      Signature:      eyJpdiI6IkJIYXdPMkt6MXltOFBGQmxEZnZ5T1E9PSIsInZhbHVlIjoiNjVhV3pnMWl3YXM4ZDBuekh5OHc4ZVloeWErazNoc01NazA1WXNnUVVEU3B4OWFwakpKVHhQVktyRWNxcWZ6RWUxaEF6UW91aVBJa0ZDYytIdWJKOWFMMXBqUGk4ak1YVFE4MzBPcTMwYkdCeWpiT0pmMEVFaHd3N1pWdkVSckZORVpPdWQrTDlSamRGZVdTc0RwQTVwU0NXQVdZNjBMaVZVY0tiSktaajlyRUFlVlJlakRkbGI1STVJWkY0ZUpSTEJDdGlBeGlqSG5YbjZqSXRJR3dnVjdcL2hZQUdTZ1lBbHNZcDdEVHE2bGpNYlJcL1FvZUVPa05tTHZqcFBBNUx3OTZWS3RPUUJQd1N5RlRTK2lEeng3dXM3UE5qNldTQlJvVFJoamNpS3dXOU5oWENTNlRMenBYT0RZb1ZGRnV5REJ0eXA5N3lJSEVINlgrOElMeEJ2NCswN2FMcjBqaVY1VTA0cDFEdVdEWXZ3TVdqWXNhU3JFN3d4UkI4Wk5meTBxcW14S014VXg5b1RoUjVQZHVWMWRBPT0iLCJtYWMiOiIwMjYxMjFhYWIzNzc5YjBiMmJjMDQ1ZmVlY2ZjNTI3MzAyZGYyMmRlZDk0YjZmYWVmNjFjZDQ1ZWY0NjJkMzVjIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="user-menu flex f-vertical-center f-flex-end{% if class %} {{ class }}{% endif %}">
+    {% comment %} Search {% endcomment %}
+    <input type="checkbox" id="search--header" hidden data-click='{ "selector": ".site-header__search input[type=search]", "prevent": false, "action": "focus"}'/>
+    <label for="search--header" class="hide--tablet-lg block p-sm--above-tablet p-sm--tablet flex f-vertical-middle px-sm--above-tablet py-sm--tablet px-sm--tablet">
+        {% comment %} {%- render 'icons', icon: 'search' -%} {% endcomment %}
+        <span class="sm fnt-sec fw-300 uc hide--tablet-lg">Search</span>
+    </label>
+    {% comment %} Currency {% endcomment %}
+    <span class="site-header__currency-switcher px-sm--above-tablet hide--tablet hide--tablet-lg py-sm--tablet px-xs--tablet">
+        {%- render 'currency-switcher' -%}
+    </span>
+    {% comment %} Login {% endcomment %}
+    {%- liquid
+        if shop.customer_accounts_enabled
+            assign link = settings.auth0_login_url
+            if customer
+                assign link = routes.account_url
+            endif
+            assign link_text = '<span>' | append: 'Account' | append: '</span>'
+            assign link_class = 'flex f-vertical-middle sm fnt-sec uc fw-300 px-sm--above-tablet py-sm--tablet px-sm--tablet hide--tablet-lg'
+            if link.links.size > 0
+                assign link_class = link_class | append: ' hide--tablet-lg'
+            endif
+            if link.url contains 'http'
+                echo link_text | link_to: link, class: link_class, target: '_blank'
+            else
+                echo link_text | link_to: link, class: link_class
+            endif
+        endif
+    -%}
+    {% comment %} Wishlist {% endcomment %}
+    <span class="px-sm--above-tablet hide--tablet hide--tablet-lg py-sm--tablet px-xs--tablet">
+        {% render 'wishlisthero-header-icon' %}
+    </span>
+    {% comment %} Search form (when active) {% endcomment %}
+    <div class="site-header__search flex f-vertical-center">
+        {%- render 'search-form' -%}
+        
+        <label for="search--header" class="site-header__search--close">
+            {%- render 'icons', icon: 'clear' -%}
+        </label>
+    </div>
+    {% comment %} Cart {% endcomment %}
+    {%- liquid  
+        render 'go-cart-button'
+    -%}
+</div>
+
+<script>
+        var isChatOpen = false;
+        const onOpenHandler = function () {
+            isChatOpen = true;
+        }
+        const onCloseHandler = function () {
+            isChatOpen = false;
+        }
+
+        
+    </script>

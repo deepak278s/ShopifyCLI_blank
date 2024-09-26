@@ -1,0 +1,101 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:05+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            1f9b6818bf5cab7a2933e66543a518a3
+//      Signature:      eyJpdiI6ImFNYXFiUmEzT2JQQ2wzRUJrQTBRNVE9PSIsInZhbHVlIjoiOHdJbGQ2UnNLXC9zRXBRQVRFOUpuNk55UE0rVGVVeVpzRURxQTByUERcL2FJd3MyWUxjUVR6NmhlclV5cE9sUUFvcFN0b0w1bkNPT0ZHYXRXOUVYaFU3VlV0bzRVSEZRRUNTKzh3aU9ja2MyNHVHUE1HMGNMeCtMSGRaVnhrb1F2dWgzdDh0K2Yyb2EzN2E0TUhEOFdEaHo0YnpiT0pZeGo1WW0yS3NaT241Yk9ZclwvNkpjNVJ5VnNnK1RFYWxhSWVuU0FjeFA0UGF2bVk2ZStQU1BveFhxMFhGQnFjbFJYVHo5MWZGTzZJSjIrWERkVURGZkVEeHEzd1ZEbzJVWHNjWlF4V3hMUE01S28rWTI4NCswMG4yTmowZzNFZSttQTJXOFUzU0Z1eEc5ckxGUDZjK2ZFUXRwXC83NnQxRXdQU256azFCbXlTVXNLTms5bUxSSG5iY0V5M1VmS003TElIa05BTVhmRE91YVFTUng1bzViV3RWdFZUamxseUpQWXJIM3VIM0wrdXJzR2tRTGd1QnJ0Um1SckhlcjdvZzQ0OWpaMFV2RHY3dCtsRWs9IiwibWFjIjoiZmU2OTI1ZTE0NmYyNjdkMWNhYjA2NzEzMTQ0ZTE1OWI4YjAwZjkxZjVkMGJkZjQ2YTdmMmViNWZmOGY5OTJhZCJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign gallery_id = 'gallery-' | append: section.id
+-%}
+<div class="product__images">
+    <div class="product__images-gallery" data-slider>
+
+        {%- for media in product.media -%}
+
+            {%- liquid
+                assign media_id = 'Media--' | append: media.id
+                assign media_url = media | image_url: width: 1200
+                assign preview = media_url | image_tag: loading: 'lazy'
+                if forloop.first
+                    assign preview = media_url | image_tag: preload: true
+                endif
+            -%}
+
+            {%- case media.media_type -%}
+
+                {%- when 'image' -%}
+
+                    {%- liquid
+                        assign media_master = media | image_url
+                        echo preview | link_to: media_master, target: '_blank', class: 'glightbox plp__product-image', data-gallery: gallery_id, id: media_id
+                    -%}
+                    {%- capture style -%}
+                    
+                        {{- style -}}
+
+                        .product__images-gallery .flickity-page-dots .dot:nth-child({{ forloop.index }}) {
+                            background-image: url({{ media | image_url: width: 200 }});
+                        }
+
+                    {%- endcapture -%}
+                
+                {%- when 'video' -%}
+                
+                    {%- liquid
+                        assign video = media.sources | where: 'format', 'mp4' | last
+                    -%}
+                    <a href="{{ video.url }}" target="_blank" class="glightbox" data-gallery="{{ gallery_id }}" id="{{ media_id }}">
+                        <video style="max-width: 100%;max-height: 100%;" autoplay loop muted playsinline preload="metadata">
+                            <source src="{{ video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </a>
+                    
+                    {%- capture video_style -%}
+                    
+                        {{- video_style -}}
+
+                        #{{ media_id }}:after {
+                            content: '';
+                        }
+
+                    {%- endcapture -%}
+                    
+                    {%- capture style -%}
+                    
+                        {{- style -}}
+
+                        .product__images-gallery .flickity-page-dots .dot:nth-child({{ forloop.index }}) {
+                            background-image: url({{ media | image_url: width: 200, format: "jpg" }});
+                        }
+                        .product__images-gallery .flickity-page-dots .dot:nth-child({{ forloop.index }}):after {
+                            content: '';
+                        }
+
+                    {%- endcapture -%}
+
+            {%- endcase -%}
+
+        {%- endfor -%}
+
+    </div>
+    {%- style -%}
+        @media (min-width: 769px) {
+            {{- style -}}
+        }
+        {{- video_style -}}
+    {%- endstyle -%}
+</div>

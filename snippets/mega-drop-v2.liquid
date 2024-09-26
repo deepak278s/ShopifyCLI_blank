@@ -1,0 +1,725 @@
+{% comment %} parsing L2 data into array {% endcomment %}
+{% if template contains 'index'
+  or template contains 'collection'
+  or template contains 'product'
+  or template contains 'cart'
+  or template contains '404'
+  or template contains 'static-page-v2'
+  or template contains 'delivery-v2'
+  or template contains 'faq-v2'
+  or template contains 'about-us-v2'
+  or template contains 'contact-v2'
+  or template contains 'our-services-v2'
+  or template contains 'careers-v2'
+  or template contains 'search'
+
+%}
+  <div
+    data-role="mega-drop"
+    class="
+      mega-drop fixed w-full md:w-[120%] lg:w-full top-[0px] md:top-0
+      left-0 m-containerr:left-[0%] m-containerr:mt-[-2px]  h-[calc(100%)] lg:min-h-[479px] md:h-full max-h-[calc(100%)] md:max-h-full overflow-y-auto lg:overflow-y-visible
+      z-[10] bg-white hidden md:block transition-transform
+      lg:transition-none lg:duration-300 lg:opacity-0 group-hover/nav:lg:opacity-100
+       duration-300 md:translate-x-[-20%] rtl:md:translate-x-[100%] lg:translate-x-[-100%] group-[.is-active]/nav:block
+       group-[.is-active]/nav:md:translate-x-[83%] rtl:group-[.is-active]/nav:md:translate-x-[-100%] group-hover-[.is-active]/nav:lg:translate-x-[0!important] group-hover-[.is-active]/nav:m-containerr:left-[50%] group-hover-[.is-active]/nav:m-containerr:translate-x-[-50%!important]
+       group-[.is-active]/nav:lg:translate-x-[-100%] rtl:group-[.is-active]/nav:lg:translate-x-[100%] group-[.is-active]/nav:m-containerr:translate-x-[-200%] md:z-[-1] group-hover/nav:lg:top-[unset]
+       group-hover/nav:lg:fixed group-hover/nav:lg:h-max group-hover/nav:lg:max-h-none lg:z-10
+    "
+    for="{{ link }}"
+  >
+    <div class="link m-containerr:max-w-[1600px] m-containerr:mx-auto lg:max-h-[528px] lg:overflow-y-auto m-containerr:bg-[#fff] md:relative">
+      <div class="flex md:hidden bg-[#F6F3EC] justify-start gap-4 px-5 py-5 border-b-[1px] b border-b-[#D8D8D8] sticky top-0 z-[1]">
+        <button class="" data-role="nested-toggle">{% render 'icon-v2', icon: 'icon-caret-left' %}</button>
+        <a href="{{ link.url }}" class="font-gascogne-serial text-[26px] leading-[31px]">{{ link.title }}</a>
+        <button class="hidden" data-role="nav-toggle">{% render 'icon-v2', icon: 'icon-close' %}</button>
+      </div>
+      <div class="lg:grid lg:grid-cols-4 lg:p-10 lg:gap-5">
+        {% for value in shop.metaobjects.nested_navigation['nested-navigation'].nested_navigation.value %}
+          {% assign objParentNav = value.parent_navigation_handle %}
+          {% assign nestedNavHandle = '' %}
+          {% if value.nested_nav_handle != blank %}
+            {% assign nestedNavHandle = value.nested_nav_handle %}
+          {% endif %}
+          {% if objParentNav == link.handle %}
+            {% case nestedNavHandle %}
+              {% when '' %}
+                {% liquid
+                  assign bannerImage = value.nested_navigation_image
+                  assign desktopBannerImage = value.nested_navigation_image_desktop
+                  assign bannerTitle = value.image_title
+                  assign bannerSubTitlte = value.image_subtitle
+                  assign bannerRedirection = value.image_redirection_link
+                  assign bannerBtnText = value.image_button_text
+                  assign column_span = value.column_span
+                  assign imgUrl = value.nested_navigation_image | image_url
+                  assign desktopImageUrl = value.nested_navigation_image_desktop | image_url
+                  if imgUrl contains 'files'
+                    assign imgUrl = bannerImage | image_url | split: 'files/' | last | split: '?v=' | first
+                  else
+                    assign imgUrl = imgUrl | split: '/' | last | split: '?v' | first
+                  endif
+                  if desktopImageUrl contains 'files'
+                    assign desktopImageUrl = desktopBannerImage | image_url | split: 'files/' | last | split: '?v=' | first
+                  else
+                    assign desktopImageUrl = desktopImageUrl | split: '/' | last | split: '?v' | first
+                  endif
+                  assign bannerImage = images[imgUrl]
+                  assign desktopBannerImage = images[desktopImageUrl]
+                %}
+                {% comment %}
+                  <div class="lg:col-span-1 lg:col-span-2 lg:col-span-3 lg:col-span-4"></div>
+                {% endcomment %}
+                <div class="mt-6 mb-5 lg:m-0 px-5 lg:p-0 lg:w-full lg:col-span-{{ column_span }}">
+                  {% assign ratio = 1 %}
+                  {% assign desktop_ratio = 1 %}
+                  {% if bannerImage != blank %}
+                    {% assign ratio = bannerImage.aspect_ratio %}
+                  {% endif %}
+                  {% if desktopBannerImage != blank %}
+                    {% assign desktop_ratio = desktopBannerImage.aspect_ratio %}
+                  {% endif %}
+                  <style>
+                      {% if column_span == 2 %}
+                        @media(min-width:768px){
+                        .drop-image-{{ link.handle }}-{{ forloop.index }}-{{  imgUrl | split : "." | first }}{
+                          padding-bottom:calc({{ 1 | divided_by : desktop_ratio | times : 100 }}% - 10px)!important;
+                        }
+                      }
+                      {% elsif column_span == 3 %}
+                          @media(min-width:768px){
+                        .drop-image-{{ link.handle }}-{{ forloop.index }}-{{  imgUrl | split : "." | first }}{
+                          padding-bottom:calc({{ 1 | divided_by : desktop_ratio | times : 100 }}% - 13px)!important;
+                        }
+                      }
+                      {%  else %}
+                      @media(min-width:768px){
+                        .drop-image-{{ link.handle }}-{{ forloop.index }}-{{  imgUrl | split : "." | first }}{
+                          padding-bottom:{{ 1 | divided_by : desktop_ratio | times : 100 }}%!important;
+                        }
+                      }
+                    {% endif %}
+                  </style>
+                  <div
+                    class="relative overflow-hidden bg-[#E5E5E5] drop-image-{{ link.handle }}-{{ forloop.index }}-{{  imgUrl | split : "." | first }}"
+                    style="padding-bottom:{{ 1 | divided_by : ratio | times : 100 }}%"
+                  >
+                    <picture>
+                      <source
+                        media="(min-width:768px)"
+                        srcset="{{ desktopBannerImage | image_url : width : 800 }},{{ bannerImage | image_url : width : 1000 }}"
+                      >
+                      {{
+                        bannerImage
+                        | image_url: width: 600
+                        | image_tag:
+                          widths: '300, 400,500',
+                          class: 'absolute top-0 left-0 w-full h-full',
+                          loading: 'lazy'
+                      }}
+                    </picture>
+                    {% if bannerRedirection != blank -%}
+                      <a href="{{ bannerRedirection }}" class="absolute top-0 left-0 w-full h-full block"></a>
+                    {%- endif %}
+                  </div>
+                  {% if bannerTitle != blank %}
+                    <h3
+                      style="position:relative;"
+                      class="mt-3 font-gascogne-serial text-[18px] lg:text-[26px] leading-[22px] lg:leading-[29px] lg:text-center font-light"
+                    >
+                      {{ bannerTitle }}
+                      <a
+                        href="{{ bannerRedirection }}"
+                        style="position:absolute;top:0px;left:0px;width:100%;height:100%;"
+                      ></a>
+                    </h3>
+                  {% endif %}
+                  {% if bannerSubTitlte != blank %}
+                    <p class="font-shape text-[12px] mt-3">{{ bannerSubTitlte }}</p>
+                  {% endif %}
+                  {% if bannerBtnText != blank %}
+                    <a
+                      href="{{ bannerRedirection }}"
+                      class="font-shape lg:flex lg:justify-center text-[11px] leading-[12px] uppercase underline underline-offset-[2px] mt-3"
+                    >
+                      {{- bannerBtnText -}}
+                    </a>
+                  {% endif %}
+                </div>
+              {% else %}
+                {% assign nestedNav = linklists[nestedNavHandle] %}
+                {% comment %}
+                  <div class="lg;grid-cols-2 lg:grid-cols-1 lg:grid-cols-3 lg:col-span-1 lg:col-span-2 lg:col-span-3 lg:col-span-4"></div>
+                {% endcomment %}
+                {% assign navsize = nestedNav.links.size %}
+                <div class="mega-drop_linklist px-5 lg:p-0  lg:flex-[0_0.5_100%]  {% if navsize >= 4 %} lg:col-span-4 {% else %} lg:col-span-{{ navsize }} {%  endif %}">
+                  <ul class="mega-drop_linklist_links lg:grid {% if navsize >= 4 %} lg:grid-cols-4 {% else %} lg:grid-cols-{{ navsize }}{% endif %} lg:gap-[18px]">
+                    {% for link in nestedNav.links %}
+                      <li class="group/nest border-b-[#D5D5D5] border-b-[1px] lg:border-b-[0px]">
+                        {% if link.levels > 0 %}
+                          <p
+                            data-role="l3-toggle"
+                            class="text-[12px] flex justify-between items-center font-light font-shape uppercase lg:px-0 py-6 group-[&.active]/nest:pb-3 group-[&.active]/nest:lg:pb-0 lg:py-0 lg:mb-5 lg:capitalize lg:text-[26px] lg:font-gascogne-serial lg:font-light lg:leading-[29px]"
+                          >
+                            {{ link.title }}
+                            <span class="lg:hidden">
+                              {%- render 'icon-v2',
+                                icon: 'icon-header-plus',
+                                classAttr: 'group-[.active]/nest:hidden'
+                              %}
+                              {% render 'icon-v2',
+                                icon: 'icon-header-minus',
+                                classAttr: 'hidden group-[.active]/nest:block'
+                              -%}
+                            </span>
+                          </p>
+                          <ul class="max-h-0 lg:max-h-[10000px] overflow-hidden transition-all group-[.active]/nest:max-h-[10000px]">
+                            <li>
+                              <a
+                                class="flex w-full py-3 lg:py-0 lg:px-0 lg:mb-3 text-[14px] text-[#4B5259] font-shape font-light leading-[21px] lg:hidden"
+                                href="{{ link.url }}"
+                              >
+                                Shop all {{ link.title }}
+                              </a>
+                            </li>
+                            {% for child_link in link.links %}
+                              <li>
+                                <a
+                                  class="flex w-full py-3 lg:py-0 lg:px-0 lg:mb-3 text-[#4B5259] text-[14px] font-shape font-light leading-[21px]"
+                                  href="{{ child_link.url }}"
+                                >
+                                  {{- child_link.title -}}
+                                </a>
+                              </li>
+                            {% endfor %}
+                            <li>
+                              <a
+                                class="mega-drop_nested_link_title w-full py-3 lg:py-0 lg:px-0 lg:mb-3 text-[13px] text-[#121212] gap-2 uppercase font-shape font-light leading-[21px] hidden lg:flex lg:items-center underline underline-offset-4"
+                                href="{{ link.url }}"
+                              >
+                                Shop all {{ link.title -}}
+                                {% render 'icon-v2', icon: 'icon-caret' %}
+                              </a>
+                            </li>
+                          </ul>
+                        {% else %}
+                          <a
+                            href="{{ link.url }}"
+                            class="text-[12px] mega-drop_nested_link font-light font-shape uppercase px-5 py-6 lg:border-b-[0px] lg:capitalize lg:text-[26px] lg:font-gascogne-serial lg:font-light lg:leading-[29px]"
+                          >
+                            {{- link.title -}}
+                          </a>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+            {% endcase %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% else %}
+  {% style %}
+    .mega-drop {
+      position: fixed;
+      width: 100%;
+      top: -68px;
+      left: 0px;
+      height: 100%;
+      max-height: 100%;
+      overflow-y: auto;
+      z-index: 10;
+      background-color: #fff;
+      display: none;
+      transition-property: transform;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+      transition-duration: 300ms;
+    }
+    .is-active .mega-drop {
+      display: block;
+    }
+    .mega-drop_title {
+      display: flex;
+      justify-content: flex-start;
+      padding: 20px 20px;
+      border-bottom: solid 1px #d8d8d8;
+      position: sticky;
+      top: 0px;
+      background-color: #fff;
+      z-index: 1;
+      gap: 16px;
+    }
+    .mega-drop_title a {
+      font-size: 26px;
+      font-family: var(--primary-font);
+      line-height: 31px;
+    }
+    .mega-drop_nested_link {
+      font-size: 12px;
+      font-weight: 300;
+      font-family: var(--secondary-font);
+      text-transform: uppercase;
+      padding: 24px 20px;
+      border-bottom: solid 1px #d5d5d5;
+    }
+    .mega-drop_link_wrapper {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .mega-drop_links_title {
+      font-family: var(--secondary-font);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 300;
+      text-transform: uppercase;
+      padding: 24px 20px;
+    }
+    .active [data-role='l3-toggle'] {
+      padding-bottom: 12px;
+    }
+    .mega-drop_link_content li.mega-drop_links_list {
+      border-bottom: solid 1px #d5d5d5;
+    }
+    .active .mega-drop_links_title span .nav-icon_plus {
+      display: none;
+    }
+    .mega-drop_links_title span .nav-icon_minus {
+      display: none;
+    }
+    .active .mega-drop_links_title span .nav-icon_minus {
+      display: block;
+    }
+    .mega-drop_links_list_container {
+      max-height: 0px;
+      overflow: hidden;
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+    }
+    .active .mega-drop_links_list_container {
+      max-height: 10000px;
+    }
+    .mega-drop_nested_link_title {
+      display: flex;
+      width: 100%;
+      padding: 12px 0px;
+      font-size: 14px;
+      font-family: var(--secondary-font);
+      font-weight: 300;
+      line-height: 21px;
+      color: #4b5259;
+    }
+    .mega-drop_link_title {
+      font-size: 12px;
+      font-weight: 300;
+      font-family: var(--secondary-font);
+      text-transform: uppercase;
+      padding: 24px 20px;
+      border-bottom: solid 1px #d5d5d5;
+    }
+    .mega-drop_image_block {
+      margin-top: 24px;
+      margin-bottom: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .mega-drop_image_wrapper {
+      position: relative;
+      overflow: hidden;
+      background-color: #e5e5e5;
+    }
+    .mega-drop_image_wrapper img,
+    .mega-drop_image_link {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+    }
+    .mega-drop_image_title {
+      margin-top: 12px;
+      font-size: 18px;
+      font-family: var(--primary-font);
+      line-height: 22px;
+      font-weight: 300;
+    }
+    .mega-drop_image_subtitle {
+      font-family: var(--secondary-font);
+      font-size: 12px;
+      margin-top: 12px;
+    }
+    .mega-drop_title {
+      background-color: #f6f3ec;
+    }
+    .mega-drop_title button[data-role='nav-toggle'] {
+      display: none;
+    }
+    .mega-drop_image_button {
+      font-family: var(--secondary-font);
+      font-size: 11px;
+      line-height: 12px;
+      text-transform: uppercase;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      margin-top: 12px;
+    }
+    @media (min-width: 768px) {
+      .mega-drop {
+        width: 120%;
+        top: 0px;
+        height: 100%;
+        max-height: 100%;
+        display: block;
+        transform: translateX(-20%);
+        height: 100%;
+        overflow-y: auto;
+      }
+      .is-active .mega-drop {
+        transform: translateX(83%);
+        z-index: -1;
+      }
+      .mega-drop_container {
+        position: relative;
+      }
+      .mega-drop_title {
+        display: none;
+      }
+    }
+    @media (min-width: 1024px) {
+      .mega-drop {
+        min-height: 479px;
+        transition-property: opacity;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+        opacity: 0;
+        transform: translateX(-100%);
+        top: unset;
+        width: 100%;
+        height: max-content;
+      }
+      .is-active .mega-drop {
+        transform: translateX(-100%);
+      }
+      .nested-link:hover > .mega-drop {
+        display: block !important;
+        opacity: 1;
+        transform: translateX(-50%);
+        left: 50%;
+      }
+      .nested-link.nested:hover ~ .mega-bg,
+      .nested-link.nested:hover ~ .drop-overlay {
+        display: block;
+      }
+      .mega-drop_container {
+        max-height: 528px;
+        overflow-y: auto;
+      }
+      .mega-drop_link_container {
+        display: grid;
+        padding: 40px;
+        gap: 20px;
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .mega-drop_link_content li.mega-drop_links_list {
+        border: 0px;
+      }
+      .mega-drop_image_block {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+      }
+      .mega-drop_image_title {
+        font-size: 26px;
+        line-height: 29px;
+        text-align: center;
+      }
+      .mega-drop_image_button {
+        justify-content: center;
+        display: flex;
+      }
+      .mega-drop_link_wrapper {
+        padding: 0px;
+        flex: 0 0.5 100%;
+      }
+      .mega-drop_link_content {
+        display: grid;
+        gap: 18px;
+      }
+      .mega-drop_link_content.g-col-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+      .mega-drop_link_content.g-col-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .mega-drop_link_content.g-col-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .mega-drop_link_content.g-col-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .col-span-1 {
+        grid-column: span 1;
+      }
+      .col-span-2 {
+        grid-column: span 2;
+      }
+      .col-span-3 {
+        grid-column: span 3;
+      }
+      .col-span-4 {
+        grid-column: span 4;
+      }
+      .mega-drop_links_title {
+        border-bottom: 0px;
+        text-transform: capitalize;
+        font-size: 26px;
+        font-weight: 300;
+        line-height: 29px;
+      }
+      .header-navigation_link:hover a::after {
+        transform: scale(1);
+      }
+      .mega-drop_links_title span {
+        display: none;
+      }
+      .mega-drop_links_title {
+        display: block !important;
+        padding: 0px !important;
+        margin-bottom: 20px;
+      }
+      .mega-drop_links_list_container {
+        max-height: 10000px;
+      }
+      .mega-drop_nested_link_title {
+        padding: 0px;
+        margin-bottom: 12px;
+      }
+      .header-navigation_link .mega-drop_links_title {
+        font-family: var(--primary-font);
+      }
+      .mega-drop_nested_link_all {
+        display: flex !important;
+        align-items: center;
+        font-family: var(--primary-font);
+        text-decoration: underline 1px #000;
+        text-underline-offset: 4px;
+        font-size: 13px;
+        line-height: 16px;
+        gap: 8px;
+        color: #121212;
+        text-transform: uppercase;
+      }
+    }
+  {% endstyle %}
+  <div
+    class="
+      mega-drop fixed w-full md:w-[120%] lg:w-full top-[-68px] md:top-0
+      left-0 m-containerr:left-[0%] m-containerr:mt-[-2px]  h-[calc(100vh_+_50px)] lg:min-h-[479px] md:h-full max-h-[calc(100%_+_50px)] md:max-h-full overflow-y-auto lg:overflow-y-visible
+      z-[10] bg-white hidden md:block transition-transform
+      lg:transition-opacity lg:duration-300 lg:opacity-0 group-hover/nav:lg:opacity-100
+       duration-300 md:translate-x-[-20%] rtl:md:translate-x-[100%] lg:translate-x-[-100%] group-[.is-active]/nav:block
+       group-[.is-active]/nav:md:translate-x-[83%] rtl:group-[.is-active]/nav:md:translate-x-[-100%] group-hover-[.is-active]/nav:lg:translate-x-[0!important] group-hover-[.is-active]/nav:m-containerr:left-[50%] group-hover-[.is-active]/nav:m-containerr:translate-x-[-50%!important]
+       group-[.is-active]/nav:lg:translate-x-[-100%] rtl:group-[.is-active]/nav:lg:translate-x-[100%] group-[.is-active]/nav:m-containerr:translate-x-[-200%] md:z-[-1] group-hover/nav:lg:top-[unset]
+       group-hover/nav:lg:fixed group-hover/nav:lg:h-max group-hover/nav:lg:max-h-none
+    "
+    data-role="mega-drop"
+    for="{{ link }}"
+  >
+    <div class="link mega-drop_container m-containerr:max-w-[1600px] m-containerr:mx-auto lg:max-h-[528px] lg:overflow-y-auto m-containerr:bg-[#fff] md:relative">
+      <div class="flex mega-drop_title md:hidden justify-between px-[25px] py-5 border-b-[1px] b border-b-[#D8D8D8] sticky top-0 bg-white z-[1]">
+        <button class="" data-role="nested-toggle">{% render 'icon-v2', icon: 'icon-caret-left' %}</button>
+        <a href="{{ link.url }}" class="font-gascogne-serial text-[26px] leading-[31px]">{{ link.title }}</a>
+        <button data-role="nav-toggle">{% render 'icon-v2', icon: 'icon-close' %}</button>
+      </div>
+      <div class="mega-drop_link_container lg:flex lg:p-10 lg:gap-5">
+        {% for value in shop.metaobjects.nested_navigation['nested-navigation'].nested_navigation.value %}
+          {% assign objParentNav = value.parent_navigation_handle %}
+          {% assign nestedNavHandle = '' %}
+          {% if value.nested_nav_handle != blank %}
+            {% assign nestedNavHandle = value.nested_nav_handle %}
+          {% endif %}
+          {% if objParentNav == link.handle %}
+            {% case nestedNavHandle %}
+              {% when '' %}
+                {% liquid
+                  assign bannerImage = value.nested_navigation_image
+                  assign desktopBannerImage = value.nested_navigation_image_desktop
+                  assign bannerTitle = value.image_title
+                  assign bannerSubTitlte = value.image_subtitle
+                  assign bannerRedirection = value.image_redirection_link
+                  assign bannerBtnText = value.image_button_text
+                  assign column_span = value.column_span
+                  assign imgUrl = value.nested_navigation_image | image_url
+                  assign desktopImageUrl = value.nested_navigation_image_desktop | image_url
+                  if imgUrl contains 'files'
+                    assign imgUrl = bannerImage | image_url | split: 'files/' | last | split: '?v=' | first
+                  else
+                    assign imgUrl = imgUrl | split: '/' | last | split: '?v' | first
+                  endif
+                  if desktopImageUrl contains 'files'
+                    assign desktopImageUrl = desktopBannerImage | image_url | split: 'files/' | last | split: '?v=' | first
+                  else
+                    assign desktopImageUrl = desktopImageUrl | split: '/' | last | split: '?v' | first
+                  endif
+                  assign bannerImage = images[imgUrl]
+                  assign desktopBannerImage = images[desktopImageUrl]
+                %}
+                <div class="mega-drop_image_block mt-6 mb-5 lg:m-0 px-5 lg:p-0 lg:w-full col-span-{{ column_span }}">
+                  {% assign ratio = 1 %}
+                  {% assign desktop_ratio = 1 %}
+                  {% if bannerImage != blank %}
+                    {% assign ratio = bannerImage.aspect_ratio %}
+                  {% endif %}
+                  {% if desktopBannerImage != blank %}
+                    {% assign desktop_ratio = desktopBannerImage.aspect_ratio %}
+                  {% endif %}
+                  <style>
+                      {% if column_span == 2 %}
+                        @media(min-width:768px){
+                        .drop-image-{{ link.handle }}-{{ forloop.index }}-{{  imgUrl | split : "." | first }}{
+                          padding-bottom:calc({{ 1 | divided_by : desktop_ratio | times : 100 }}% - 10px)!important;
+                        }
+                      }
+                      {% elsif column_span == 3 %}
+                          @media(min-width:768px){
+                        .drop-image-{{ link.handle }}-{{ forloop.index }}-{{  imgUrl | split : "." | first }}{
+                          padding-bottom:calc({{ 1 | divided_by : desktop_ratio | times : 100 }}% - 13px)!important;
+                        }
+                      }
+                      {%  else %}
+                      @media(min-width:768px){
+                        .drop-image-{{ link.handle }}-{{ forloop.index }}-{{  imgUrl | split : "." | first }}{
+                          padding-bottom:{{ 1 | divided_by : desktop_ratio | times : 100 }}%!important;
+                        }
+                      }
+                    {% endif %}
+                  </style>
+                  <div
+                    class="mega-drop_image_wrapper relative overflow-hidden bg-[#E5E5E5] drop-image-{{ link.handle }}-{{ forloop.index }}-{{  imgUrl | split : "." | first }}"
+                    style="padding-bottom:{{ 1 | divided_by : ratio | times : 100 }}%"
+                  >
+                    <picture>
+                      <source
+                        media="(min-width:768px)"
+                        srcset="{{ desktopBannerImage | image_url : width : 800 }},{{ bannerImage | image_url : width : 1000 }}"
+                      >
+                      {{
+                        bannerImage
+                        | image_url: width: 600
+                        | image_tag:
+                          widths: '300, 400,500',
+                          class: 'absolute top-0 left-0 w-full h-full',
+                          loading: 'lazy'
+                      }}
+                    </picture>
+                    {% if bannerRedirection != blank -%}
+                      <a
+                        href="{{ bannerRedirection }}"
+                        class="mega-drop_image_link absolute top-0 left-0 w-full h-full block"
+                      ></a>
+                    {%- endif %}
+                  </div>
+                  {% if bannerTitle != blank %}
+                    <h3
+                      style="position:relative;"
+                      class="mega-drop_image_title mt-3 font-gascogne-serial text-[18px] lg:text-[26px] leading-[22px] lg:leading-[29px] lg:text-center font-light"
+                    >
+                      {{ bannerTitle }}
+                      <a
+                        href="{{ bannerRedirection }}"
+                        style="position:absolute;top:0px;left:0px;width:100%;height:100%;"
+                      ></a>
+                    </h3>
+                  {% endif %}
+                  {% if bannerSubTitlte != blank %}
+                    <p class="mega-drop_image_subtitle font-shape text-[12px] mt-3">{{ bannerSubTitlte }}</p>
+                  {% endif %}
+                  {% if bannerBtnText != blank %}
+                    <a
+                      href="{{ bannerRedirection }}"
+                      class="mega-drop_image_button font-shape lg:flex lg:justify-center text-[11px] leading-[12px] uppercase underline underline-offset-[2px] mt-3"
+                    >
+                      {{- bannerBtnText -}}
+                    </a>
+                  {% endif %}
+                </div>
+              {% else %}
+                {% assign nestedNav = linklists[nestedNavHandle] %}
+                {% assign navsize = nestedNav.links.size %}
+                <div class="mega-drop_link_wrapper px-5 lg:p-0 lg:flex-[0_0.5_100%] {% if navsize >= 4 %} col-span-4 {% else %} col-span-{{ navsize }} {% endif %}">
+                  {% comment %}
+                    <div class="lg:grid-cols-2 lg:grid-cols-1 lg:grid-cols-3 lg:grid-cols-4"></div>
+                  {% endcomment %}
+                  <ul class="mega-drop_link_content lg:grid {% if navsize >= 4 %} g-col-4 {% else %} g-col-{{ navsize }} {% endif %} lg:gap-[18px]">
+                    {% for link in nestedNav.links %}
+                      <li class="group/nest mega-drop_links_list">
+                        {% if link.levels > 0 %}
+                          <p
+                            data-role="l3-toggle"
+                            class="mega-drop_links_title text-[12px] flex justify-between items-center font-light font-shape uppercase lg:px-0 py-6 lg:py-0 lg:mb-5 border-b-[#D5D5D5] border-b-[1px] lg:border-b-[0px] lg:capitalize lg:text-[26px] lg:font-gascogne-serial lg:font-light lg:leading-[29px]"
+                          >
+                            {{ link.title }}
+                            <span class="lg:hidden">
+                              {%- render 'icon-v2',
+                                icon: 'icon-header-plus',
+                                classAttr: 'nav-icon_plus group-[.active]/nest:hidden'
+                              %}
+                              {% render 'icon-v2',
+                                icon: 'icon-header-minus',
+                                classAttr: 'nav-icon_minus hidden group-[.active]/nest:block'
+                              -%}
+                            </span>
+                          </p>
+                          <ul class="mega-drop_links_list_container max-h-0 lg:max-h-[10000px] overflow-hidden transition-all group-[.active]/nest:max-h-[10000px]">
+                            <li>
+                              <a
+                                class="mega-drop_nested_link_title flex w-full py-3 lg:py-0 lg:px-0 lg:mb-3 text-[14px] font-shape font-light leading-[21px]"
+                                href="{{ link.url }}"
+                              >
+                                Shop all {{ link.title }}
+                              </a>
+                            </li>
+                            {% for child_link in link.links %}
+                              <li>
+                                <a
+                                  class="mega-drop_nested_link_title flex w-full py-3 lg:py-0 lg:px-0 lg:mb-3 text-[14px] font-shape font-light leading-[21px]"
+                                  href="{{ child_link.url }}"
+                                >
+                                  {{- child_link.title -}}
+                                </a>
+                              </li>
+                            {% endfor %}
+                            <li>
+                              <a
+                                class="mega-drop_nested_link_all w-full py-3 lg:py-0 lg:px-0 lg:mb-3 text-[14px] font-shape font-light leading-[21px] hidden lg:flex underline"
+                                href="{{ link.url }}"
+                              >
+                                Shop all {{ link.title }}
+                                {% render 'icon-v2', icon: 'icon-caret' %}
+                              </a>
+                            </li>
+                          </ul>
+                        {% else %}
+                          <a
+                            href="{{ link.url }}"
+                            class="text-[12px] mega-drop_link_title font-light font-shape uppercase px-5 py-6 border-b-[#D5D5D5] border-b-[1px] lg:border-b-[0px] lg:capitalize lg:text-[26px] lg:font-gascogne-serial lg:font-light lg:leading-[29px]"
+                          >
+                            {{- link.title -}}
+                          </a>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+            {% endcase %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}

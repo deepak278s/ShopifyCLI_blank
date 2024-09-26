@@ -1,0 +1,30 @@
+<header class="section__header f-space-between flex f-wrap f-vertical-bottom mt-lg mb-md">
+
+    {%- if title or content -%}
+
+        <div class="my-md">
+
+            {%- liquid
+                if title
+                    render 'title', title: title, tag: title_tag, class: 'sm fnt-sec uc fw-300'
+                endif
+                if content != ''
+                    render 'richtext', content: content, class: ''
+                endif
+            -%}
+
+        </div>
+
+    {%- endif -%}
+
+    {%- if link_text -%}
+
+        <div class="my-sm{% unless link_tablet %} hide--tablet{% endunless %}">
+
+            {%- render 'link', style: 'button', text: link_text, link: link -%}
+
+        </div>
+
+    {%- endif -%}
+
+</header>

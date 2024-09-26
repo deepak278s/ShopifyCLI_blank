@@ -1,0 +1,62 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:07+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            b46fba0898fd9dde29134dc317b2be2e
+//      Signature:      eyJpdiI6ImJcL2J3azhCZ2pOOHNMVFc4clJORUd3PT0iLCJ2YWx1ZSI6ImozdW1TRU9hZWRjcXlNajQ2cHBaOGxrWmhpM2pCRjdHMzN0eWJFbk5qTFNUbnlZblp4NVVwSVwvalNvZ0VHdjNrd1NUaWlLUlFCRDZjcXBlYmJMdjMyRUJcL0owcHVhenVtUlV6VzlJU2x5K3lmODZkcmlWa3pZRkphXC9LV3liTmZreWlLNkxvRU9KaXlWUjR2M08rNm1VMjNRc3g4ckgzakcyZFI4cTdod2ZKcUNiaGJwQ2xHYllNbzNRN1wvcDRPMmJyUVpBQXZhdHF1Q25mNHpyaGo1NFVPTVU5eWJxWkdHUHNxZHNjQndSOCsxRG02b3kzT1NzSUdJUmpkb1FwcktvUUJcL1cwd3c0MzdYXC9vQ290OXVXYWNQUnlMNWdhVTRab0NDWFZRZjMxRmJYZExOdWZpWGZqdmI2eDhuS09ZMFV2MUZzOEluVzh4VE44bkhDVFJ4UEpCXC9CRHpDRVFkZHdRUThcLzd4TjBIS3RndGtxSUhGbnBUOVcxS0lEaDhMTmh5MFc1ajdRMkhHY0IrUitzTDh6dDRZNG9aazlQakluTHpNdDUwc2dvaGhqZz0iLCJtYWMiOiIwYTYwMDRmYjQ4OTk3NzVlZGRkMmE5ZjA0NGE2NjUxOGMwMGUwOGYyMmM3ZGI2YmEyMTQ4M2FhNDQwZWVjZTZhIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign collection_image_class = 'collection__header-image hide--tablet'
+-%}
+
+<header class="collection__header--brand px-sm--tablet text-align-center flex--above-tablet">
+
+    {%- liquid
+        if collection.image
+            echo '<div class="' | append: collection_image_class | append: '">'
+            echo collection.image | image_url: width: 2560 | image_tag: preload: true
+            echo '</div>'
+        endif
+    -%}
+
+    <div class="collection__header-content container py-lg px-xl--above-tablet px-xs--tablet">
+        {%- liquid
+            assign title_class = 'collection__title title--sm title--lg--tablet '
+            if collection.description != empty
+                assign title_class = title_class | append: ' mb-sm'
+            endif
+            if collection.title != empty
+                render 'title', title: collection.title, tag: 'h1', class: title_class
+            endif
+            if collection.description != empty
+                assign description_class = 'lg mt-xs mx-a'
+                render 'richtext', content: collection.description, class: description_class
+            endif
+        -%}
+
+        {% if collection.metafields.brand.show_video %}
+            {%- liquid
+                capture collection_header_link
+                    echo 'icon-video.svg' | asset_url | img_tag: loading: 'lazy', width: '22'
+                    echo '<span class="underline xs blue">'
+                    echo 'collections.general.view_brand_video' | t
+                    echo '</span>'
+                endcapture
+                echo collection_header_link | link_to: '#brand-video', class: 'collection__header-link fnt-sec flex f-vertical-center f-center mt-md'
+            -%}
+        {% endif %}
+        
+    </div>
+</header>

@@ -1,0 +1,43 @@
+{% style %}
+  html[dir='rtl'] language-selector li::before {
+    right: 0px;
+  }
+{% endstyle %}
+
+{% if localization.available_languages.size > 1 %}
+  <language-selector>
+    {% form 'localization' %}
+      <ul
+        aria-description="Language selector"
+        role="list"
+        class="flex py-5 border-t-[1px] border-t-[#D8D8D8] lg:border-0 lg:p-0"
+      >
+        {% for language in localization.available_languages %}
+          <li
+            key="{{ language.iso_code }}"
+            class="
+                  group/lang {% if language.iso_code == localization.language.iso_code %}active{% endif %} pr-3 {% if forloop.index == 1 %}rtl:pl-3 rtl:pr-0{% endif %}{% if forloop.last %}pl-3 rtl:pl-0 relative before:content-[''] before:w-[1px] before:bg-black before:h-4 before:block
+                    before:absolute before:top-[58%] before:left-0 before:-translate-y-1/2 before:rotate-[25deg]
+              {% endif %}
+            "
+          >
+            <a
+              href="#"
+              {% if language.iso_code == localization.language.iso_code %}
+                aria-current="true"
+              {% endif %}
+              hreflang="{{ language.iso_code }}"
+              lang="{{ language.iso_code }}"
+              data-value="{{ language.iso_code }}"
+              class="text-[12px] font-medium capitalize text-[#595959] group-[.active]/lang:text-[#000]"
+              ><span class="">
+                {{- language.endonym_name -}}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+      <input type="hidden" name="language_code" value="{{ localization.language.iso_code }}">
+    {% endform %}
+  </language-selector>
+{% endif %}

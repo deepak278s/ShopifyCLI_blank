@@ -1,0 +1,39 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:32+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            cc8a5ff7f4ac8159add8338165187cad
+//      Signature:      eyJpdiI6Ik9pVWtIR3loNEx3WE9QdVlZd3VuUVE9PSIsInZhbHVlIjoicWdVUHJDM3Q0VXBiU1FPeHlQeDE0dnJtTWdqXC9OeUtzWUxjN0ZaZk9JNHlkV0FKejhkVXREMHhUNkw2WkRnWlNYQmFGQ1c3UzVGTDFoN1l4aVpWU3R2UDh2QmJhVGM3NVNuYjdocEtiMUpYQzNOcUh5RWF0dnFHZkNOblwvOTJXbHJyNk1DQVB4WjJ1WVpLUFdMYkYyUFRBUDZHU0FkSkY2eHRIcHh5dEFOenQyQkVLR0lDTTd5MnlJcG94eWU0TWxDNzNaZm5aUWJyXC9yRUdSOExaTkZJMGFGWXVBWnV4UnlmOXkrUzN2OExIM0RpVnhnMXE1SjBcL1wvNWRPN3VDTWs4eXQ2RUkycFpaaUl4dXcrNVRUUk1ybDdPRDhTT25hUjNuNUFaNUhvZU5INTB1RlA0Z2FEdnRZRWlCdWFWZE44UW1UbkM5ZU1VMEk3UThxMW9RUFwvZWlVYnczUzQ4VnZGN2ZuK0ozcHNPdmhac0V2dGNvbXViVm1sSW91ZnhmSkRGTk5WdStjQWVxNFJBaVY0RnZVMENpQT09IiwibWFjIjoiYjEwOWE0ZWUzMzkwYTc1N2NkZTNkNjg1NTI4YTMxZTg4MmZhNDQzMjk3ODEzMTdjZGFjMGVlMTc0NjRmOWVhYiJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="image-column mx-sm--above-tablet {{ class }}">
+    <div class="image-column__content p-md pt-xl">
+        {%- liquid
+            if block.settings.title
+                assign title = block.settings.title | newline_to_br
+                render 'title', title: title, tag: block.settings.title_tag, class: 'title--md title--sm--tablet white'
+            endif
+        -%}
+    </div>
+    {%- liquid
+        if block.settings.link_text != blank
+            assign link_text = '<span>' | append: block.settings.link_text | append: '</span>'
+            echo link_text | link_to: block.settings.link, class: 'image-column__link fnt-ter lg uc fw-800'
+        endif
+        if block.settings.background
+            assign image_alt = block.settings.background.alt | default: block.settings.title
+            echo block.settings.background | image_url: width: 700 | image_tag: loading: 'lazy', class: 'image-column__image', alt: image_alt
+        endif
+    -%}
+</div>

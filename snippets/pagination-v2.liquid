@@ -1,0 +1,79 @@
+{% style %}
+  .loader {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 1s linear infinite;
+    display: block;
+  }
+  .loader::before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    animation: prixClipFix 2s linear infinite;
+  }
+  .pagination-loadMore__btn {
+    position: relative;
+  }
+  .pagination-loadMore__btn.hidden {
+    display: none;
+  }
+  .loader-wrapper {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: none;
+  }
+  .active .loader-wrapper {
+    display: flex;
+  }
+  .active .paginate-text {
+    display: none;
+  }
+  .pagination-wrapper {
+    opacity: 0;
+  }
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes prixClipFix {
+    0% {
+      clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+    }
+    25% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+    }
+    50% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+    }
+    75% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+    }
+    100% {
+      clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+    }
+  }
+{% endstyle %}
+<paginate-grid data-section="{{ section.id }}" class="">
+  <div class="pagination-wrapper" data-pagination>
+    <button
+      class="pagination-loadMore__btn {% if paginate.current_page == paginate.pages %}hidden{% endif %}"
+      data-role="paginate"
+      data-page="{{ paginate.current_page | plus : 1 }}"
+    >
+      <span class="paginate-text">Load More</span>
+      <span class="loader-wrapper"><span class="loader"></span> </span>
+    </button>
+  </div>
+</paginate-grid>

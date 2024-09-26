@@ -1,0 +1,50 @@
+<style>
+    .collection-description__wrapper {
+        max-width: 700px;
+    }
+    .collection-description__wrapper #collection-description {
+        display: inline;
+    }
+    .collection-description__wrapper #read-more {
+        position: relative;
+        line-height: 1;
+        letter-spacing: 0.03em;
+    }
+    .collection-description__wrapper button#read-more:after {
+        content: '';
+        width: 40px;
+        background: red;
+        position: absolute;
+        left: -40px;
+        z-index: 0;
+        height: 100%;
+        background: rgb(255,255,255);
+        background: linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    }
+</style>
+
+<div class="collection-description__wrapper">
+    <div class="rte {{ class }}" id="collection-description">{{ content | strip_html }}</div>
+    <button id="read-more" class="text-link">More</button>
+</div>
+
+<script>
+  const shortenedText = document.getElementById('collection-description');
+  const readMoreButton = document.getElementById('read-more');
+  const fullText = shortenedText.textContent;
+  const maxLength = 225;
+
+  if (fullText.length > maxLength) {
+    const shortenedTextContent = fullText.substr(0, maxLength);
+    shortenedText.textContent = shortenedTextContent;
+
+    readMoreButton.style.display = 'inline';
+
+    readMoreButton.addEventListener('click', function() {
+      shortenedText.textContent = fullText;
+      readMoreButton.style.display = 'none';
+    });
+  } else {
+    readMoreButton.style.display = 'none';
+  }
+</script>

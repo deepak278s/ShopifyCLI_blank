@@ -1,0 +1,147 @@
+<notify-popup class="group/notify">
+  <div class="bg-[#fff] hidden group-[.active]/notify:block fixed w-full max-w-[90%] md:max-w-[672px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[201] md:p-10">
+    <div class="hidden md:flex justify-between">
+      <h3 class="text-[26px] font-gascogne-serial leading-[31px] text-[#222] capitalize">
+        <span class="group-[.success]/notify:hidden"> We will email you when back in stock</span
+        ><span class="hidden group-[.success]/notify:block">Success!</span>
+      </h3>
+      <button class="flex ml-auto" data-role="popup-close">
+        {% render 'icon-v2', icon: 'notify-popup-close' %}
+      </button>
+    </div>
+    <button class="pt-4 px-4 flex ml-auto md:hidden" data-role="popup-close">
+      {% render 'icon-v2', icon: 'notify-popup-close' %}
+    </button>
+    <div class="group-[.success]/notify:hidden">
+      <div class="px-6 pb-6 md:p-0 mt-1 md:mt-0">
+        <h3 class="text-[26px] font-gascogne-serial leading-[31px] text-[#222] capitalize md:hidden">
+          We will email you when back in stock
+        </h3>
+        <p class="text-[14px] font-shape leading-[21px] md:mt-1 text-[#222] font-light">
+          Simply enter your email address below and we'll let you know when the item is back in stock
+        </p>
+        <form class="mt-6">
+          <p class="text-[14px] font-shape font-normal leading-[21px]">Email Address</p>
+          <input
+            type="text"
+            name="email"
+            placeholder="Email Address"
+            class="border-[0.75px] group-[.error]/notify:border-[#F00] group-[.error]/notify:text-[#F00] focus:ring-0 focus:outline-none w-full rounded-[4px] mt-2 placeholder:text-[#707070] text-[16px] font-shape placeholder:font-shape py-[14px] px-3 border-[#D5D5D5]"
+          >
+          <button
+            type="submit"
+            class="bg-[#121212] overflow-hidden rounded-full w-full text-[#fff] text-[13px] font-normal uppercase mt-4 font-shape flex justify-center items-center py-[15px] relative"
+          >
+            <div
+              role="status"
+              class="absolute hidden left-0 top-0 w-full h-full group-[&.loading]/notify:flex justify-center items-center bg-[#000]"
+            >
+              {% render 'icon-v2', icon: 'icon-pdp-loader' %}
+              <span class="sr-only">Loading...</span>
+            </div>
+            NOTIFY ME
+          </button>
+          <p class="text-[14px] font-shape text-[#1c8533] text-center w-full mt-[6px] hidden group-[.success]/notify:block">
+            Submitted Successfully
+          </p>
+          <p class="text-[14px] font-shape text-[#F00] w-full mt-[6px] hidden group-[.error]/notify:block">
+            Please enter a valid email address and re-submit.
+          </p>
+        </form>
+      </div>
+    </div>
+    <div class="hidden group-[.success]/notify:block px-6 pb-6 md:p-0 mt-1 md:mt-0">
+      <h3 class="text-[26px] font-gascogne-serial leading-[31px] text-[#222] capitalize md:hidden mb-1">Succcess!</h3>
+      <h3 class="text-[14px] font-shape leading-[21px] md:mt-1 text-[#222] font-light">
+        We will email you when this item is back in stock. Until then, explore similar items.
+      </h3>
+      <a
+        href="{{ block_settings.success_redirection }}"
+        class="bg-[#121212] overflow-hidden rounded-full w-full text-[#fff] text-[13px] font-normal uppercase mt-4 font-shape flex justify-center items-center py-[15px] relative"
+        >view similar items</a
+      >
+    </div>
+  </div>
+  <div
+    data-role="popup-close"
+    class="fixed cursor-pointer hidden group-[.active]/notify:block top-0 left-0 w-full bg-[rgba(0,0,0,0.6)] h-full z-[200]"
+  ></div>
+</notify-popup>
+
+<script>
+  class NotifyPopup extends HTMLElement {
+    constructor() {
+      super();
+      this.closeBtn = this.querySelectorAll('[data-role="popup-close"]');
+      this.form = this.querySelector('form');
+      this.input = this.querySelector("input[type='text']");
+
+      this.closeBtn.forEach((el) => {
+        el.addEventListener('click', this.hidePopup.bind(this));
+      });
+      this.form.addEventListener('submit', this.formSubmission.bind(this));
+      document.addEventListener('custom:displayNotify', this.displayPopup.bind(this));
+    }
+    displayPopup(e) {
+      this.productId = e.detail.productId;
+      this.variantId = e.detail.variantId;
+      this.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    hidePopup() {
+      this.classList.remove('active');
+      this.classList.remove('success');
+      this.classList.remove('error');
+      this.input.value = '';
+      document.body.style.overflow = 'auto';
+    }
+    async createSubscription() {
+      let formData = new FormData(this.form);
+      formData.append('a', 'XE2bGu');
+      formData.append('product', this.productId);
+      formData.append('variant', this.variantId);
+      formData.append('platform', 'shopify');
+      formData.append('subscribe_for_newsletter', 'false');
+
+      await fetch('https://a.klaviyo.com/onsite/components/back-in-stock/subscribe', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(formData),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
+    async formSubmission(e) {
+      e.preventDefault();
+      let valid = this.validateEmail();
+      if (valid) {
+        this.classList.add('loading');
+        try {
+          let subscriptionData = await this.createSubscription();
+          this.classList.add('success');
+        } catch (err) {
+          console.log(err);
+          this.classList.add('error');
+        }
+        this.classList.remove('loading');
+      } else {
+        this.classList.add('error');
+        setTimeout(() => {
+          this.classList.remove('error');
+        }, 2500);
+      }
+    }
+    validateEmail() {
+      let inputVal = this.input.value;
+      let regex =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      let valid = inputVal.match(regex);
+      return valid;
+    }
+  }
+
+  customElements.define('notify-popup', NotifyPopup);
+</script>

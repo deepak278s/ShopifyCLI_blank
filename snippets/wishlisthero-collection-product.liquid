@@ -1,0 +1,45 @@
+{%- comment %}<locksmith:bc6d>{% endcomment -%}
+  {%- assign locksmith_4293_product__first_available_variant = nil %}{% assign locksmith_4293_product__selected_variant = nil %}{% assign locksmith_4293_product__selected_or_first_available_variant = nil %}{% for variant in product.variants %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% if locksmith_4293_product__first_available_variant == nil and variant.available %}{% assign locksmith_4293_product__first_available_variant = variant %}{% endif %}{% if locksmith_4293_product__selected_variant == nil and variant.selected %}{% assign locksmith_4293_product__selected_variant = variant %}{% endif %}{% if variant == product.selected_or_first_available_variant %}{% assign locksmith_4293_product__selected_or_first_available_variant = product.selected_or_first_available_variant %}{% endif %}{% endfor %}{% if locksmith_4293_product__selected_or_first_available_variant == nil %}{% assign locksmith_4293_product__selected_or_first_available_variant = locksmith_4293_product__first_available_variant %}{% endif -%}
+{%- comment %}</locksmith:bc6d>{% endcomment -%}
+
+{% comment %}
+ Wishlist Hero Snippets -  V 1.0.0
+{% endcomment %}
+{% unless buttonMode %}
+   {% assign buttonMode = 'icon_only' %}
+{% endunless %}
+{% unless buttonView %}
+   {% assign buttonView = 'Collection' %}
+{% endunless %}
+{% unless buttonClass %}
+   {% assign buttonClass = 'wishlisthero-floating' %}
+{% endunless  %}
+{% assign image = product.featured_image %}
+{% assign name = product.title %}
+{% capture url %}https://{{shop.domain}}{{product.url}}{% endcapture %}
+{% for var in product.variants %}
+    {%- comment %}<locksmith:535e>{% endcomment -%}
+      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: var, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+    {%- comment %}</locksmith:535e>{% endcomment -%}
+    {% if locksmith_4293_product__selected_or_first_available_variant.id == var.id %}
+        {% if var.image and var.image.src %}
+            {% assign image = var.image.src %}
+        {% endif %}
+        {% if var.url %}
+            {%  assign url = var.url %}
+        {% endif %}
+        {% if var.name %}
+            {% assign name = var.name %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+<div data-wlh-id="{{product.id}}" 
+ data-wlh-link="{{url}}"
+data-wlh-variantid="{{locksmith_4293_product__selected_or_first_available_variant.id}}" 
+ data-wlh-price="{{locksmith_4293_product__selected_or_first_available_variant.price | remove: '.' | remove: ',' | divided_by: 100.0 }}" 
+ data-wlh-name="{{name | strip_html }}" 
+ data-wlh-image="{{image | img_url: '1024x'}}" 
+ class="wishlist-hero-custom-button {{buttonClass}}" 
+ data-wlh-mode="{{buttonMode}}"
+ data-wlh-view="{{buttonView}}"
+ style="left: auto;"></div> 

@@ -1,0 +1,387 @@
+{% liquid
+  if template contains 'search'
+    assign result = search.results
+    assign filters = search.filters
+    assign sort_options = search.sort_options
+    assign sort_by = search.sort_by
+  else
+    assign result = collection.products
+    assign filters = collection.filters
+    assign sort_options = collection.sort_options
+    assign sort_by = collection.sort_by
+  endif
+%}
+<facet-filters-form class="transition-all z-10 lg:z-[99!important]">
+  <div class="filters-container">
+    <div class="filter-mobileHeader">
+      <div class="filter-mobile__actionBtns">
+        <div class="filter-mobile__btn">
+          <button data-role="filter-toggle">
+            Filter <span>{% render 'icon-v2', icon: 'filter' %}</span>
+          </button>
+        </div>
+        <div class="filter-mobile__btn">
+          <button data-role="sort-toggle">
+            Sort <span>{% render 'icon-v2', icon: 'chevron-down' %}</span>
+          </button>
+        </div>
+        <div class="filter-mobile__btn">
+          <layout-switch>
+            <input type="radio" name="grid-switch" value="layout-2" id="mobile-single-switch">
+            <label for="mobile-single-switch">{% render 'icon-v2', icon: 'single-rect' %}</label>
+            <input type="radio" name="grid-switch" value="layout-1" id="mobile-grid-switch" checked>
+            <label for="mobile-grid-switch">{% render 'icon-v2', icon: 'grid-rect' %}</label>
+          </layout-switch>
+        </div>
+      </div>
+    </div>
+    <div class="filter-form__wrapper" data-role="filter-container">
+      <div class="filter-form__header">
+        <p class="filter-form__heading">Filter By</p>
+        <button class="filter-form__toggle" data-role="filter-toggle">
+          {% render 'icon-v2', icon: 'icon-close' %}
+        </button>
+      </div>
+      {% liquid
+        assign totalActiveCount = 0
+        for filter in filters
+          for value in filter.active_values
+            assign totalActiveCount = totalActiveCount | plus: filter.active_values.size
+          endfor
+        endfor
+      %}
+      <div
+        class="active-filters empty-filter {% if totalActiveCount == 0 %} hidden{% endif %}"
+        data-role="active-filters"
+      >
+        {% for filter in filters %}
+          {% for value in filter.active_values %}
+            <input
+              type="checkbox"
+              value="{{ value.value }}"
+              name="{{ value.url_to_remove }}"
+              id="active-filter{{ value.value }}"
+            >
+            <active-filter data-value="{{ value.value }}">
+              <label for="avail-chain">
+                {{- value.label }}
+                <span>{% render 'icon-v2', icon: 'icon-cross3' %}</span></label
+              >
+            </active-filter>
+          {% endfor %}
+        {% endfor %}
+        <button
+          class="clear-filter  {% unless totalActiveCount > 0 -%}hidden{% endunless %} clear-filter-desk active-clear-filter"
+          data-action="desktop-removeFilter"
+          data-role="removeFilters"
+        >
+          Clear Filters
+        </button>
+      </div>
+      <div
+        class="active-filters empty-filter {% if totalActiveCount == 0 %} hidden{% endif %} clear-filter-mb"
+        data-role="active-filters"
+      >
+        <button
+          class="clear-filter  {% unless totalActiveCount > 0 -%}hidden{% endunless %}"
+          data-action="desktop-removeFilter"
+          data-role="removeFilters"
+        >
+          Clear Filters
+        </button>
+      </div>
+      <div class="filter-form__inputs">
+        <form class="facet-filter" data-role="filter">
+          {% liquid
+            assign filterToDisplay = 'Brand,Colour,Material,Price,Color' | downcase
+            if collection.metafields.custom.brand_page
+              assign filterToDisplay = 'Categories,Colour,Material,Price,Color' | downcase
+            endif
+            assign filterToDisplayArr = filterToDisplay | split: ','
+          %}
+          {% for filter in filters %}
+            {% assign filDisplay = false %}
+            {% for fil in filterToDisplayArr %}
+              {% assign title = filter.label | downcase %}
+              {% if title == fil %}
+                {% assign filDisplay = true %}
+              {% endif %}
+            {% endfor %}
+            {% if filDisplay %}
+              {% if filter.type == 'price_range' %}
+                {% render 'range-bar-v2', filter: filter %}
+              {% else %}
+                {% liquid
+                  assign activeCount = 0
+                  assign filterProductCount = 0
+                  for value in filter.values
+                    assign filterProductCount = filterProductCount | plus: value.count
+                    if value.active
+                      assign activeCount = activeCount | plus: 1
+                    endif
+                  endfor
+                %}
+                {% if filterProductCount > 0 %}
+                  <details data-action="{{ filter.label }}">
+                    <summary>
+                      <span class="filter-value__title">
+                        {{ filter.label }}
+                        {%- if activeCount > 0 %}
+                          <span>
+                            {{ activeCount }}
+                          </span>
+                        {% endif -%}
+                      </span>
+                      <span class="filter-forward">
+                        {%- if activeCount > 0 %}{{ activeCount }} Selected{% endif -%}
+                        {%- render 'icon-v2', icon: 'fitler-down-v2' -%}
+                      </span>
+                    </summary>
+                    <div class="filter-inputs">
+                      <div class="filter-form__header">
+                        <button>
+                          <nested-toggle>{% render 'icon-v2', icon: 'icon-back' %}</nested-toggle>
+                        </button>
+                        <p class="filter-form__heading">{{ filter.label }}</p>
+                      </div>
+                      <div class="filter-inputs__wrapper">
+                        {% assign filter_label = filter.label | downcase %}
+                        {% if filter_label == 'color' or filter_label == 'colour' %}
+                          {% assign colorList = shop.metaobjects.swatch_list['swatch-list'].swatch_list.value %}
+                          {% for value in filter.values %}
+                            {% if value.count > 0 %}
+                              {% assign filter_value = value.value | downcase %}
+                              {% assign color = false %}
+                              {% for colorValue in colorList %}
+                                {% assign colorTitle = colorValue.color_title | downcase %}
+                                {% if colorTitle == filter_value %}
+                                  {% assign color = colorValue.color_value %}
+                                {% endif %}
+                              {% endfor %}
+
+                              <input
+                                type="checkbox"
+                                value="{{ value.value }}"
+                                name="{{ value.param_name }}"
+                                id="filter-{{ filter.label }}-{{value.value | replace : " " , "-" }}"
+                                {% if value.active %}
+                                  checked
+                                {% endif %}
+                              >
+                              <label for="filter-{{ filter.label }}-{{value.value | replace : " " , "-" }}">
+                                <span class="filter-input__count">{{ value.count }}</span>
+                                {{- value.value -}}
+                                <span
+                                  class="filter-input__color-box"
+                                  style="{% if color %}background-color:{{ color }};{% else %}box-shadow:0 0 3px 0px rgb(0 0 0 / 11%);{% endif %}"
+                                ></span
+                              ></label>
+                            {% endif %}
+                          {% endfor %}
+                        {% else %}
+                          {% for value in filter.values %}
+                            {% if value.count > 0 %}
+                              <input
+                                type="checkbox"
+                                value="{{ value.value }}"
+                                name="{{ value.param_name }}"
+                                id="filter-{{ filter.label }}-{{value.value | replace : " " , "-" }}"
+                                {% if value.active %}
+                                  checked
+                                {% endif %}
+                              >
+                              <label for="filter-{{ filter.label }}-{{value.value | replace : " " , "-" }}">
+                                <span class="filter-input__count">{{ value.count }}</span>
+                                {{- value.value -}}
+                                <span class="filter-input__box"></span
+                              ></label>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                      <div class="filter-input__footer">
+                        <button class="btn-reset" data-role="removeFilters">Reset</button>
+                        <button class="btn-apply" data-role="filter-toggle">Apply</button>
+                      </div>
+                    </div>
+                  </details>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </form>
+        <layout-switch>
+          <div class="grid-switch__desktop">
+            <input type="radio" name="layout-option" id="single_grid" value="layout-2">
+            <label for="single_grid">{% render 'icon-v2' : icon : 'icon-double-grid' %}</label>
+            <input type="radio" name="layout-option" id="tri_grid" value="layout-1" checked>
+            <label for="tri_grid">{% render 'icon-v2' : icon : 'icon-triple-grid' %}</label>
+            <input type="radio" name="layout-option" id="four_grid" value="layout-3">
+            <label for="four_grid">{% render 'icon-v2' : icon : 'icon-quadraple-grid' %}</label>
+          </div>
+        </layout-switch>
+        <sort-by>
+          <div class="desktop_sort">
+            {% liquid
+              assign selectedSort = 'Sort by : '
+              assign defSort = false
+              for value in sort_options
+                if value.value == sort_by
+                  assign defSort = true
+                  if value.value == 'created-descending'
+                    assign selectedSort = selectedSort | append: 'New in'
+                  else
+                    assign selectedSort = selectedSort | append: value.name
+                  endif
+                endif
+              endfor
+              unless defSort
+                if collection.default_sort_by == 'manual'
+                  assign defSortTitle = 'Featured'
+                endif
+                assign selectedSort = selectedSort | append: defSortTitle
+              endunless
+            %}
+            <details>
+              <summary>
+                <span data-role="desktop-sort">{{ selectedSort }}</span
+                ><span>{%- render 'icon-v2', icon: 'fitler-down-v2' -%}</span>
+              </summary>
+              <div class="sort_options">
+                {% liquid
+                  assign sortingOptions = 'manual,price-ascending,price-descending,created-descending' | split: ','
+                %}
+                {% for value in sort_options %}
+                  {% assign sortDisplay = false %}
+                  {% for sortOpt in sortingOptions %}
+                    {% if sortOpt == value.value %}
+                      {% assign sortDisplay = true %}
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if sortDisplay %}
+                    <input
+                      type="radio"
+                      data-value="{{ value.value }}"
+                      value="{{ value.value }}"
+                      name="desk_sort"
+                      id="desktop-sort-{{value.value}}"
+                      {% if sort_by == value.value or result.default_sort_by == value.value %}
+                        checked
+                      {% endif %}
+                    >
+                    <label for="desktop-sort-{{value.value}}">
+                      {% if value.value == 'created-descending' %}
+                        New in
+                      {% elsif value.value == 'price-ascending' %}
+                        Price Low to High
+                      {% elsif value.value == 'price-descending' %}
+                        Price High to Low
+                      {% else %}
+                        {{- value.name -}}
+                      {% endif %}
+                      <span class="sort-input__box"></span>
+                    </label>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </details>
+          </div>
+        </sort-by>
+      </div>
+      <div class="filter-mobile__footer">
+        <button data-role="filter-toggle">
+          Show <span data-role="filters-count">{{ result.products_count }}</span> Products
+        </button>
+      </div>
+    </div>
+
+    <div class="sort-form__wrapper" data-role="sort-wrapper">
+      <div class="sort-form__header">
+        <p class="sort-form__heading">Sort By</p>
+        <button class="sort-form__toggle" data-role="sort-toggle">{% render 'icon-v2', icon: 'icon-close' %}</button>
+      </div>
+      <sort-by>
+        <div class="sort-inputs__wrapper">
+          {% liquid
+            assign sortingOptions = 'manual,price-ascending,price-descending,created-descending' | split: ','
+          %}
+          {% for value in sort_options %}
+            {% assign sortDisplay = false %}
+            {% for sortOpt in sortingOptions %}
+              {% if sortOpt == value.value %}
+                {% assign sortDisplay = true %}
+              {% endif %}
+            {% endfor %}
+            {% if sortDisplay %}
+              <input
+                type="radio"
+                value="{{ value.value }}"
+                data-value="{{ value.value }}"
+                {% if collection.sort_by == value.value or collection.default_sort_by == value.value %}
+                  checked
+                {% endif %}
+                name="mob-sort"
+                id="filter-{{value.value}}"
+              >
+              <label for="filter-{{value.value}}">
+                {% if value.value == 'created-descending' %}
+                  New in
+                {% elsif value.value == 'price-ascending' %}
+                  Price Low to High
+                {% elsif value.value == 'price-descending' %}
+                  Price High to Low
+                {% else %}
+                  {{- value.name -}}
+                {% endif %}
+                <span class="sort-input__box"></span
+              ></label>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </sort-by>
+      <div class="sort-form__footer">
+        <button class="btn-reset" data-role="clearSort">Reset</button>
+        <button class="btn-apply" data-role="sort-toggle">Apply</button>
+      </div>
+    </div>
+  </div>
+  <form data-role="sort" class="hidden">
+    {%- assign sort_by = sort_by | default: result.default_sort_by -%}
+    <select
+      name="sort_by"
+      class="facet-filters__sort select__select caption-large"
+      id="SortBy"
+      aria-describedby="a11y-refresh-page-message"
+    >
+      {%- for option in sort_options -%}
+        <option
+          value="{{ option.value | escape }}"
+          {% if option.value == sort_by %}
+            selected="selected"
+          {% endif %}
+        >
+          {{ option.name | escape }}
+        </option>
+      {%- endfor -%}
+    </select>
+  </form>
+</facet-filters-form>
+<div class="result-count">
+  <p class="result-count__text" data-role="show-count">
+    Showing
+    <span data-role="product=-count">
+      {% liquid
+        assign totalNoProdPerPage = 0
+        assign previousItems = paginate.current_offset
+        if current_page > 1
+          assign totalNoProdPerPage = totalNoProdPerPage | plus: previousItems
+        endif
+        assign currentPageProducts = result | size
+        assign totalNoProdPerPage = totalNoProdPerPage | plus: currentPageProducts
+      -%}
+      {{ totalNoProdPerPage -}}
+    </span>
+    products of {{ paginate.items }}
+  </p>
+</div>

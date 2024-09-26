@@ -1,0 +1,56 @@
+{%- comment %}<locksmith:f0b0>{% endcomment -%}
+  {%- assign locksmith_7967_product__price_min = nil %}{% assign locksmith_7967_product__price_max = nil %}{% assign locksmith_7967_product__price_varies = false %}{% for variant in product.variants %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% if locksmith_7967_product__price_min == nil or variant.price < locksmith_7967_product__price_min %}{% assign locksmith_7967_product__price_min = variant.price %}{% endif %}{% if locksmith_7967_product__price_max == nil or locksmith_7967_product__price_max < variant.price %}{% assign locksmith_7967_product__price_max = variant.price %}{% endif %}{% endfor %}{% if locksmith_7967_product__price_min != locksmith_7967_product__price_max %}{% assign locksmith_7967_product__price_varies = true %}{% endif -%}
+{%- comment %}</locksmith:f0b0>{% endcomment -%}
+
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:29+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            3f9f6b540956cb7508ea8c969b996f79
+//      Signature:      eyJpdiI6IlNnRHNDMlY3Y0M1dWRJeGV3RzZ2bFE9PSIsInZhbHVlIjoiMUVQZCtYUWNyRHNqR2xOd0dCc0hFRUg2czZVY2NLNXNOU084OGgwVnJBdVBOTTFWMFFYR3N2bTRKUXIrMWtRajRJSGZIekJnS1RUWFA2R1wvY2NIOVVISGVBK3VBWDdvY0tOSHJlK2laSHRUbDE3cXhXeU1iUVU2N2xncGhRUHpIS2R0dFRGQjd0VG1TTDZqcG1TMEhEM2VmSjRkK1N4UkRpeWZDN2NZa2oxcE9JXC9zUzJkWnFPcXpvTDd2cWY4anp6WXJZbGdkVE1PXC9rSnRZbzRzT0F3Rkl6UVduZ0cwY1E4dGNFV0NjQVBTQ3pFdkFla1R2THNscEtXU1lDYnFTXC9seUtrSitBVjJ0WDBQcEVcL0xLZk4wZm1FWDFzOVV5ZzlaM21VUDNBYnF4b1J4RHFtUVcySGxBb1wvd2o5MDdoXC84U0FHYUlLMXBhdGR6dG5MY2l6NTljZnFOeXVndHJGblFPK29EaWJyYzNYQmJtdEwrTFwvNGJQWGxJSUtZaUlCRUloVnVrR2srMGFWWVRDMXVvTFZjK3VBPT0iLCJtYWMiOiIxNzJlNDg1MGJhZjM0OWZlM2MyYzJkODEwNmEzNjUzMDJmOWRlMjVlM2I0ODM2NWJiYTU4OTBiOTE3OGRiODVlIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign price = locksmith_7967_product__price_min
+    assign compare_at_price = productcompare_at_price_min
+    if current_variant
+        assign price = current_variant.price
+        assign compare_at_price = current_variant.compare_at_price
+    endif
+-%}
+
+{% if product.template_suffix contains 'price-on-request' %} 
+{% comment %} Display text instead of price for 'price-on-request' product template {% endcomment %}
+{% unless template.name == 'product' %}
+    <p class="product-price product-price__on-request md fnt-{% if font %}{{ font }}{% else %}sec{% endif %} fw-300">
+        {{ 'products.product.price_on_request' | t }}
+    </p>
+{% endunless %}
+{% else %}
+    <p class="product-price md fnt-{% if font %}{{ font }}{% else %}sec{% endif %} fw-300">
+        {% unless current_variant %}
+            {% if locksmith_7967_product__price_varies %}
+                <span>{{ 'products.product.price_min' | t }}</span>
+            {% endif %}
+        {% endunless %}
+        <span {% if price < compare_at_price %}class="product-price--sale"{% endif %}>
+            {{ price | money }}
+        </span>
+        {% if price < compare_at_price %}
+            <span class="product-price--original">
+                {{ compare_at_price | money }} 
+            </span>
+        {% endif %}
+    </p>
+{% endif %}

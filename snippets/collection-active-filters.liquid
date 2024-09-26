@@ -1,0 +1,76 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:31+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            34cfc3f5a42a773201e5ff26184a227a
+//      Signature:      eyJpdiI6IlFnb1wvYWM3ajlaUmF0YnJadk5iUFVRPT0iLCJ2YWx1ZSI6InlxbFJlOHo5ZFwvY0FtZDV2VEs1cklqMlErVWJ4aStvNVVCSEF6WGwrK21sVkdCMFlqemJpRURkY0JCWlgzWE94ck8rZlpGZTh1Nk4rVjZEZnlqZTJTWXY3dGVVSTExQjlINXRmZEJQVk11amg3ZUJxR2hxTEEzbEJKV0tzdEI4RFJYK2xuNTFOVkdLdWIzeEZqRFNYd1dwUDBNWG5qSmx5K0lJbStlaUJ1OEd4R3RKbjdlbTRkRU9OMjdEOHJNVEFJSk1IYUxOdE5DSjMwYXB4UHRlSzN4VWxCQ0dBZXNCRDdjdVNFclhRKytkaWpFMzllK3NDMlhocm10czFUNTFwUmYyb1J1QmZBMlFjeWxwOUZiNFNEYmRUeURxU0tlakxnM1MxbmdiWnFnZ2VzUVRsYzFOQXJwQUl5UTRZdTY1V0h6ZlVlekJwbTJNYkNJTExpb3NpY0FhRFpYVDBiWVh4ZXl0Z1JWRWlHT1Ywb293ZCt5ekpIMTh3UWRxc0gydjVJVVZsVVJEeTJ5TVZZbkx2bFFjSkRWUXRwcGRBaENrMkg3bGZ0MXdnWnJvPSIsIm1hYyI6IjhhY2M4OWQ2Y2U0OGY4MjhmZDkwNjgwMjQ2NmQ4ZmFlMGI4ZDZlMjg5OWJjNzI2NTcxYzc5ODY4NDA0N2E2MjkifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign collection_filtered = false
+    assign remove_link_class = 'active-filters__remove-filter fnt-sec md flex f-vertical-middle px-sm'
+-%}
+
+{%- capture clear_text -%}
+    <span class="inline-block ml-xs fnt-sec uc fw-500 sm">{{ 'collections.filters.clear' | t }} (X)</span>
+{%- endcapture -%}
+
+{%- capture delete_text -%}
+    <span class="inline-block ml-xs fnt-sec uc fw-500 sm">${filter_value.label} (X)</span>
+{%- endcapture -%}
+
+<div class="active-filters mt-md pb-sm mb-sm fnt-sec flex f-wrap f-vertical-middle f-flex-start">
+    {%- liquid
+        for filter in collection.filters
+            if filter.type == 'price_range'
+                if filter.min_value.value != nil or filter.max_value.value != nil
+                    assign collection_filtered = true
+
+                    assign min_value = filter.min_value.value | default: 0
+                    assign min_money = min_value | money
+
+                    assign max_value = filter.max_value.value | default: filter.range_max
+                    assign max_money = max_value | money
+
+                    if filter.max_value.value
+                        if filter.min_value.value
+                            assign min_max_money = min_money | append: ' - ' | append: max_money
+                        else
+                            assign min_max_money = 'Under ' | append: max_money
+                        endif
+                    else
+                        assign min_max_money = min_money | append: '+'
+                    endif
+
+                    assign filter_value_label = delete_text | replace: '${filter_value.label}', min_max_money
+
+                    echo filter_value_label | link_to: filter.url_to_remove, class: remove_link_class
+                endif
+            else
+                for filter_value in filter.active_values
+                    assign collection_filtered = true
+                    assign filter_value_label = delete_text | replace: '${filter_value.label}', filter_value.label
+
+                    echo filter_value_label | link_to: filter_value.url_to_remove, class: remove_link_class
+                endfor
+            endif
+        endfor
+        
+        if collection_filtered
+            assign clear_url = collection.url | append: '?sort_by=' | append: collection.sort_by
+            echo clear_text | link_to: clear_url, class: 'active-filters__clear fnt-sec uc xs flex f-vertical-middle px-sm'
+        endif
+    -%}
+
+  </div>

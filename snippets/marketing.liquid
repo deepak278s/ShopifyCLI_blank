@@ -1,0 +1,154 @@
+{%- comment %}<locksmith:5b4b>{% endcomment -%}
+  {%- assign locksmith_bf85_product__available = false %}{% assign locksmith_bf85_product__selected_variant = nil %}{% assign locksmith_bf85_product__price = nil %}{% for variant in product.variants %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: variant, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif %}{% if locksmith_bf85_product__available == false and variant.available %}{% assign locksmith_bf85_product__available = true %}{% endif %}{% if locksmith_bf85_product__selected_variant == nil and variant.selected %}{% assign locksmith_bf85_product__selected_variant = variant %}{% endif %}{% if locksmith_bf85_product__price == nil %}{% assign locksmith_bf85_product__price = variant.price %}{% endif %}{% endfor -%}
+{%- comment %}</locksmith:5b4b>{% endcomment -%}
+
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:27+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            0b9d2c5e9e016e69f544995ec102afd7
+//      Signature:      eyJpdiI6ImkyUmNyZ2tlR01EQkJPRTVQdlNMbXc9PSIsInZhbHVlIjoiV1AyOGNDWjNNVWVDYmtXenI2bHBRa0RiczdKNndhQmdNOUpIRmdkVEV6c1lZenk4MU1oVDJHWTJVNmlFeUlJN1R4M0YxZlJMTUp1MFVqZjhhQUtNQXFwQWlCbmk3UGltVklGM1JGbjRsUDlpQjFoeUhpV0RRekxxNHRTUElpc1BVQ2dnMzNXY2dtMkVMUUFaUjhDa0RBYWZNTFBLMDluSjAxK0dwb0NsNHI4RU9jb1FMMkVYNDRMWUNIQmQrR0ZPR1ZhZkoxZDRWaWRMQ3FWaVhHUjNIeVpzRGJpaEhyZDlNbTNGWG8rT2dvWGVFVGE4M0U5cjFqUXVPTUs4UjByTGNsRWlNcWM0Qm9ETlRpeHdja0FmN2FzdHg0ajI4SGc1aDRuU01NSERsZ2tnMExaYVwvaTg1WVNRXC9KeThzcGxnR0dHRUVZbWtMN0oxSXRJVllGVXFcL09SOXl4Y0RYOGk4azdDa3BKMXdyTU9ZeGJSQVhLMWxpcVZIK013VDFwME9DZ2liOVhQRkRpdGJFMGlaU25SRXhWZz09IiwibWFjIjoiMWRkNzEyNTA5NjI5NDdiMjdiYjEyYTc4NGYxNDg3YjRkNDJjOGY3MzMzY2EzM2MwYjkwOWFkOGFmY2YyZmU4ZiJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- case get -%}
+    {%- when 'product schema' -%}
+    {%- if template.name == 'product' -%}
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org/",
+                "@type": "Product",
+                "name": "{{ product.title }}",
+                "image": [
+                    {%- comment %}<locksmith:0ad5>{% endcomment -%}
+                      {%- assign locksmith_a279_forloop__size = 0 %}{%- for image in product.images -%}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: image, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == 'true' %}{% assign locksmith_a279_forloop__size = locksmith_a279_forloop__size | plus: 1 %}{% endif %}{% endfor %}{% assign locksmith_a279_forloop__index = nil -%}
+                    {%- comment %}</locksmith:0ad5>{% endcomment -%}
+                    {%- for image in product.images -%}
+                        {%- comment %}<locksmith:6cd8>{% endcomment -%}
+                          {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: image, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% if locksmith_a279_forloop__index == nil %}{% assign locksmith_a279_forloop__index = 1 %}{% assign locksmith_a279_forloop__index0 = 0 %}{% else %}{% assign locksmith_a279_forloop__index = locksmith_a279_forloop__index | plus: 1 %}{% assign locksmith_a279_forloop__index0 = locksmith_a279_forloop__index0 | plus: 1 %}{% endif %}{% if locksmith_a279_forloop__index == 1 %}{% assign locksmith_a279_forloop__first = true %}{% else %}{% assign locksmith_a279_forloop__first = false %}{% endif %}{% if locksmith_a279_forloop__index == locksmith_a279_forloop__size %}{% assign locksmith_a279_forloop__last = true %}{% else %}{% assign locksmith_a279_forloop__last = false %}{% endif %}{% assign locksmith_a279_forloop__rindex = locksmith_a279_forloop__size | minus: locksmith_a279_forloop__index | minus: 1 %}{% assign locksmith_a279_forloop__rindex0 = locksmith_a279_forloop__size | minus: locksmith_a279_forloop__index0 | minus: 1 %}{% else %}{% continue %}{% endif -%}
+                        {%- comment %}</locksmith:6cd8>{% endcomment -%}
+                        "{{ image | img_url: 'master' }}"{%- unless locksmith_a279_forloop__last -%}{{ ',' }}{%- endunless -%}
+                    {%- endfor -%}
+                ],
+                "description": {{ product.description | escape | json }},
+                "sku":"{{ locksmith_bf85_product__selected_variant.sku | default: product.id }}",
+                "mpn":"{{ product.id }}",
+                "brand":{
+                    "@type":"Brand",
+                    "name":"{{ shop.name }}"
+                },
+                "offers":{
+                    "@type":"Offer",
+                    "url":"{{ product.url }}",
+                    "priceCurrency":"{{ shop.currency }}",
+                    "price":"{{ locksmith_bf85_product__price | divided_by: 100 }}",
+                    "itemCondition":"https://schema.org/NewCondition",
+                    "availability":"https://schema.org/{%- if locksmith_bf85_product__available -%}InStock{%- else -%}OutOfStock{%- endif -%}",
+                    "seller":{
+                        "@type":"Organization",
+                        "name":"{{ shop.name }}"
+                    }
+                }
+            }
+        </script>
+    {%- endif -%}
+
+    {%- when 'breadcrumbs' -%}
+    <script type="application/ld+json">
+        {
+            "@context":"https://schema.org",
+            "@type":"BreadcrumbList",
+            "itemListElement":[
+                {
+                "@type":"ListItem",
+                "position":1,
+                "name":"Home",
+                "item":"{{ shop.url }}/"
+                }
+                {%- if template contains 'page' -%}
+                    ,{
+                        "@type":"ListItem",
+                        "position":2,
+                        "name":"{{ page.title }}",
+                        "item":"{{ shop.url }}{{ page.url }}"
+                    }
+                {%- elsif template contains 'cart' -%}
+                    ,{
+                        "@type":"ListItem",
+                        "position":2,
+                        "name":"Basket",
+                        "item":"{{ shop.url }}/cart"
+                    }
+                {%- elsif template contains 'product' -%}
+                    ,{
+                        "@type":"ListItem",
+                        "position":2,
+                        "name":"{{ product.title }}",
+                        "item":"{{ shop.url }}{{ product.url }}"
+                    }
+                {%- elsif template contains 'collection' and collection.handle -%}
+                    ,{
+                        "@type":"ListItem",
+                        "position":2,
+                        "name":"{{ collection.title }}",
+                        "item":"{{ shop.url }}{{ collection.url }}"
+                    }
+                    {%- if current_tags -%}
+                        ,{
+                            "@type":"ListItem",
+                            "position":3,
+                            "name":"{{ current_tags | join: " + " }}",
+                            "item":"{{ shop.url }}/collections/{{ collection.handle }}/{{ current_tags }}"
+                        }
+                    {%- endif -%}
+                {%- elsif template == 'blog' -%}
+                    ,{
+                        "@type":"ListItem",
+                        "position":2,
+                        "name":"{{ blog.title }}",
+                        "item":"{{ shop.url }}{{ blog.url }}"
+                    }
+                    {%- if current_tags -%}
+                        ,{
+                            "@type":"ListItem",
+                            "position":3,
+                            "name":"{{ current_tags | join: " + " }}",
+                            "item":"{{ shop.url }}{{ blog.url }}/tagged/{{ current_tags }}"
+                        }
+                    {%- endif -%}
+                {%- elsif template == 'article' -%}
+                    ,{
+                        "@type":"ListItem",
+                        "position":2,
+                        "name":"{{ blog.title }}",
+                        "item":"{{ shop.url }}{{ blog.url }}"
+                    },
+                    {
+                        "@type":"ListItem",
+                        "position":3,
+                        "name":"{{ article.title }}",
+                        "item":"{{ shop.url }}{{ article.url }}"
+                    }
+                {%- else -%}
+                    ,{
+                        "@type":"ListItem",
+                        "position":2,
+                        "name":"{{ page.title }}",
+                        "item":"{{ shop.url }}{{ page.url }}"
+                    }
+                {%- endif -%}
+            ]
+        }
+    </script>
+
+{%- endcase -%}

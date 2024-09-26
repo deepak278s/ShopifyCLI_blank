@@ -1,0 +1,94 @@
+<!-- summery and login -->
+<div
+  class="flex flex-col w-full gap-5 p-6 border border-[rgba(213,_213,_213,_0.28)] "
+  data-role="cart-summary"
+>
+  <div class="w-full flex flex-col gap-3" data-role="summary">
+    <h3 class="text-[26px] leading-[28.6px] font-gascogne-serial font-light capitalize text-[#222222]">
+      Order Summary
+    </h3>
+    {% if section.settings.enable_promotion and promotionalValue != blank %}
+      {% assign promotionalValue = promotionalValue | times: 100 %}
+      <div class="px-3 py-4 bg-[#F8F8F8] font-shape text-[12px] font-[400] leading-[133.333%] tracking-[-0.24px] text-[#222222] uppercase">
+        {% if promotionalValue >= cart.total_price %}
+          <p>Spend an extra {{ promotionalValue | minus: cart.total_price | money }} to qualify for FREE DELIVERY</p>
+        {% else %}
+          <p>{{ section.settings.qualify_text }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="w-full flex flex-col gap-3">
+      <div class="flex justify-between ">
+        <div class="font-shape text-[14px] font-[400] leading-[114.286%] tracking-[-0.28px] text-[#222222]">
+          Subtotal (excluding delivery)
+        </div>
+        <div class="font-shape text-[14px] font-[400] leading-[128.571%] text-[#222222]">
+          {{ cart.total_price | money }}
+        </div>
+      </div>
+      {% comment %}
+        <div class="flex justify-between ">
+          <div class="font-shape text-[14px] font-[400] leading-[114.286%] tracking-[-0.28px] text-[#222222]">
+            Shipping
+          </div>
+          <div class="font-shape text-[14px] font-[400] leading-[114.286%] tracking-[-0.28px] text-[#222222]">Free</div>
+        </div>
+      {% endcomment %}
+    </div>
+    <div class="w-full">
+      <div class="w-full h-px bg-[#D5D5D5]"></div>
+    </div>
+    <div class="flex flex-col w-full">
+      <div class="flex items-center justify-between ">
+        <div class="flex flex-col gap-2">
+          <div class="font-shape text-[18px] font-[400] leading-[120%] capitalize text-[#222222]">Order Total</div>
+          <div class="font-shape text-[11px] font-[400] leading-[150%] tracking-[0.055px] text-[#222222]">
+            Taxes and shipping calculated at checkout
+          </div>
+        </div>
+        <div class="font-shape text-[15px] font-[400] leading-[106.667%] text-[#222222]">
+          {{ cart.total_price | money }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col w-full gap-5 lg:gap-4 md:items-end md:justify-end lg:justify-center">
+    {% if section.settings.promo_text != blank %}
+      <p class="font-shape text-[10px] font-[400] leading-[140%] text-[#7F7F7F] tracking-[-0.2px] text-center lg:w-full">
+        {{ section.settings.promo_text }}
+      </p>
+    {% endif %}
+    <a
+      href="/checkout"
+      class="btn-dark flex justify-center items-center w-full cart-loading:hidden h-[50px] py-[15px] px-11 uppercase text-[16px] leading-3 font-normal md:max-w-[352px] font-shape rounded-[26px] bg-[#121212]"
+    >
+      Secure checkout
+    </a>
+  </div>
+  {% if section.settings.enable_icon %}
+    <div class="flex flex-col w-full gap-5 md:items-end md:justify-end lg:justify-center">
+      {% if section.blocks.size > 0 %}
+        <div class="payment_icon md:max-w-[352px] flex flex-col gap-3 ">
+          <div class="payment-icon flex flex-row justify-center text-center gap-3 py-2">
+            {% for block in section.blocks %}
+              <div>{{ block.settings.icon_svg }}</div>
+            {% endfor %}
+          </div>
+          {% if section.settings.payment_text != blank %}
+            <p class="font-shape text-[10px] font-[400] leading-[140%] text-[#7F7F7F] tracking-[-0.2px] text-center">
+              {{ section.settings.payment_text }}
+            </p>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+<style>
+  [data-role='cart-summary'] {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  }
+</style>

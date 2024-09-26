@@ -1,0 +1,191 @@
+{% style %}
+  :root {
+    --font-light: 'Shape';
+    --font-semiBold: 'Shape';
+    --font-bold: 'Shape';
+    --font-regular: 'Shape';
+    --font-heading: 'Gascogne Serial';
+  }
+  .cms-wrapper ul {
+    list-style: initial;
+    padding-left: 20px;
+  }
+
+  .cms-wrapper h2,
+  .cms-wrapper h3,
+  .cms-wrapper h4,
+  .cms-wrapper h5,
+  .cms-wrapper h6 {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 250;
+    line-height: 120%;
+    text-transform: capitalize;
+    color: #222222;
+  }
+  .cms-wrapper p,
+  .cms-wrapper li {
+    font-family: var(--font-light);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 150%;
+    color: #222222;
+  }
+  .active-account-menu a {
+    border-bottom: 2px solid #222;
+  }
+  @media (min-width: 1024px) {
+    .cms-wrapper h1 {
+      font-size: 46px;
+    }
+    .cms-wrapper h2,
+    .cms-wrapper h3,
+    .cms-wrapper h4,
+    .cms-wrapper h5,
+    .cms-wrapper h6 {
+      font-size: 26px;
+    }
+    .active-account-menu a {
+      border-bottom: none;
+    }
+    .active-account-menu {
+      background: #f6f3ec;
+    }
+    .active-account-menu a {
+      border-bottom: 0px;
+    }
+  }
+{% endstyle %}
+
+<div class="flex flex-col w-full gap:5 lg:gap-10 sticky top-0 border-b-[0.5px] border-[#D5D5D5] lg:border-0">
+  <div class="flex overflow-x-auto whitespace-nowrap lg:block lg:whitespace-normal">
+    {% if section.settings.menu_links.links != blank %}
+      {% for link in section.settings.menu_links.links %}
+        <div
+          class="
+            p-5 py-6 relative flex justify-between
+            {% if link.url == page.url %} active-account-menu {% endif %}
+          "
+        >
+          <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">
+            {{ link.title }}
+          </div>
+
+          <a
+            href="{{link.url}}"
+            class="absolute top-0 left-0 w-full h-full"
+          ></a>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <div class="p-5 py-6 relative flex justify-between {% if request.path contains  'contact-us' %} active-account-menu {% endif %}">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">Contact us</div>
+
+        <a
+          href="{{ shop.url | append: pages['privacy-policies'].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if request.path contains  'delivery' %} active-account-menu {% endif %}">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">Delivery</div>
+
+        <a
+          href="{{ shop.url | append: pages['cookie-policy'].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if template.name contains  'return-policy' %} active-account-menu {%- endif -%}">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">Returns</div>
+
+        <a
+          href="{{ shop.url | append: pages['terms-and-conditions'].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if template.name contains  'privacy-policy' %} active-account-menu {%- endif -%} ">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">Privacy Policy</div>
+
+        <a
+          href="{{ shop.url | append: pages[website-terms-of-use].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if template.name contains  'website-terms-of-use' %} active-account-menu {%- endif -%} ">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">About Us</div>
+
+        <a
+          href="{{ shop.url | append: pages[website-terms-of-use].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if template.name contains  'modern-slavery-statement' %} active-account-menu {%- endif -%} ">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">
+          Modern Slavery Statement
+        </div>
+
+        <a
+          href="{{ shop.url | append: pages[website-terms-of-use].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if template.name contains  'website-terms-of-use' %} active-account-menu {%- endif -%} ">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">Careers</div>
+
+        <a
+          href="{{ shop.url | append: pages[website-terms-of-use].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if template.name contains  'terms-and-conditions' %} active-account-menu {%- endif -%} ">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">
+          Terms & Conditions
+        </div>
+
+        <a
+          href="{{ shop.url | append: pages[website-terms-of-use].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if template.name contains  'faqs' %} active-account-menu {%- endif -%} ">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">FAQs</div>
+
+        <a
+          href="{{ shop.url | append: pages[website-terms-of-use].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+
+      <div class="p-5 py-6 relative flex justify-between {% if template.name contains  'uk-tax-strategy-disclosure' %} active-account-menu {%- endif -%} ">
+        <div class="font-normal text-[12px] leading-[135%] tracking-[0.06px] uppercase font-shape">
+          UK TAX STRATEGY DISCLOSURE
+        </div>
+
+        <a
+          href="{{ shop.url | append: pages[website-terms-of-use].url }}"
+          class="absolute top-0 left-0 w-full h-full"
+        ></a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth < 768) {
+      document.querySelector('.active-account-menu')
+        ? document.querySelector('.active-account-menu').scrollIntoView()
+        : '';
+    }
+  });
+</script>

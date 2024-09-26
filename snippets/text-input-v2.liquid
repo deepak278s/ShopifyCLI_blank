@@ -1,0 +1,41 @@
+{% liquid
+  assign type = type | default: 'text'
+%}
+
+<fieldset class="flex flex-col text-[10px] font-normal uppercase w-full mb-4 {% if template contains  'contact-us' %} mb-6 {% endif %} relative group/input">
+  <label for="{{ id }}" class="font-shape text-[14px] font-normal leading-[21px] mb-[8px] capitalize text-[#222222]">
+    {{- label -}}
+  </label>
+
+  <password-input>
+    <input
+      field="{{ field }}"
+      id="{{ id }}"
+      type="{{ type }}"
+      data-role="password"
+      class="w-full px-[15px] h-[48px] text-[13px] rounded-[4px] focus:border-[#D5D5D5] border-[0.75px] focus:ring-none focus:ring-transparent autofill:bg-red-300 group-[.error]/input:border-red-600 {{ class }} {% if type == 'password'%} peer/pass {% endif %}"
+      placeholder="{{ placeholder }}"
+      name="{{ name }}"
+      {% if required %}
+        required="required"
+      {% endif %}
+      {% if pattern %}
+        pattern="{{ pattern }}"
+      {% endif %}
+    >
+
+    {% if type == 'password' %}
+      <span
+        data-role="show-password"
+        class="absolute top-[30px] right-[10px] rtl:right-[initial] rtl:left-[10px] cursor-pointer  before:absolute before:w-[1px] before:h-full before:content-[''] before:bg-[#000] before:left-[50%] before:hidden before:rotate-45 peer-[[type='text']]/pass:before:block"
+      >
+        {% render 'icon', icon: 'icon-password' %}
+      </span>
+    {% endif %}
+  </password-input>
+  <p
+    class="pt-1 text-[11px] text-[#ff1e1e] normal-case hidden group-[.error]/input:block"
+  >
+    {{ errorLabel }}
+  </p>
+</fieldset>

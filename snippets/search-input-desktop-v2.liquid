@@ -1,0 +1,92 @@
+{% if template contains 'index'
+  or template contains 'collection'
+  or template contains 'product'
+  or template contains 'cart'
+  or template contains '404'
+  or template contains 'static-page-v2'
+  or template contains 'delivery-v2'
+  or template contains 'faq-v2'
+  or template contains 'about-us-v2'
+  or template contains 'contact-v2'
+  or template contains 'our-services-v2'
+  or template contains 'careers-v2'
+  or template contains 'search'
+
+%}
+  <div class="{{ class }} lg:absolute lg:left-[50%] lg:top-[50%] lg:translate-x-[-50%] lg:translate-y-[-50%]">
+    <form action="{{ routes.search_url }}" class="bg-[#F5F5F5] rounded-full px-4 py-2 lg:max-w-[440px]">
+      <div class="flex items-center ">
+        {% render 'icon-v2', icon: 'icon-search', classAttr: 'w-5 lg:w-[28px] h-5 lg:h-[auto]' %}
+        <input
+          type="text"
+          placeholder="Search for..."
+          maxlength="200"
+          name="q"
+          class="border-0 w-full md:w-[290px] lg:w-[540px] text-[12px] leading-[22px] font-shape text-[#595959] p-0 bg-transparent font-normal focus:ring-0 ml-2"
+          value="{{ search.terms | escape }}"
+          data-action="search-toggle"
+        >
+      </div>
+      <input type="hidden" name="type" value="product">
+      <input type="hidden" name="options[unavailable_products]" value="show">
+      <input type="hidden" name="options[prefix]" value="last">
+    </form>
+  </div>
+{% else %}
+  {% style %}
+    .search-input_desktop {
+      display: block !important;
+    }
+    .search-input-desktop_form {
+      background-color: #f5f5f5;
+      border-radius: 1000px;
+      padding: 8px 16px;
+      max-width: 440px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .search-input_desktop_form_wrapper {
+      display: flex;
+      align-items: center;
+      max-width: 440px;
+    }
+    .search-input_desktop_form_wrapper .searchIcon {
+      width: 28px;
+      height: 20px;
+    }
+    .search-input_desktop_form_wrapper input[type='text'] {
+      border: 0px;
+      width: 100%;
+      width: 540px;
+      font-size: 12px;
+      line-height: 22px;
+      font-family: var(--secondary-font);
+      color: #595959;
+      padding: 0px;
+      background-color: transparent;
+      font-weight: 400;
+      margin-left: 8px;
+    }
+  {% endstyle %}
+  <div class="search-input_desktop {{ class }}">
+    <form action="{{ routes.search_url }}" class="search-input-desktop_form bg-[#F5F5F5] rounded-full px-4 py-2">
+      <div class="search-input_desktop_form_wrapper flex items-center">
+        {% render 'icon-v2', icon: 'icon-search', classAttr: 'searchIcon w-5 h-5' %}
+        <input
+          type="text"
+          placeholder="Search for..."
+          maxlength="200"
+          name="q"
+          class="border-0 w-full md:w-[290px] lg:w-[540px] text-[12px] leading-[22px] font-shape text-[#595959] p-0 bg-transparent font-normal focus:ring-0 ml-2"
+          value="{{ search.terms | escape }}"
+          data-action="search-toggle"
+        >
+      </div>
+      <input type="hidden" name="type" value="product">
+      <input type="hidden" name="options[unavailable_products]" value="show">
+      <input type="hidden" name="options[prefix]" value="last">
+    </form>
+  </div>
+{% endif %}

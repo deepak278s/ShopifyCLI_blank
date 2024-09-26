@@ -1,0 +1,63 @@
+{% liquid
+    assign img = article.image
+    assign title = article.title
+    assign description = article.content | strip_html
+    assign url = article.url
+    if img
+        assign ratio = img.aspect_ratio
+    else
+        assign ratio = 1
+    endif
+%}
+<div class="relative">
+    <div class="relative bg-[#F8F8F8]" style="padding-bottom:{{ 1 | divided_by : ratio | times : 100 }}%">
+      {% if img != blank %}
+        <picture>
+          <img
+            srcset="
+              {%- if img.width >= 165 -%}{{ img | image_url: width: 165 }} 165w,{%- endif -%}
+              {%- if img.width >= 360 -%}{{ img | image_url: width: 360 }} 360w,{%- endif -%}
+              {%- if img.width >= 533 -%}{{ img | image_url: width: 533 }} 533w,{%- endif -%}
+              {%- if img.width >= 720 -%}{{ img | image_url: width: 720 }} 720w,{%- endif -%}
+              {%- if img.width >= 940 -%}{{ img | image_url: width: 940 }} 940w,{%- endif -%}
+              {%- if img.width >= 1066 -%}{{ img | image_url: width: 1066 }} 1066w,{%- endif -%}
+              {{ img | image_url }} {{ img.width }}w
+            "
+            src="{{ img | image_url: width: 533 }}"
+            sizes="(min-width: 1600px) {{ 1600 | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+            alt="{{ img.alt | escape }}"
+            loading="lazy"
+            class="absolute top-0 left-0 w-full h-full"
+            width="{{ img.width | divided_by : 4 }}"
+            height="{{ img.height }}"
+          >
+        </picture>
+      {% endif %}
+    </div>
+    <div class="px-4 py-[18px] lg:pb-[7px]">
+      <h3 class="text-[26px] mb-2 font-gascogne-serial font-light leading-[28.6px]">
+        {% if title == blank %}
+          Editorial Title
+        {% else %}
+          {{ title }}
+        {% endif %}
+      </h3>
+      <p class="text-[16px] mb-4 font-light leading-[24px] font-shape line-clamp-2">
+        {% if description == blank %}
+          When it comes to jewellery, our motto is go bling or go home. See how we're styling diamonds, emeralds
+          and colour-pop stones.
+        {% else %}
+          {{ description }}
+        {% endif %}
+      </p>
+      <a
+        href="{{ url }}"
+        class="text-[13px] font-normal uppercase font-shape border-b-[1px] border-b-[#000] pb-2"
+        >Read More</a
+      >
+    </div>
+    <a
+      href="{{ url }}"
+      class="absolute h-full w-full top-0 left-0"
+    ></a>
+  </div>
