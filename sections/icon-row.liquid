@@ -1,0 +1,210 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:40+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            296d981121867b91bb1987a30bd4485e
+//      Signature:      eyJpdiI6ImpPbWpsb0FCVmM4ODhya0g0WkJCM3c9PSIsInZhbHVlIjoiRXJOZjNXQ0paWGNjajhMRnR4bFBtMmNmMXhYQ1BIaHZWSTU2eU4wUUdMY2IxTXZ2TEo0eHJmT2pab0tPXC9yXC91RjhcL0ZPRlNlQmtpaWd0RlJUTGxVbmM3OUdhTFp1ZlhCenNickVuSURpa0dxcDBHRUZiK2FLNHNDbnVIMWF0QTBVR1pPWG5jTjM1NnJKRmJhWWk5WGZIQ1U2Q1Fwd0VTb1QzRHhFSjk1TWZXaDFTZVNGTDhWZjNaeUdxN0pvY3JcL2FIU2MwZ0dqc2lcL2FLWWd0WHlZS0tvRE5xRnlKOFFpYjRFXC9cL2txZlloOTR2K2lVTmplTW0yUTRLczJqd1ZPSThqMFVERUxnZUhldEpXS0F4ck4xQ1JUYmR2MzRCZjBmWDFcL2ZSMWU3VmdPNFN5OHlNaSttT2xxWUt5bWJuQ0d6cnduU2FoNXphZG1JRjZicXhDMHVyeis2MDhQbmo2OFI5Nzl1cWd5MGE4bnVOYjhpMDBnSVNydmIyS0kzVXA3R3grTDBET0pKUHdrQ0ZZQ1pySVJtaUdBPT0iLCJtYWMiOiIwNzQ2YWU5ZjhlNTIyODEwN2MwYTAzYWYwY2EzMzM5ZWExMDVmYmNmY2M1Y2Y2YzUyM2JjOGY4MThjOWRmZDFjIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<section class="icon-row container flex f-equal-width f-vertical-middle pt-{{ section.settings.spacing_top }} pb-{{ section.settings.spacing_bottom }}
+    {% if section.settings.spacing_top_tablet != '' %}pt-{{ section.settings.spacing_top_tablet }}--tablet{% endif %}
+    {% if section.settings.spacing_bottom_tablet != '' %}pb-{{ section.settings.spacing_bottom_tablet }}--tablet{% endif %}
+    ">
+
+    {%- liquid
+        for block in section.blocks
+            if block.settings.icon
+                assign icon = block.settings.icon | image_url: width: 300 | image_tag: loading: 'lazy', class: 'mx-a'
+                echo icon | link_to: block.settings.link, class: 'icon-row__icon block px-lg'
+            endif
+        endfor
+    -%}
+    
+</section>
+    
+{% schema %}
+    {
+        "name": "Icon Row",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Mobile Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top_tablet",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom_tablet",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Icon",
+                "type": "icon",
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "icon",
+                        "label": "Icon"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "Link"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Icon Row",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

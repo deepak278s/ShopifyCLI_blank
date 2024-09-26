@@ -1,0 +1,277 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:49+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            abfa2ece91d133a92234e7b4edd5b2dd
+//      Signature:      eyJpdiI6ImZqN0ZCN1hldE9BbG85T1dKS2JNVFE9PSIsInZhbHVlIjoidnZWSGJOQmFmXC8zMk5lQmtJdzNFOWhnbkhWRXNVeW1vOVNqcWpMTThmN3k3U25RSkhiTUFRNnd5dlBoSHlMbkhtdTQxd3RUWkFoV29GV0lXNFBlQnJKSVZxcGo3TlVWWmY3UUgwXC9ZZFNkenJHUUhXejRweUhLTFZLbDNzRTV4cHJhTkVPaG1FbURUOGM3WmI1T2ZmdGU1V0tlZU1pckREa3Y2TUdBVE9DdGFwaXI3UVwvN0VtSVFVQ1BRQVd3V0U1ZWlORUdXRGxrT2VVTTFlcFpOSytsVmNkUGE3NkdnTXVNd3ltWmlJNmxGMTZ2QVFvTTdWUStzUU1Ndk8wUDlESUIybis0cGh0eWxKZTFPcnJtS0JvVlJFeHJ0U1E2cHhpTkpRb2Vrbm52Q3FKVUlWaWVIUjcwcUxRcnAyZGNnWFl4WG5lSTlxK0hwTDNVNXBMcFlNRkdkV212eU9IUUZzT2FScmxzM0ROR0k3RnphYlJjODRFVER3Q2lpZ1c0MFYzTldsZHprNDlNcE5wRVBSK3pqcUt5QT09IiwibWFjIjoiN2QzODYyYjk5Mjc1ZTQzNmRhMDI0ZTA1YWJkYmQ4MTQwNTQ3NTk5ZGIzODBhOTgzM2M2MzJiMjZkYTYyOGIyOSJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="hero__banner flex mt-{{ section.settings.spacing_top }} mb-{{ section.settings.spacing_bottom }}">
+
+    {%- for block in section.blocks -%}
+        <div class="hero__banner-section{% if block.settings.overlay %} hero__banner--overlay{% endif %}">
+
+            {%- liquid
+                assign image_class = ''
+                if block.settings.video_filename != ''
+                    if block.settings.video_filename_mobile
+                        assign video_url = block.settings.video_filename_mobile | file_url
+                        render 'video', url: video_url, class: 'hide--above-tablet'
+                        assign image_class = 'hide--tablet'
+                    endif
+                    assign video_url = block.settings.video_filename | file_url
+                    render 'video', url: video_url, class: image_class
+                else
+                    if block.settings.background_mobile
+                        echo block.settings.background_mobile | image_url: width: 1200 | image_tag: preload: true, class: 'hide--above-tablet'
+                        assign image_class = 'hide--tablet'
+                    endif
+                    if block.settings.background
+                        echo block.settings.background | image_url: width: 2560 | image_tag: preload: true, class: image_class
+                    endif
+                endif
+            -%}
+
+            <div class="hero-banner__container px-md px-xl--above-tablet
+                flex text-align-center f-center--tablet  text-align-center--tablet">
+                <div class="hero-banner__content" data-sal="slide-up">
+                    
+                    {% if block.settings.pre_title != '' %}
+                        <p class="hero-banner__pretitle title--sm white">{{block.settings.pre_title}}</p>
+                    {% endif %}
+                    
+                    {%- liquid
+                        assign title_class = 'hero-banner__title white mb-md'
+                        if block.settings.title != ''
+                            assign title = block.settings.title | newline_to_br
+                            render 'title', title: title, tag: block.settings.title_tag, class: title_class
+                        endif
+                    -%}
+
+                    {% if block.settings.text != '' %}
+                        <p class="hero-banner__subtitle white">{{block.settings.text}}</p>
+                    {% endif %}
+
+                    {%- liquid
+                        if block.settings.link_text != blank
+                            render 'link', style: 'button', text: block.settings.link_text, link: block.settings.link, class: 'hero-banner__cta fw-300'
+                        endif
+
+                        if block.settings.icon_link != ''
+                            assign icon_link = block.settings.icon_link | remove: '#' | prepend: '#'
+                            echo block.settings.icon | link_to: icon_link
+                        else
+                            echo block.settings.icon
+                        endif
+                    -%}
+                    
+                </div>
+            </div>
+
+            {%- liquid
+                if block.settings.link
+                    echo block.settings.link_text | link_to: block.settings.link, class: 'hero__banner__overlay-link'
+                endif
+            -%}
+        </div>
+    {%- endfor -%}
+</div>
+
+{% schema %}
+    {
+        "name": "Hero Banner",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Banner",
+                "type": "banner",
+                "limit": 2,
+                "settings": [
+                    {
+                        "type": "text",
+                        "id": "pre_title",
+                        "label": "Pre Title"
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "title",
+                        "label": "Title"
+                    },
+                    {
+                        "type": "text",
+                        "id": "text",
+                        "label": "Text"
+                    },
+                    {
+                        "type": "select",
+                        "id": "title_tag",
+                        "label": "Title tag",
+                        "options": [
+                            {
+                                "value": "h1",
+                                "label": "h1"
+                            },
+                            {
+                                "value": "h2",
+                                "label": "h2"
+                            },
+                            {
+                                "value": "h3",
+                                "label": "h3"
+                            },
+                            {
+                                "value": "h4",
+                                "label": "h4"
+                            }
+                        ],
+                        "default": "h2"
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "icon",
+                        "label": "Icon",
+                        "info": "SVG"
+                    },
+                    {
+                        "type": "text",
+                        "id": "icon_link",
+                        "label": "Icon link",
+                        "info": "Enter the ID of the section you want this icon to link to."
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "background",
+                        "label": "Background"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "background_mobile",
+                        "label": "Mobile background"
+                    },
+                    {
+                        "type": "text",
+                        "id": "video_filename",
+                        "label": "Video file name",
+                        "info": "Upload a video (mp4) to files, and enter the file name here."
+                    },
+                    {
+                        "type": "text",
+                        "id": "video_filename_mobile",
+                        "label": "Mobile video file name",
+                        "info": "Upload a video (mp4) to files, and enter the file name here."
+                    },
+                    {
+                        "type": "header",
+                        "content": "Button"
+                    },
+                    {
+                        "type": "text",
+                        "id": "link_text",
+                        "label": "Text"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "Link"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Design"
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "overlay",
+                        "label": "Enable gradient overlay",
+                        "default": false
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Hero Banner",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

@@ -1,0 +1,171 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:35+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            d3f9e26cdd961574090b25d1b5dc71ad
+//      Signature:      eyJpdiI6Ijh3clJzakhLMzdMaTZUakhEOGZBZEE9PSIsInZhbHVlIjoic2tBOFJBdXpiWlVpV2lTOXRISkVDRTNMN0NqRDJ4dDBmakxHcFViZkhKY1wvYUhUWVB1cGRBUms3ZzBtZ0x3Y3UwZm1QN3pOUGZySDM3RE1CaklwdTBTNmlHR09vcTJSNVNTZEoyRXR0eXR0Uk5wQmQ3bmxNc3NZYzVLV0s2Q25JS1VGXC9FQ1lIZzNJU0tlNElYVUd0UTcwdGt6MnU5UTU4dUxwRGpiZzk1cG12UnlaRjl1R0xKd1wvamw3dnNVZzF6MmNmZXVMWHNERjhRNHI1R1hKcURNVTVkc2hGbmpqOGlJMVNNSE04SllcL0pHY0ljTVpWUmtEUjI2a1ZCeGNBd09MZkhMemUxejZUYVM5VFFTWjgwdGY0OHlZbHB1MGpEcmliS3Y4MWdvSXdqa0NOK3diTUpJcllmS1doaTdoaStnM1RudERsZVNhZEd2MXo2SENsT2Y3bEdwNFNyc0g5S01Hb3pmR1NmRUNZVmhFbDA3WjVzcXJ2YVVBZVltNDM1ZEx2cVpKZ0hWVHlFbUNYTU1cL053b0FBPT0iLCJtYWMiOiI2NzMzZmM2NWVmOWU0N2MxMDc3OTllNjdjMzBmNWQ1Mjk0NWM0YTY1MTUyODE2NGM3Y2VhYzg3NTNmOTNlYmRjIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<section class="image-slider container mt-{{ section.settings.spacing_top }} mb-{{ section.settings.spacing_bottom }}">
+
+    {%- render 'section__header', title: section.settings.title, title_tag: section.settings.title_tag, title_dash: true -%}
+
+    {%- if section.blocks.size > 0 -%}
+
+        <div class="image-slider__images" data-flickity='{"cellAlign": "left", "contain": true, "prevNextButtons": false, "pageDots": false, "freeScroll": true{% if section.blocks.size > 4 %}, "wrapAround": true, "autoPlay": 2000, "pauseAutoPlayOnHover": false, "friction": 0.25, "selectedAttraction": 0.0001{% endif %}}'>
+
+                {%- liquid
+                    for block in section.blocks
+                        echo block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'mx-sm'
+                    endfor
+                -%}
+
+            </div>
+        </div>
+
+    {%- endif -%}
+
+</section>
+    
+{% schema %}
+    {
+        "name": "Image Slider",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "select",
+                "id": "title_tag",
+                "label": "Title tag",
+                "options": [
+                    {
+                        "value": "h1",
+                        "label": "h1"
+                    },
+                    {
+                        "value": "h2",
+                        "label": "h2"
+                    },
+                    {
+                        "value": "h3",
+                        "label": "h3"
+                    },
+                    {
+                        "value": "h4",
+                        "label": "h4"
+                    }
+                ],
+                "default": "h2"
+            },
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    },
+                    {
+                        "value": "xxl",
+                        "label": "XX Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    },
+                    {
+                        "value": "xxl",
+                        "label": "XX Large"
+                    }
+                ],
+                "default": "0"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Image",
+                "type": "image",
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Image"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Image Slider",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

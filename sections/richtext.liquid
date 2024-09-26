@@ -1,0 +1,288 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:50+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            9302bf1beb91fc3b9e4f94f6072f5c26
+//      Signature:      eyJpdiI6IlFUaGpUd3FzOFJqaENJNFBpUTNrZ2c9PSIsInZhbHVlIjoiOXpPNVJqbFNKd2hEWlgrbVI4XC9XWEcwWmtscHRuSU51QWs0Z29XZmVPdTdPZERLS2hNb212c0N2Yys0MWxjb1FsbDRYNXJBTjlON2dnSWR3SHM3N3pcL3V6c01zYjNwaDhtTm13NFFob0pXVjFJUmlcL3VvNmg5bTh3a3BUcVJhVDNWa2ZEcDVBTDFBUU5cL05BN3B0b1wvZHZMY3JvMHZXeEhcL3NaRG9aa3lwa1wvalNZZzh3QW5iaExWUGVpUkNvTDV2VXJFUkVYd0xuUkNIcEhHb3lXcTNxYzgzNEVYZHp6QlFlVGd6TUxUUUpcL2pYa1wvbUZLb2dEK25ETGJXbng1UXd3VjFCWG9IMVgyZytZUWtydEkwWWRCdDdWcHUwZ2pQTForSlNNVU9lbnFoRTdoMm9VMVJORXFhQmFlam0yU2dzTVBkR2VhSm5iUnVQRWN2TEJCWFMydEl1MmYxUCtTZ0U4NWpjc1M2R1hCdkhzcTdVWkVrUGtrXC8rcU9XTFp2a2tNdnB1V3h5K2tONmtobzNDOFFYWGE5dkE9PSIsIm1hYyI6IjY2ZjY2NGNlODU3Y2I5NWMyYTA5NTU5MmQxNDJiMGI3YzZjMWFhNWMxN2EwNDM4NGYxZWM4YmUwODNhYjQyZWIifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign section_id = 'shopify-section-' | append: section.id
+-%}
+<div {% if section.settings.id != '' %}id="{{ section.settings.id }}"{% endif %}
+    class="container{% if section.settings.width %}--sm{% endif %}
+    mt-{{ section.settings.spacing_top }} mb-{{ section.settings.spacing_bottom }}
+    {% if section.settings.spacing_top_tablet != '' %}mt-{{ section.settings.spacing_top_tablet }}--tablet{% endif %}
+    {% if section.settings.spacing_bottom_tablet != '' %}mb-{{ section.settings.spacing_bottom_tablet }}--tablet{% endif %}">
+
+    {%- style -%}
+    #{{ section_id }} {
+        padding-top: {{ section.settings.custom_spacing }}px;
+        padding-bottom: {{ section.settings.custom_spacing }}px;
+    }
+    @media screen and (max-width: 768px) {
+        #{{ section_id }} {
+            padding-top: {{ section.settings.custom_spacing_tablet }}px;
+            padding-bottom: {{ section.settings.custom_spacing_tablet }}px;
+        }
+    }
+    {%- endstyle -%}
+
+    {%- liquid
+        if section.settings.title != empty
+            assign title_class = 'title--lg color-links'
+            if section.settings.content != empty or section.settings.link_text != empty
+                assign title_class = title_class | append: ' mb-lg'
+            endif
+            render 'title', title: section.settings.title, tag: section.settings.title_tag, class: title_class
+        endif
+        if section.settings.content != empty
+            render 'richtext', content: section.settings.content
+        endif
+        if section.settings.link_text != empty
+            render 'link', style: 'button--light', text: section.settings.link_text, link: section.settings.link
+        endif
+    -%}
+
+</div>
+
+{% schema %}
+    {
+        "name": "Rich Text",
+        "class": "text-align-center my-0",
+        "settings": [
+            {
+                "type": "text",
+                "id": "id",
+                "label": "Section ID"
+            },
+            {
+                "type": "richtext",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "select",
+                "id": "title_tag",
+                "label": "Title tag",
+                "options": [
+                    {
+                        "value": "h1",
+                        "label": "h1"
+                    },
+                    {
+                        "value": "h2",
+                        "label": "h2"
+                    },
+                    {
+                        "value": "h3",
+                        "label": "h3"
+                    },
+                    {
+                        "value": "h4",
+                        "label": "h4"
+                    }
+                ],
+                "default": "h2"
+            },
+            {
+                "type": "richtext",
+                "id": "content",
+                "label": "Content"
+            },
+            {
+                "type": "header",
+                "content": "Button"
+            },
+            {
+                "type": "text",
+                "id": "link_text",
+                "label": "Text"
+            },
+            {
+                "type": "url",
+                "id": "link",
+                "label": "Link"
+            },
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "checkbox",
+                "id": "width",
+                "label": "Smaller width",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "lg"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "lg"
+            },
+            {
+                "type": "number",
+                "id": "custom_spacing",
+                "label": "Custom vertical spacing",
+                "default": 0
+            },
+            {
+                "type": "header",
+                "content": "Layout - Mobile"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top_tablet",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "lg"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom_tablet",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "lg"
+            },
+            {
+                "type": "number",
+                "id": "custom_spacing_tablet",
+                "label": "Custom vertical spacing",
+                "default": 0
+            }
+        ],
+        "presets": [
+            {
+                "name": "Rich Text",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

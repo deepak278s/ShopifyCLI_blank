@@ -1,0 +1,108 @@
+{% if section.settings.image != blank %}
+<div class="grid-shop-look__wrapper border-top border-bottom">
+    <div class="grid grid--2--above-tablet">
+        <div class="grid-shop-look__image-wrapper">
+            <div class="grid-shop-look__image background-image relative {% if section.settings.rounded_corners == true %}rounded-corners{% endif %}">
+                {% if section.settings.image != blank %}
+                    <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{section.settings.title}}" title="{{section.settings.title}}" />
+                {% else %}
+                    <img src="https://placehold.co/600x1200"/>
+                {% endif %} 
+            </div>
+        </div>
+        <div class="container">
+            <div class="grid-shop-look__heading px-lg pt-md pb-lg text-align-center">
+                <h2 class="md uc pt-md pb-sm fnt-sec">{{ section.settings.title }}</h2>
+                {% if section.settings.cta_text %}
+                    <a class="btn mb-md" href="{{ section.settings.cta_url }}">{{ section.settings.cta_text }}</a>
+                {% endif %}
+            </div>
+            <ul class="grid grid--2 grid--2--tablet">
+            {% for block in section.blocks %}
+                {% render 'product-item', product: block.settings.product %}
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+{% schema %}
+    {
+        "name": "2.0 Shop Look (Grid)",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Heading"
+            },
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title",
+                "default": "New in"
+            },
+            {
+                "type": "header",
+                "content": "Button"
+            },
+            {
+                "type": "url",
+                "id": "cta_url",
+                "label": "URL"
+            },
+            {
+                "type": "text",
+                "id": "cta_text",
+                "label": "Text"
+            },
+            {
+                "type": "header",
+                "content": "Image"
+            },
+            {
+                "type": "checkbox",
+                "id": "rounded_corners",
+                "label": "Rounded corners",
+                "default": false
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Product",
+                "type": "product",
+                "settings": [
+                  {
+                    "type": "product",
+                    "id": "product",
+                    "label": "Product"
+                  }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "2.0 Shop Look (Grid)",
+                "blocks": [
+                    {
+                        "type": "product"
+                    },
+                    {
+                        "type": "product"
+                    },
+                    {
+                        "type": "product"
+                    },
+                    {
+                        "type": "product"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

@@ -1,0 +1,51 @@
+<div class="container--xs py-lg">
+    <div class="footer__newsletter-container--form">
+        {% if section.settings.newsletter_heading != blank %}
+            <h4 class="fnt-sec italic sm uc fw-300 mb-sm">{{ section.settings.newsletter_heading }}</h4>
+        {% endif %}
+        {% if section.settings.newsletter_text != blank %}
+            <p>{{ section.settings.newsletter_text }}</p>
+        {% endif %}
+        {% if section.settings.newsletter_html != blank %}
+            <div class="footer__newsletter-klaviyo">
+                {% render 'newsletter-klaviyo' %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "2.0 Newsletter",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Newsletter"
+            },
+            {
+                "type": "text",
+                "id": "newsletter_heading",
+                "label": "Heading",
+                "default": "Join our mailing list"
+            },
+            {
+                "type": "textarea",
+                "id": "newsletter_text",
+                "label": "Text",
+                "default": "Get emails you’ll *actually* want to read and receive 10% off your first online order!"
+            },
+            {
+                "type": "text",
+                "id": "newsletter_html",
+                "label": "HTML Embed (Klaviyo)",
+                "info": "Copy HTML embed code from Klaviyo sign up forms and paste in there. e.g. <div class='klaviyo-form-X883Kw'></div>"
+            }
+        ],
+        "presets": [
+            {
+                "name": "2.0 Newsletter",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

@@ -1,0 +1,93 @@
+<div class="hero-banner-block__wrapper" id="{{ section.id }}">
+		<div class="hero-banner-blocks__container flex border-bottom">
+            {% for block in section.blocks %}
+			<div class="hero-banner-blocks__wrapper relative bg-grey" {{ block.shopify_attributes }}>
+                <a href="{{ block.settings.link }}">
+                    <div class="hero-banner-blocks__image background-image">
+                        {% if block.settings.image %}
+                            <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}" title="{{ block.settings.image.alt }}"/>
+                        {% else %}
+                            <img src="https://placehold.co/600x800"/>
+                        {% endif %}
+                    </div>
+                    <div class="hero-banner-blocks__text z-index--1">
+                        {% if block.settings.title %}<h2 class="title--xl mb-md {% if block.settings.description_style == 'secondary' %}fnt-sec fw-300 uc{% endif %}">{{ block.settings.title }}</h2>{% endif %}
+                        {% if block.settings.description %}<p class="fnt-sec sm uc">{{ block.settings.description }}</p>{% endif %}
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+		</div>
+</div>
+
+{% schema %}
+    {
+        "name": "2.0 Hero Banners (3)",
+        "max_blocks": 3,
+        "settings": [],
+        "blocks": [
+            {
+                "name": "Banner",
+                "type": "image",
+                "settings": [
+                    {
+                        "type": "header",
+                        "content": "Image"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Image"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Text"
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Title",
+                        "default": "Amina Muaddi"
+                    },
+                    {
+                    "type": "select",
+                    "id": "description_style",
+                    "label": "Title Font Style",
+                    "options": [
+                        {
+                            "value": "primary",
+                            "label": "Primary"
+                        },
+                        {
+                            "value": "secondary",
+                            "label": "Secondary"
+                        }
+                    ],
+                    "default": "primary"
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "description",
+                        "label": "Description",
+                        "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut bibendum ligula. Fusce sodales dictum dictum. Vestibulum venenatis nibh augue."
+                    },
+                    {
+                        "type": "header",
+                        "content": "URL"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "Link"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+            "name": "2.0 Hero Banners (3)",
+            "settings": {}
+            }
+        ]
+    }
+{% endschema %}

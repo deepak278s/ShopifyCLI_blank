@@ -1,0 +1,107 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:43+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            eb5797a350c912802d84af0d3dccf184
+//      Signature:      eyJpdiI6IjNXYkx2cklBVTZLRHB5VW92ZjhlN1E9PSIsInZhbHVlIjoiQ29qNFNPNFpleENBRW9oZjVLR2c1ZkpGUXNOWm9nQTNRNDJwUTZ3Q1wvaU5oOWo0YThHVFZLSUZKSjFjZ3c3MmJUTmxnZnY0Wm5KXC9MT0RKaWJMVDJJN0ZkU0xKYzRhdGYySHZZWE5jdDl5RDdDK0dKTnNrRWN3SkJPbGZjWVlnOGtjb0llNXAzSTRcL3lEVnpDZ1NaMkw2dkJiSEtMR1hDZTdzeklnWXpmUE9wenorNVdoWkRacEVuN2VEdWI5U3oxdGlrZlFLa242eXJaZ1pHdHZwQkI0UUtucjBJanRZcVA4bmpNbkp3b0tsa2R6dXlwQXA2ZDhaT3M1VXJiZmRkcWc0Y1lDWGMreW50OXh6ZHBtSlNHMWp3SjYzRVRTQ0VST0FSYXJ1dUFQcmhMWlphUUlwT0MxTU90RTFWVmpGejhHTUxLczdzN2hKTjJcL1hGZFlxMFwvXC9TNmo3cVpUNXVEb1FqTHZTYUdvUUNXOHdxaThlZ0xtUm5vbDh0VFpHZmtINGY2OGN6a3pSZlRiQzNyWGlBcFRVblJjZWRuWXU4MkNCTWdmN1BZYVFVVT0iLCJtYWMiOiI0N2E1ZDQxOTY4MjY3MDlmYTdjMTQ0NzU5NDQyMmYyMTM4N2QzOGM2MDczN2JkM2QzMTIxYzdlZTliZmMxYjNlIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<product-recommendations class="product-recommendations container" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4">
+
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+
+
+        <div class="flex mt-md mt-xs--tablet mb-lg f-vertical-middle f-center">
+        
+        <h2 class="sm fnt-sec uc italic heading-lined ml-xs">{{ section.settings.title }}</h2>
+    </div>
+        
+        <ul class="grid--4 grid--tablet grid--2--tablet collectionProductsGrid" role="list">
+
+            {%- liquid
+                for recommendation in recommendations.products
+                    comment
+                      <locksmith:4ce7> Code added automatically by the Locksmith app. Do not modify or remove.
+                    endcomment
+                    capture var
+                      render 'locksmith-variables', scope: 'subject', subject: recommendation, subject_parent: recommendations, variable: 'transparent'
+                    endcapture
+                    if var == "true"
+                    else
+                      continue
+                    endif
+                    comment
+                      </locksmith:4ce7> End Locksmith code block.
+                    endcomment
+                    render 'product-item', product: recommendation, tag: 'li'
+                endfor
+            -%}
+            
+        </ul>
+
+    {%- endif -%}
+
+</product-recommendations>
+
+{% javascript %}
+  class ProductRecommendations extends HTMLElement {
+    constructor() {
+      super();
+
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+
+        fetch(this.dataset.url)
+          .then(response => response.text())
+          .then(text => {
+            const html = document.createElement('div');
+            html.innerHTML = text;
+            const recommendations = html.querySelector('product-recommendations');
+            if (recommendations && recommendations.innerHTML.trim().length) {
+              this.innerHTML = recommendations.innerHTML;
+            }
+            window.sal.update()
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 200px 0px'}).observe(this);
+    }
+  }
+
+  customElements.define('product-recommendations', ProductRecommendations);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "tag": "section",
+  "class": "container",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Recommended for you",
+      "label": "Title"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,120 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:47+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            b4bec62b13097fc649c90043f2924668
+//      Signature:      eyJpdiI6IjczSTNpazNFODRwV0FYV0gwcHZsV0E9PSIsInZhbHVlIjoiUFJ1V3BWa2xYbENwbDFTVVh1OEc0REhOb05jZW5yT2ZsejI5eHdNSW5VbEJnQ0YxT3hDMUdaelkxcjZXZHRkNUhLWFwvV0JCUHMzdUp2XC9ITitJVWVRRFBzc293S3hDRXJ6bHNWNzkwY3czSlJPVGkzdHBFM0thVXhweU85YStuYnhYN3owZ0pJT1RnQW5HWGZzK04zbGdXZFVRS2ZDTSs5cEdrSGxmNkIrcDc4TjdTYmdsbm5VdHQwcDc0bUc2TXh5VFNybkJIZ2tKQ2xScUxSN2d6TzZUekx2bzB2RmJWcU9hQUFLdyt2Ym96QmdqTkFBOTVTSVgwM003NitIR28xUmFPZlhoNjhhS2FqNENPbE13MWVSbFFrOSt3Y2xzZUJTcld5WG1oVlg1VnVtbnA5a2s1dE5MNGVcLzJyXC9yYmFVdGFoMFJWOEMrc2hlTisrSVVUXC9LMmtpZ3VoWTIrMDlJNTAxN0NjOGxkV3ZiYzlBZ2hmMjRwUlRYNk43WG9GZXFQbWo5WU1Gc3dIQk9qT1MyMzczZjZRPT0iLCJtYWMiOiI5NDUzZTBjNmFhZTMxMzc0ZjkwZmE1Y2YwYTYyNmMxMjY4ZDVmZmYxZDRjZDViMzA1MTZkOTgxZmRlMTA4ODVlIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="popup-section">
+    {% if section.settings.title != blank %}
+        <h2 class="title--md mb-sm">{{section.settings.title}}</h2>
+    {% endif %}
+    <div class="popup-section__text-container flex {% if section.settings.sub_title == blank %}f-flex-end{% else%}f-space-between{% endif %}">
+        {% if section.settings.sub_title != blank %}
+            <p class="popup-section__text">{{section.settings.sub_title}}</p>
+        {% endif %}
+        {% if section.settings.button_link != blank %}
+            {%- render 'link', class: 'popup-section__viewall', style: 'button--light', text: 'View All', link: {{section.settings.button_link}}, icon: 'arrow' -%}
+        {% endif %}
+    </div>
+
+    <div class="popup-section__container flex f-space-between">
+        {%- for block in section.blocks -%}
+            {% case block.type %}
+                {% when 'collection' %}
+                <div class="popup-section__card popup-section__card--{{block.id}}">
+                    <div class="popup-section__card-image" {% if block.settings.image %}style="background-image: url({{block.settings.image | img_url: '590x'}})"{% else %}style="background-image: url({{block.settings.collection.image | img_url: '590x'}})"{% endif %}>
+                        {% if block.settings.collection.metafields.popup.homepage_badge != blank and block.settings.display_badge == true %}
+                            <span class="popup-section__card-badge">{{block.settings.collection.metafields.popup.homepage_badge}}</span>
+                        {% endif %}
+                    </div>
+                    <h3 class="popup-section__title">{{block.settings.collection.title}}</h3>
+                    {% if block.settings.description != '' %}
+                        <p class="popup-section__description">{{block.settings.description}}</p>
+                    {% endif %}
+                    {% if block.settings.cta_text != '' %}
+                        <a class="popup-section__btn btn" href="{{block.settings.collection.url}}">{{block.settings.cta_text}}</a>
+                    {% endif %}
+                </div>
+                <style>
+                    .popup-section__card--{{block.id}} .popup-section__card-badge {
+                        background-color: {{block.settings.collection.metafields.popup.homepage_badge_colour}};
+                    }
+                </style>
+            {% endcase %} 
+        {%- endfor -%}
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Homepage Popup Section",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "id": "sub_title",
+                "label": "Subtitle"
+            },
+            {
+                "type": "url",
+                "id": "button_link",
+                "label": "View All Link"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Collection",
+                "type": "collection",
+                "settings": [
+                  {
+                    "type": "collection",
+                    "id": "collection",
+                    "label": "Collection"
+                  },
+                  {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                  },
+                  {
+                    "type": "text",
+                    "id": "description",
+                    "label": "Description"
+                  },
+                  {
+                    "type": "text",
+                    "id": "cta_text",
+                    "label": "CTA Text"
+                  },
+                  {
+                    "type": "checkbox",
+                    "id": "display_badge",
+                    "label": "Display Badge?"
+                  }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Popup Section"
+            }
+        ]
+    }
+{% endschema %}

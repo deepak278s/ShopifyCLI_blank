@@ -1,0 +1,215 @@
+{%- capture section-border -%}
+{% if section.settings.border_top == true -%}border-top{%- endif %}
+{% if section.settings.border_bottom == true -%}border-bottom{%- endif %}
+{%- endcapture %}
+
+<style>
+    {% if section.settings.text_color == 'white' %}
+        #{{ section.id }} .hero-single__wrapper__text p {
+            color: #fff;
+        }
+        #{{ section.id }} .hero-single__wrapper__btn {
+            color: #fff;
+            border-color: #fff;
+        }
+        #{{ section.id }} .hero-single__wrapper__btn:hover {
+            background: none;
+        }
+    {% endif %}
+    {% if section.settings.text_position == 'bottom' %}
+        {% if section.settings.cta_text != '' %}
+        #{{ section.id }} .hero-single__wrapper__text {
+            bottom: 70px;
+            top: auto;
+        }
+        {% else %}
+        #{{ section.id }} .hero-single__wrapper__text {
+            bottom: 30px;
+            top: auto;
+        }
+        {% endif %}
+    {% endif %}
+    {% if section.settings.text_position == 'top' %}
+        #{{ section.id }} .hero-single__wrapper__text {
+            top: 30px;
+            bottom: auto;
+        }
+    {% endif %}
+    {% if section.settings.text_position_mobile == 'bottom' %}
+        {% if section.settings.cta_text != '' %}
+        @media (max-width: 768px) {
+            #{{ section.id }} .hero-single__wrapper__text {
+                bottom: 70px;
+                top: auto;
+            }
+        }
+        {% else %}
+        @media (max-width: 768px) {
+        #{{ section.id }} .hero-single__wrapper__text {
+            bottom: 30px;
+            top: auto;
+        }
+    }
+        {% endif %}
+    {% endif %}
+    {% if section.settings.text_position_mobile == 'top' %}
+    @media (max-width: 768px) {
+        #{{ section.id }} .hero-single__wrapper__text {
+            top: 30px;
+            bottom: auto;
+        }
+    }
+    {% endif %}
+</style>
+
+{%- liquid 
+    if section.settings.image_mobile != blank 
+        assign desktop_classes = 'hide--tablet'
+        assign mobile_classes = 'hide--above-tablet'
+    endif
+-%}
+
+<div class="hero-single__wrapper py-lg {{ section-border }}" id="{{ section.id }}">
+    <a href="{{ section.settings.url }}">
+        <div class="hero-single__wrapper__image background-image">
+            {% if section.settings.image %}
+                    <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.image.alt }}" title="{{ section.settings.image.alt }}" loading="lazy" class="{{ desktop_classes }}"/>
+                {% if section.settings.image_mobile != blank %}
+                    <img src="{{ section.settings.image_mobile | img_url: 'master' }}" alt="{{ section.settings.image.alt }}" title="{{ section.settings.image.alt }}" loading="lazy" class="{{ mobile_classes }}"/>
+                {% endif %}
+            {% else %}
+                <img src="https://placehold.co/1920x1200"/>
+            {% endif %}
+        </div>
+        <div class="container">
+            <div class="hero-single__wrapper__text z-index--1 fnt-sec uc title--md">
+                {% if section.settings.title %}
+                    {{ section.settings.title }}
+                {% endif %}
+            </div>
+            {% if section.settings.cta_text != '' %}
+                <a class="hero-single__wrapper__btn btn mt-md" href="{{section.settings.cta_url}}">{{section.settings.cta_text}}</a>
+            {% endif %}
+        </div>
+    </a>
+</div>
+
+{% schema %}
+    {
+        "name": "2.0 Single Image Banner",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Settings"
+            },
+            {
+                "type": "checkbox",
+                "id": "border_top",
+                "label": "Border Top",
+                "default": false
+            },
+            {
+                "type": "checkbox",
+                "id": "border_bottom",
+                "label": "Border Bottom",
+                "default": false
+            },
+            {
+                "type": "header",
+                "content": "Heading"
+            },
+            {
+                "type": "select",
+                "id": "text_position",
+                "label": "Title position (Desktop)",
+                "options": [
+                    {
+                        "value": "top",
+                        "label": "Top"
+                    },
+                    {
+                        "value": "bottom",
+                        "label": "Bottom"
+                    }
+                ],
+                "default": "top"
+            },
+            {
+                "type": "select",
+                "id": "text_position_mobile",
+                "label": "Title position (Mobile)",
+                "options": [
+                    {
+                        "value": "top",
+                        "label": "Top"
+                    },
+                    {
+                        "value": "bottom",
+                        "label": "Bottom"
+                    }
+                ],
+                "default": "top"
+            },
+            {
+                "type": "select",
+                "id": "text_color",
+                "label": "Title colour",
+                "options": [
+                    {
+                        "value": "black",
+                        "label": "Black"
+                    },
+                    {
+                        "value": "white",
+                        "label": "White"
+                    }
+                ],
+                "default": "black"
+            },
+            {
+                "type": "richtext",
+                "id": "title",
+                "label": "Title",
+                "default": "<p>Perspective / alive in wonderland</p><p>Visual overload/ mix media/ visuals competing for attention</p>"
+            },
+            {
+                "type": "header",
+                "content": "Button"
+            },
+            {
+                "type": "text",
+                "id": "cta_text",
+                "label": "Text"
+            },
+            {
+                "type": "header",
+                "content": "Image"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image (Desktop)"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_mobile",
+                "label": "Image (Mobile)"
+            },
+            {
+                "type": "header",
+                "content": "URL"
+            },
+            {
+                "type": "url",
+                "id": "url",
+                "label": "Link"
+            }
+        ],
+        "presets": [
+            {
+            "name": "2.0 Single Image Banner",
+            "settings": {}
+            }
+        ]
+    }
+{% endschema %}

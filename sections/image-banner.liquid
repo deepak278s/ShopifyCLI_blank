@@ -1,0 +1,744 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:37+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            6e4e61bcc42e637f77e7e811a44401ae
+//      Signature:      eyJpdiI6IjBMXC9TaTlSd0VLRUc3clR1bGViMVhBPT0iLCJ2YWx1ZSI6ImNpRmVrbW1uVWJYOTI2SVwvakx5WlFQU1V4SlR3cDd0RnVMZ3VVQ05mQUVtXC9VQ3NMcExoc0J2R3dyb1piYlJKMUNraDJES3h6YlZkSlNXVEgzQkJoNktJSStKaFYrT0Z3eEZlWXRRNVRkdHlCcW43XC9udlNiQTh1Q2JDVDZ3Q3VvcXVOT1wvQ2pTT3NqZjZsS3gzem9HZTdJNHBGMkkrQllvWllBaldrY1VFWEZMWVwvUzhnMERsQ09cL1o3MGpkRW81NmptRFU0N2lRVlhZVklNRmhHVEdhd05mK0JqdGU2WlwvUys4RHhcLzZaOWUwQWxSelNPamFqR1RXd3hJazZjQ3J0bWxEOGN6NVMxakNXN1U1ZWJKTGVmRVdBTDlpUnlGZHNHYUt3c3R5ajh4bDd2ZVhzRVNPNGhETVFVQmhhZ0Yzeld4UUszek14MzRNUkZpMk9PZk1reGVTODh5TXRBaTA2OXdiejhHVSs4VXgxOXVTdkwwTjV2N0dIOU1uejZqZGx2RVFxZ1BDUmN6VXpTWFFFZmUreE9mZz09IiwibWFjIjoiYzlhNWQxOWM2NzY1M2MwMTUyNWFiMGU4MWQwZjg3MTBlNWRmOTcxYWYxYTgxZjI0YjgwNGFkMWZkZjVlNDdhNyJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign gradient_blocks = section.blocks | where: 'type', 'gradient'
+    capture gradient_style
+        for block in gradient_blocks
+            echo block.settings.color | append: ' ' | append: block.settings.position | append: '%, '
+        endfor
+    endcapture
+    assign gradient_style = gradient_style | split: ', ' | join: ', '
+    assign image_blocks = section.blocks | where: 'type', 'image'
+-%}
+
+<section id="image-banner--{{ section.id }}"
+    class="image-banner
+    {{ section.settings.direction }}
+    flex--above-tablet f-vertical-middle{% if gradient_blocks.size == 0 %} bg-black{% endif %}
+    py-xl
+    mt-{{ section.settings.spacing_top }} mb-{{ section.settings.spacing_bottom }}
+    {% if section.settings.spacing_top_tablet != '' %}
+        pt-{{ section.settings.spacing_top_tablet }}--tablet
+    {% endif %}
+    {% if section.settings.spacing_bottom_tablet != '' %}
+        pb-{{ section.settings.spacing_bottom_tablet }}--tablet
+    {% endif %}">
+    {% style %}
+        #image-banner--{{ section.id }} {
+            {%- if gradient_style != '' -%}--gradient: {{ gradient_style }};{% endif %}
+            {%- if section.settings.text_color != '' -%}--color-white: {{ section.settings.text_color }};{% endif %}
+            {%- if section.settings.bg_opacity != '' -%}--opacity: {{ section.settings.bg_opacity | divided_by: 100.0 }};{% endif %}
+            {%- if section.settings.bg_rotation != '' -%}--rotation: {{ section.settings.bg_rotation }}deg;{% endif %}
+            {%- if section.settings.icon != blank %}
+                --icon-width: {{ section.settings.icon_width }}px;
+                --icon-bottom: {{ section.settings.icon_bottom }}%;
+                --icon-right: {{ section.settings.icon_right }}%;
+                --icon-x: {{ section.settings.icon_x }}%;
+                --icon-y: {{ section.settings.icon_y }}%;
+            {%- endif -%}
+        }
+        @media screen and (max-width: 768px) {
+            {%- if section.settings.icon != blank %}
+                #image-banner--{{ section.id }} {
+                    --icon-width: {{ section.settings.icon_width_tablet }}px;
+                    --icon-bottom: {{ section.settings.icon_bottom_tablet }}%;
+                    --icon-right: {{ section.settings.icon_right_tablet }}%;
+                    --icon-x: {{ section.settings.icon_x_tablet }}%;
+                    --icon-y: {{ section.settings.icon_y_tablet }}%;
+                }
+            {%- endif -%}
+            {%- if image_blocks.size > 0 -%}
+                #image-banner--{{ section.id }} .image-banner__images {
+                    transform: translateY({{ section.settings.offset_tablet }}%);
+                    margin-bottom: {{ section.settings.offset_tablet }}%;
+                }
+            {%- endif -%}
+        }
+
+    {% endstyle -%}
+    {%- if image_blocks.size > 0 -%}
+
+        <div class="image-banner__images image-banner__images--{{ section.blocks.size }}">
+            <div class="{% if section.settings.direction == '' %}pl-xl{% else %}pr-xl{% endif %}--above-tablet
+                {% if section.settings.padding_left_tablet != '' %}pl-{{ section.settings.padding_left_tablet }}--tablet{% endif %}
+                {% if section.settings.padding_right_tablet != '' %}pr-{{ section.settings.padding_right_tablet }}--tablet{% endif %}">
+
+                {%- liquid
+                    for block in image_blocks
+                        case block.type
+                            when 'image'
+                                render 'image-banner--image', block: block
+                        endcase
+                    endfor
+                -%}
+
+            </div>
+        </div>
+
+    {%- endif -%}
+
+    <div class="image-banner__content white text-align-center--tablet">
+        <div class="p-xl--above-tablet px-md--tablet mt-lg--tablet">
+
+            {%- liquid
+                if section.settings.title != ''
+                    assign title_class = 'mb-md title--' | append: section.settings.title_size
+                    render 'title', title: section.settings.title, tag: section.settings.title_tag, class: title_class
+                endif
+                if section.settings.content != ''
+                    render 'richtext', content: section.settings.content, class: 'mb-sm pb-sm'
+                endif
+                if section.settings.link_text != ''
+                    render 'link', style: link_style, text: section.settings.link_text, link: section.settings.link
+                endif
+            -%}
+            
+        </div>
+    </div>
+
+    {%- liquid
+        if section.settings.icon
+            echo section.settings.icon | image_url: width: 250 | image_tag: loading: 'lazy', class: 'image-banner__icon'
+        endif
+    -%}
+
+</section>
+    
+{% schema %}
+    {
+        "name": "Image Banner",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "select",
+                "id": "title_tag",
+                "label": "Title tag",
+                "options": [
+                    {
+                        "value": "h1",
+                        "label": "h1"
+                    },
+                    {
+                        "value": "h2",
+                        "label": "h2"
+                    },
+                    {
+                        "value": "h3",
+                        "label": "h3"
+                    },
+                    {
+                        "value": "h4",
+                        "label": "h4"
+                    }
+                ],
+                "default": "h2"
+            },
+            {
+                "type": "select",
+                "id": "title_size",
+                "label": "Title size",
+                "options": [
+                    {
+                        "value": "xs",
+                        "label": "Extra Small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "xl"
+            },
+            {
+                "type": "richtext",
+                "id": "content",
+                "label": "Content"
+            },
+            {
+                "type": "header",
+                "content": "Icon"
+            },
+            {
+                "type": "image_picker",
+                "id": "icon",
+                "label": "Icon"
+            },
+            {
+                "type": "number",
+                "label": "Icon width",
+                "id": "icon_width",
+                "default": 125
+            },
+            {
+                "type": "range",
+                "label": "Icon Position (Right)",
+                "id": "icon_right",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "label": "Icon Position (Bottom)",
+                "id": "icon_bottom",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "default": 50
+            },
+            {
+                "type": "number",
+                "label": "Icon Offset (Horizontal %)",
+                "id": "icon_x",
+                "default": 50
+            },
+            {
+                "type": "number",
+                "label": "Icon Offset (Vertical %)",
+                "id": "icon_y",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "Button"
+            },
+            {
+                "type": "text",
+                "id": "link_text",
+                "label": "Text"
+            },
+            {
+                "type": "url",
+                "id": "link",
+                "label": "Link"
+            },
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "select",
+                "id": "direction",
+                "label": "Layout direction",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Images on left"
+                    },
+                    {
+                        "value": "f-dir-reverse",
+                        "label": "Images on right"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Style"
+            },
+            {
+                "type": "color",
+                "id": "text_color",
+                "label": "Text colour"
+            },
+            {
+                "type": "range",
+                "id": "bg_opacity",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "label": "Background opacity",
+                "info": "Applied when a gradient has been applied",
+                "default": 41
+            },
+            {
+                "type": "number",
+                "id": "bg_rotation",
+                "label": "Gradient rotation",
+                "default": 262
+            },
+            {
+                "type": "header",
+                "content": "Layout - Mobile"
+            },
+            {
+                "type": "number",
+                "id": "offset_tablet",
+                "label": "Vertical offset (%)",
+                "default": 0
+            },
+            {
+                "type": "select",
+                "id": "spacing_top_tablet",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    },
+                    {
+                        "value": "xxl",
+                        "label": "XX-Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom_tablet",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    },
+                    {
+                        "value": "xxl",
+                        "label": "XX-Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "padding_left_tablet",
+                "label": "Left spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Default"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "padding_right_tablet",
+                "label": "Right spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Default"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "number",
+                "label": "Icon width (px)",
+                "id": "icon_width_tablet",
+                "default": 61
+            },
+            {
+                "type": "range",
+                "label": "Icon Position (Right)",
+                "id": "icon_right_tablet",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "label": "Icon Position (Bottom)",
+                "id": "icon_bottom_tablet",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "default": 50
+            },
+            {
+                "type": "number",
+                "label": "Icon Offset (Horizontal %)",
+                "id": "icon_x_tablet",
+                "default": 50
+            },
+            {
+                "type": "number",
+                "label": "Icon Offset (Vertical %)",
+                "id": "icon_y_tablet",
+                "default": 50
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Gradient colour",
+                "type": "gradient",
+                "limit": 3,
+                "settings": [
+                    {
+                        "type": "color",
+                        "id": "color",
+                        "label": "Colour"
+                    },
+                    {
+                        "type": "range",
+                        "id": "position",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "label": "Position",
+                        "default": 50
+                    }
+                ]
+            },
+            {
+                "name": "Image",
+                "type": "image",
+                "limit": 2,
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Image"
+                    },
+                    {
+                        "type": "range",
+                        "id": "image_span",
+                        "min": 0,
+                        "max": 24,
+                        "step": 1,
+                        "label": "Width",
+                        "default": 12
+                    },
+                    {
+                        "type": "number",
+                        "label": "Padding (Top)",
+                        "id": "padding",
+                        "default": 0
+                    },
+                    {
+                        "type": "header",
+                        "content": "Icon"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "icon",
+                        "label": "Icon"
+                    },
+                    {
+                        "type": "number",
+                        "label": "Icon width",
+                        "id": "icon_width",
+                        "default": 69
+                    },
+                    {
+                        "type": "select",
+                        "id": "icon_display",
+                        "label": "Show icon",
+                        "options": [
+                            {
+                                "value": "desktop",
+                                "label": "Desktop only"
+                            },
+                            {
+                                "value": "tablet",
+                                "label": "Mobile only"
+                            },
+                            {
+                                "value": "both",
+                                "label": "Mobile & desktop"
+                            }
+                        ],
+                        "default": "both"
+                    },
+                    {
+                        "type": "range",
+                        "label": "Icon Position (Bottom)",
+                        "id": "icon_bottom",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "default": 50
+                    },
+                    {
+                        "type": "range",
+                        "label": "Icon Position (Right)",
+                        "id": "icon_right",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "default": 50
+                    },
+                    {
+                        "type": "number",
+                        "label": "Icon Offset (Horizontal %)",
+                        "id": "icon_x",
+                        "default": 50
+                    },
+                    {
+                        "type": "number",
+                        "label": "Icon Offset (Vertical %)",
+                        "id": "icon_y",
+                        "default": 50
+                    },
+                    {
+                        "type": "header",
+                        "content": "Layout - Tablet"
+                    },
+                    {
+                        "type": "range",
+                        "id": "image_span_tablet",
+                        "min": 0,
+                        "max": 24,
+                        "step": 1,
+                        "label": "Width",
+                        "default": 12
+                    },
+                    {
+                        "type": "number",
+                        "label": "Padding (Top)",
+                        "id": "padding_tablet",
+                        "default": 0
+                    },
+                    {
+                        "type": "number",
+                        "label": "Icon width",
+                        "id": "icon_width_tablet",
+                        "default": 69
+                    },
+                    {
+                        "type": "range",
+                        "label": "Icon Position (Bottom)",
+                        "id": "icon_bottom_tablet",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "default": 50
+                    },
+                    {
+                        "type": "range",
+                        "label": "Icon Position (Right)",
+                        "id": "icon_right_tablet",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "default": 50
+                    },
+                    {
+                        "type": "number",
+                        "label": "Icon Offset (Horizontal %)",
+                        "id": "icon_x_tablet",
+                        "default": 50
+                    },
+                    {
+                        "type": "number",
+                        "label": "Icon Offset (Vertical %)",
+                        "id": "icon_y_tablet",
+                        "default": 50
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Image Banner",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

@@ -1,0 +1,392 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:33+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            8cb1a5cb39ab509990073e2c0f5e0946
+//      Signature:      eyJpdiI6IkxBMFJGQlRjSzdOZFgzUTg5b0k2ZGc9PSIsInZhbHVlIjoiVEUxSWJXV3RqUjIxOW9ZYWt2OEdxZVBwWGY4Y2dyUmw4XC9VbXFcL0ltTXpcL2JCTHhaQVB2S0tkbk9uSFVFejJGSWErclF2NHZIYXdKaWpaaTNPTSsxUFpUWFZmaHBMSTBUY1JYd3pQcndWaFpITUs2SG1wa3J5ZDc5SUNWbXVPb09oMkEwMlVZVWxLRHpRQndCblkrUkd6bWJMY2NiUUtoUXgzREUyS1RId0NNZXI1T01FYnhSOGZ2RXdyeDJpVTFqdXJUWUFUMGZKOFpSV0txYW9tbmgrVEQrR2x5SGEzazl3MFNmNVcyb00rNXVjZ1E2RlBscERwdk00dVpsbHdXKzQ3N3NUdzhuUmx0c3dhd2xuTFVaXC9TdW9lZk1PRHFYTVAwdlVlN1J4RnJrTFhMUzRPSWpQVTNFOW0weG9zbTV3ejc0bitBRE9GMUtUMEY2UXpXcG1SeHloSitFZVRRNk0xYXVnTWg3MEpkMzRnbEs2QjFqR28yV0xkRTlBRm1FS2gwWkVOakd4bVp6ZmIzZ3dTM3BsTmc9PSIsIm1hYyI6ImE5YjU1OTJmYjFjMzQxZmExMzEyYzdkOGI3MDM0MmY2YjI1NjQwZjlhMTEyZjg2NzdiYjVkYWViYmQ1Mjk0MDkifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign gradient_blocks = section.blocks | where: 'type', 'gradient'
+    capture gradient_style
+        for block in gradient_blocks
+            echo block.settings.color | append: ' ' | append: block.settings.position | append: '%, '
+        endfor
+    endcapture
+    assign gradient_style = gradient_style | split: ', ' | join: ', '
+    assign column_blocks = section.blocks | where: 'type', 'column'
+-%}
+
+{%- style -%}
+    #shopify-section-{{ section.id }} .image-columns__images {
+        {%- liquid
+            if gradient_style != ''
+                echo '--gradient:' | append: gradient_style | append: ';'
+            endif
+            if section.settings.bg_opacity != ''
+                assign bg_opacity = section.settings.bg_opacity | divided_by: 100.0
+                echo '--opacity:' | append: bg_opacity | append: ';'
+            endif
+            if section.settings.bg_rotation != ''
+                echo '--rotation:' | append: section.settings.bg_rotation | append: 'deg;'
+            endif
+            echo '--bottom:var(--space-' | append: section.settings.spacing_bottom | append: ');'
+        -%}
+    }
+    {% if section.settings.spacing_bottom_tablet != '' %}
+        @media screen and (max-width: 768px) {
+            #shopify-section-{{ section.id }} .image-columns__images {
+                --bottom: var(--space-{{ section.settings.spacing_bottom_tablet }});
+            }
+        }
+    {%- endif -%}
+{%- endstyle -%}
+
+<section class="image-columns text-align-center
+    mt-{{ section.settings.spacing_top }} mb-{{ section.settings.spacing_bottom }}
+    {% if section.settings.spacing_top_tablet != '' %}mt-{{ section.settings.spacing_top_tablet }}--tablet{% endif %}
+    {% if section.settings.spacing_bottom_tablet != '' %}mb-{{ section.settings.spacing_bottom_tablet }}--tablet{% endif %}">
+    <header class="section-header richtext-header container mb-lg mb-sm--tablet">
+
+        {%- liquid
+            if section.settings.title != ''
+                render 'title', title: section.settings.title, tag: section.settings.title_tag, class: 'title--md mb-sm color-links'
+            endif
+            if section.settings.content != ''
+                render 'richtext', content: section.settings.content
+            endif
+            if section.settings.icon
+                echo section.settings.icon | image_url: width: 200 | image_tag: loading: 'lazy', class: 'section-header__icon hide--tablet'
+            endif
+        -%}
+
+    </header>
+    <div class="image-columns__images flex f-vertical-top grid--tablet grid--2--tablet">
+
+        {%- liquid
+            for block in column_blocks
+                capture class
+                    cycle 'mt-md mt-xl--above-tablet', ''
+                endcapture
+                render 'image-column', block: block, class: class
+            endfor
+        -%}
+
+    </div>
+</section>
+
+{% schema %}
+    {
+        "name": "Image Columns",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "select",
+                "id": "title_tag",
+                "label": "Title tag",
+                "options": [
+                    {
+                        "value": "h1",
+                        "label": "h1"
+                    },
+                    {
+                        "value": "h2",
+                        "label": "h2"
+                    },
+                    {
+                        "value": "h3",
+                        "label": "h3"
+                    },
+                    {
+                        "value": "h4",
+                        "label": "h4"
+                    }
+                ],
+                "default": "h2"
+            },
+            {
+                "type": "richtext",
+                "id": "content",
+                "label": "Content"
+            },
+            {
+                "type": "image_picker",
+                "id": "icon",
+                "label": "Icon"
+            },
+            {
+                "type": "header",
+                "content": "Style"
+            },
+            {
+                "type": "range",
+                "id": "bg_opacity",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "label": "Background opacity",
+                "info": "Applied when a gradient has been applied",
+                "default": 34
+            },
+            {
+                "type": "number",
+                "id": "bg_rotation",
+                "label": "Gradient rotation",
+                "default": 270
+            },
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    },
+                    {
+                        "value": "xxl",
+                        "label": "XX Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    },
+                    {
+                        "value": "xxl",
+                        "label": "XX Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Mobile Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top_tablet",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom_tablet",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "",
+                        "label": "Match desktop"
+                    },
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": ""
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Gradient colour",
+                "type": "gradient",
+                "limit": 3,
+                "settings": [
+                    {
+                        "type": "color",
+                        "id": "color",
+                        "label": "Colour"
+                    },
+                    {
+                        "type": "range",
+                        "id": "position",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "%",
+                        "label": "Position",
+                        "default": 50
+                    }
+                ]
+            },
+            {
+                "name": "Column",
+                "type": "column",
+                "limit": 4,
+                "settings": [
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Title"
+                    },
+                    {
+                        "type": "select",
+                        "id": "title_tag",
+                        "label": "Title tag",
+                        "options": [
+                            {
+                                "value": "h1",
+                                "label": "h1"
+                            },
+                            {
+                                "value": "h2",
+                                "label": "h2"
+                            },
+                            {
+                                "value": "h3",
+                                "label": "h3"
+                            },
+                            {
+                                "value": "h4",
+                                "label": "h4"
+                            }
+                        ],
+                        "default": "h3"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "background",
+                        "label": "Background"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Button"
+                    },
+                    {
+                        "type": "text",
+                        "id": "link_text",
+                        "label": "Text"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "Link"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Image Columns",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

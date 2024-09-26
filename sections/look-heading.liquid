@@ -1,0 +1,36 @@
+<header class="section__header flex f-wrap f-vertical-bottom f-space-between mt-lg mb-md">
+    <div class="title-dash">
+        <h2 class="title--md mb-sm sal-animate" data-sal="slide-up">{{ section.settings.title }}</h2>
+        <div class="rte sal-animate" data-sal="slide-up">
+            <p>{{ section.settings.description }}</p>
+        </div>
+    </div>
+</header>
+
+{% schema %}
+    {
+        "name": "The Look - Heading",
+        "tag": "section",
+        "class": "container",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title",
+                "default": "Complete the look"
+            },
+            {
+                "type": "text",
+                "id": "description",
+                "label": "Description",
+                "default": "Recommended by our stylists"
+            }
+        ],
+        "presets": [
+            {
+                "name": "The Look - Heading",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

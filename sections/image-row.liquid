@@ -1,0 +1,118 @@
+<div class="custom-image-row__container {% if section.blocks.size > 2 %} hide--tablet{% endif %}{% if section.settings.wrap_on_line_breaks %} wrap{% endif %}">
+  {% for block in section.blocks %}
+    <div class="custom-image-row__column">
+      {% if block.settings.image_url %}
+        <div class="custom-image-row__image_block object-fit">
+          <img
+            src="{{ block.settings.image_url | img_url: 'master' }}"
+            alt="{{ block.settings.image.alt }}"
+            title="{{ block.settings.image.alt }}"
+            loading="lazy"
+          >
+        </div>
+      {% endif %}
+
+      {% if block.settings.title %}
+        <h2 class="title--xl centered">{{ block.settings.title }}</h2>
+      {% endif %}
+
+      {% if block.settings.description %}
+        <p class="fnt-sec fw-300 centered">{{ block.settings.description }}</p>
+      {% endif %}
+
+      {% if block.settings.cta_link != '' and block.settings.cta_link_text != '' %}
+        <a class="btn mt-md" href="{{ block.settings.cta_link }}">{{ block.settings.cta_link_text }}</a>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+  .custom-image-row__column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .centered {
+    text-align: center;
+  }
+  .custom-image-row__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+  }
+
+  .custom-image-row__image_block {
+    flex: 1;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+
+  .custom-image-row__image_block img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    width: 100%;
+  }
+
+  /* Conditional CSS for flex-wrap */
+  .custom-image-row__container.wrap {
+    flex-wrap: wrap;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Custom Image Row",
+  "settings": [
+    {
+      "type": "checkbox",
+      "label": "Wrap on line breaks",
+      "id": "wrap_on_line_breaks",
+      "default": false
+    }
+  ],
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "label": "Image",
+          "id": "image_url"
+        },
+        {
+          "type": "text",
+          "label": "CTA link text",
+          "id": "cta_link_text"
+        },
+        {
+          "type": "url",
+          "label": "CTA Link",
+          "id": "cta_link"
+        },
+        {
+          "type": "text",
+          "label": "Title",
+          "id": "title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Image Row",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

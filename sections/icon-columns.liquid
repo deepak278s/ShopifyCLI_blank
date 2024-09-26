@@ -1,0 +1,76 @@
+<div class="icon-columns__wrapper container text-align-center flex f-center f-wrap py-lg--tablet">
+    {% for block in section.blocks %}
+        <div class="py-lg py-sm--tablet icon-columns__block">
+            <span class="fnt-sec uc fw-300">{{ block.settings.title }}</span>
+            {% if block.settings.svg %}
+                <div class="py-md">
+                    {{ block.settings.svg }}
+                </div>
+            {% endif %}
+            <p>{{ block.settings.description }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+{% schema %}
+    {
+        "name": "Icon columns",
+        "max_blocks": 3,
+        "settings": [
+            {
+                "type": "header",
+                "content": "CTA"
+            },
+            {
+                "type": "text",
+                "id": "cta_text",
+                "label": "Text",
+                "default": "Shop the edit"
+            },
+            {
+                "type": "url",
+                "id": "url",
+                "label": "Link"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Column",
+                "type": "text",
+                "settings": [
+                    {
+                        "type": "header",
+                        "content": "Text"
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Title",
+                        "default": "Your new BFF (Best Fashion Friend)"
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "description",
+                        "label": "Description",
+                        "default": "We offer a personalised luxury shopping and styling service.  Reach out to our Personal Shoppers on WhatsApp to discover more brands and products."
+                    },
+                    {
+                        "type": "header",
+                        "content": "Icon"
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "svg",
+                        "label": "Icon (SVG)"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Icon columns",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

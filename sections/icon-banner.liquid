@@ -1,0 +1,187 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:53+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            c0ed24c9a14d05a686894a7677605e41
+//      Signature:      eyJpdiI6IjNoVTdpRkRQMzBEZFhGelJzYng5a2c9PSIsInZhbHVlIjoieG4wQTZOS3JJRnpaT0ZMdEVEa0ZwRnlGT2RPbk9UWkwwam1MTEN4OSt1UDhQUmpQMjJpNWZPWlpOcTFKRVB6UmFGUkpvQm9kWDM4ajh6MkNndFlVcXBUemJjaVwvRThsVE9uZjBcL0VoVmJ0YkFoWDZnWlFab2tScXlsMXZ1NzBSS3J6b3RLTDQ1a0pkNlVod25RRGZjcStaREl0TllKNm5xRjRudjYxQ1wvcjFJdEtyVW5ZdjJOc3VhZFBkVTdZc3JVNDlQVnI2NlNFNFFPMlVBYVAxajQ3WkdZd0ZVc1hMWE9XaFwveXp6NzlIVk9aQXhvaGdHZGhLUlphYkl5TEpGWFlxb2JtWmFKb21tZ0pnR3pwTzFcL1IrRFEycVI5SXlOSHRoajlsOVNzWWF6SldqSDZoWGdOY010MU1PUlFQWE54WXlyZWtWTnptODRWbVJySlB0b1k1cW5FTERiSFVPY1g4S0RXc1R5V05mNXBPRjBFMUZRZFpcL1V4QkUraXJ0R1wvSitra1RaSGxJZThNVnoxM0E2SGZobkE9PSIsIm1hYyI6IjhjNTAwMTc4MGRlZWFkOTg3YjI0MTAzZThmM2RmOWVlZjY4MDJlNzc2NDNmYTliN2UyZjNlOTc5MjhjNWYyM2IifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<section class="icon-banner bg-white flex--above-tablet f-equal-width--above-tablet
+    {% if section.settings.border-top %} bt-1{% endif %}{% if section.settings.border-bottom %} bb-1{% endif %}
+    mt-{{ section.settings.spacing_top }} mb-{{ section.settings.spacing_bottom }}">
+
+    {%- for block in section.blocks -%}
+
+        <div class="text-align-center py-xl--above-tablet py-lg px-md">
+
+            {%- liquid
+                if block.settings.icon
+                    echo block.settings.icon | image_url: width: 200 | image_tag: loading: 'lazy', class: 'icon-banner__icon mx-a mb-md'
+                endif
+                if block.settings.title != ''
+                    render 'title', title: block.settings.title, tag: block.settings.title_tag, class: 'title--sm mb-sm'
+                endif
+                if block.settings.content != ''
+                    render 'richtext', content: block.settings.content, class: 'mt-sm'
+                endif
+            -%}
+
+        </div>
+
+    {%- endfor -%}
+
+</section>
+
+{% schema %}
+    {
+        "name": "Icon Banner",
+        "max_blocks": 3,
+        "settings": [
+            {
+                "type": "checkbox",
+                "id": "border-top",
+                "label": "Border (Top)",
+                "default": true
+            },
+            {
+                "type": "checkbox",
+                "id": "border-bottom",
+                "label": "Border (Bottom)",
+                "default": true
+            },
+            {
+                "type": "header",
+                "content": "Layout"
+            },
+            {
+                "type": "select",
+                "id": "spacing_top",
+                "label": "Top spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            },
+            {
+                "type": "select",
+                "id": "spacing_bottom",
+                "label": "Bottom spacing",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "0"
+                    },
+                    {
+                        "value": "xs",
+                        "label": "Extra small"
+                    },
+                    {
+                        "value": "sm",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "md",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "lg",
+                        "label": "Large"
+                    },
+                    {
+                        "value": "xl",
+                        "label": "Extra Large"
+                    }
+                ],
+                "default": "0"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Icon",
+                "type": "icon",
+                "limit": 3,
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "icon",
+                        "label": "Icon"
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Title"
+                    },
+                    {
+                        "type": "select",
+                        "id": "title_tag",
+                        "label": "Title tag",
+                        "options": [
+                            {
+                                "value": "h1",
+                                "label": "h1"
+                            },
+                            {
+                                "value": "h2",
+                                "label": "h2"
+                            },
+                            {
+                                "value": "h3",
+                                "label": "h3"
+                            },
+                            {
+                                "value": "h4",
+                                "label": "h4"
+                            }
+                        ],
+                        "default": "h2"
+                    },
+                    {
+                        "type": "richtext",
+                        "id": "content",
+                        "label": "Content"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Icon Banner",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

@@ -1,0 +1,327 @@
+{% style %}
+  #recommended-product-section-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+  #recommended-product-section-{{ section.id }}{
+    padding-left:{{ section.settings.horizontal_padding_mobile }}px;
+  }
+  @media(min-width:768px){
+    #recommended-product-section-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_desktop }}px;
+    margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+    #recommended-product-section-{{ section.id }}{
+    padding-left:{{ section.settings.horizontal_padding_desktop }}px;
+  }
+  }
+  #recommended-product-section-{{ section.id }} [data-role="scroll-bar"]{
+    width: calc(100%/{{ section.settings.collection.products.length }});
+  }
+{% endstyle %}
+<section
+  class="recommended-product-slider product-recommendations"
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=10&intent=related"
+  id="recommended-product-section-{{ section.id }}"
+>
+  {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+    {% if recommendations.intent == 'related' %}
+      <div class="m-container:max-w-[1600px] m-container:mx-auto">
+        <div class="flex items-start justify-between heading-view-all">
+          <h2 class="font-gascogne-serial text-[36px] font-light leading-[110%] capitalize mb-8 text-[#222222]">
+            {{ section.settings.heading }}
+          </h2>
+        </div>
+        <div class="relative">
+          <div
+            class="keen-slider  flex flex-row {% if section.settings.collection != blank and section.settings.scroll_bar %}pb-9{% endif %}"
+            id="recommended-product-{{ section.id }}"
+          >
+            {%- for product in recommendations.products -%}
+              <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_25%]">
+                {%- render 'product-card-v2', product: product -%}
+              </div>
+            {% endfor %}
+          </div>
+          <!-- navigation Dots code Start -->
+          {% if section.settings.scroll_bar %}
+            <div
+              class="flex relative mt-9 left-0 w-[calc(100%_-_20px)] bottom-0 h-1 bg-[#F8F8F8] overflow-hidden"
+              data-role="thumbs-dots"
+            >
+              <button
+                class="bg-[#000] absolute left-[0] transition-[left] [&.active]:bg-[#000] h-full [&.active]:h-1 {% if forloop.index == 1 %} active {% endif %} focus:outline-none "
+                data-role="scroll-bar"
+              ></button>
+            </div>
+          {% endif %}
+          <!-- navigation Dots code End -->
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+</section>
+
+<script>
+  const handleIntersection = (entries, observer) => {
+    if (!entries[0].isIntersecting) return;
+
+    observer.unobserve(productRecommendationsSection);
+
+    const url = productRecommendationsSection.dataset.url;
+
+    fetch(url)
+      .then((response) => response.text())
+      .then((text) => {
+        const html = document.createElement('div');
+        html.innerHTML = text;
+        const recommendations = html.querySelector('.product-recommendations');
+
+        if (recommendations && recommendations.innerHTML.trim().length) {
+          productRecommendationsSection.innerHTML = recommendations.innerHTML;
+          initrecommendedSlider();
+          document.dispatchEvent(new CustomEvent('updateWishlistButton'));
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const productRecommendationsSection = document.querySelector('.recommended-product-slider');
+  const observer = new IntersectionObserver(handleIntersection, { rootMargin: '0px 0px 200px 0px' });
+
+  observer.observe(productRecommendationsSection);
+
+  function initrecommendedSlider() {
+    function WheelControls(slider) {
+      var touchTimeout;
+      var position;
+      var wheelActive;
+      function dispatch(e, name) {
+        position.x -= e.deltaX;
+        position.y -= e.deltaY;
+        slider.container.dispatchEvent(
+          new CustomEvent(name, {
+            detail: {
+              x: position.x,
+              y: position.y,
+            },
+          })
+        );
+      }
+      function wheelStart(e) {
+        position = {
+          x: e.pageX,
+          y: e.pageY,
+        };
+        dispatch(e, 'ksDragStart');
+      }
+      function wheel(e) {
+        if (e.deltaY == -0) {
+          dispatch(e, 'ksDrag');
+        }
+      }
+      function wheelEnd(e) {
+        dispatch(e, 'ksDragEnd');
+      }
+      function eventWheel(e) {
+        if (!wheelActive) {
+          wheelStart(e);
+          wheelActive = true;
+        }
+        wheel(e);
+        clearTimeout(touchTimeout);
+        touchTimeout = setTimeout(() => {
+          wheelActive = false;
+          wheelEnd(e);
+        }, 50);
+      }
+      slider.on('created', () => {
+        slider.container.addEventListener(
+          'wheel',
+          (e) => {
+            if (e.deltaY != -0) {
+              slider.container.removeEventListener('wheel', () => {});
+            } else {
+              eventWheel(e);
+            }
+          },
+          { passive: false }
+        );
+      });
+    }
+    let Slider = window.Slider;
+    let thumbSlider;
+    let scrollBar = document.querySelector('#recommended-product-section-{{ section.id }} [data-role="scroll-bar"]');
+    let slide = new Slider(
+      '#recommended-product-{{ section.id }}',
+      {
+        loop: true,
+        slideChanged: (s) => {
+          s.emit('slideupdated', s.track);
+        },
+        slides: {
+          perView: 1.2,
+          spacing: 2,
+        },
+        breakpoints: {
+          '(min-width: 768px)': {
+            slides: {
+              perView: 2.6,
+              spacing: 10,
+            },
+          },
+          '(min-width: 1024px)': {
+            slides: {
+              perView: 3.6,
+              spacing: 10,
+            },
+          },
+          '(min-width: 1300px)': {
+            slides: {
+              perView: 3.8,
+              spacing: 2,
+            },
+          },
+        },
+      },
+      [
+        (slider) => {
+          slider.on('created', () => {
+            if (scrollBar) {
+              let scrollBarWidth = 100 / slider.track.details.slidesLength;
+              if (scrollBarWidth > 100) {
+                scrollBar.style.display = 'none';
+                scrollBar.closest('[data-role="thumbs-dots"]').style.display = 'none';
+              } else {
+                scrollBar.style.display = 'block';
+                scrollBar.closest('[data-role="thumbs-dots"]').style.display = 'block';
+              }
+              scrollBar.style.width = `${scrollBarWidth}%`;
+            }
+          });
+          slider.on('dragged', (slide) => {
+            if (scrollBar) {
+              let kSlider = JSON.parse(JSON.stringify(slide));
+              let progress = kSlider.track.details.progress * 100;
+              if (kSlider.track.details.rel === 0) {
+                progress = 0;
+              }
+              if (kSlider.track.details.rel === kSlider.track.details.slides.length - 1) {
+                progress = 100;
+              }
+              let offsetWidth = (progress * scrollBar.getBoundingClientRect().width) / 100;
+              scrollBar.style.left = `calc(${progress}% - ${offsetWidth}px)`;
+            }
+          });
+          slider.on('slideupdated', (s) => {
+            if (scrollBar) {
+              let progress = s.track.details.progress * 100;
+              if (s.track.details.rel === 0) {
+                progress = 0;
+              }
+              if (s.track.details.rel === s.track.details.slides.length - 1) {
+                progress = 100;
+              }
+              let offsetWidth = (progress * scrollBar.getBoundingClientRect().width) / 100;
+              scrollBar.style.left = `calc(${progress}% - ${offsetWidth}px)`;
+            }
+          });
+        },
+        WheelControls,
+      ]
+    );
+  }
+</script>
+{% schema %}
+{
+  "name": "Best Sellers V2",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 49
+    },
+    {
+      "type": "checkbox",
+      "label": "Display Scroll Bar",
+      "id": "scroll_bar",
+      "default": false
+    },
+    {
+      "type": "text",
+      "label": "Heading",
+      "id": "heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "checkbox",
+      "label": "Display Button",
+      "id": "view_button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "label": "Button",
+      "id": "btn_text",
+      "default": "view all"
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_mobile",
+      "label": "Padding Left Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_desktop",
+      "label": "Padding Left Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Sellers V2",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

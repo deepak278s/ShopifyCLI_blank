@@ -1,0 +1,29 @@
+{%- if predictive_search.performed -%}
+  <div id="predictive-search-results">
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <h3 id="predictive-search-products" class="fnt-sec uc sm py-lg">Results for: {{ predictive_search.terms }}</h3>
+      <ul
+        role="listbox"
+        aria-labelledby="predictive-search-products"
+        class="grid--4 grid--2--tablet predictive-search-products__results"
+      >
+        {% assign count = 0 %}
+        {%- for product in predictive_search.resources.products -%}
+          {%- comment %}<locksmith:5b78>{%- endcomment %}
+          {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: product, subject_parent: predictive_search.resources, variable: 'transparent' %}{% endcapture -%}
+          {%- if var == 'true' %}{% else %}{% continue %}{% endif -%}
+          {%- comment %}</locksmith:5b78>{%- endcomment %}
+          {% render 'product-item', product: product %}
+          {% assign count = count | plus: 1 %}
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p class="py-lg">No "{{ predictive_search.terms }}" products found</p>
+    {%- endif -%}
+    {%- if predictive_search.resources.products.size > 4 -%}
+      {% unless count < 4 %}
+        <button class="btn mt-md" {{ count }}>View all products</button>
+      {% endunless %}
+    {% endif %}
+  </div>
+{%- endif -%}

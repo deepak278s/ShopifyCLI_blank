@@ -1,0 +1,392 @@
+{% style %}
+  
+  #search-empty_{{ section.id }} [data-role="scroll-bar"]{
+    width: calc(100%/{{ section.settings.collection.products.length }});
+  }
+{% endstyle %}
+
+
+{% render 'vite-tag' with '@modules/collection.css' %}
+{% render 'vite-tag' with '@modules/collection.js' %}
+<section>
+
+  {% if search.results.size != 0  %}
+  <div class="m-container:max-w-[1600px] m-container:mx-auto">
+    <div class="main-collection-wrapper group/collection layout-1">
+      {% assign paginate_count = section.settings.paginate_count %}
+      {% paginate search.results by paginate_count %}
+        {% render 'facet-filters-v2', paginate: paginate %}
+        {% render 'collection-product-grid-v2',
+          products: search.results,
+          metaObject: section.settings.metafield_defination,
+          card_image: section.settings.card_image,
+          card_index: section.settings.card_image_index,
+          banner_image: section.settings.banner_image,
+          banner_image_index: section.settings.banner_image_index,
+          paginate: paginate
+        -%}
+        {% render 'pagination-v2', paginate: paginate %}
+      {% endpaginate %}
+    </div>
+    {% if section.settings.bottom_text_display %}
+      {% render 'collection-footer-desc-v2', text: section.settings.bottom_text %}
+    {% endif %}
+  </div>
+
+  {% else %}
+  <div
+        class="px-5 lg:px-10 pt-8 pb-[44px] lg:pt-[96px] bg-[#fff]"
+        data-role="empty-search"
+        id="search-empty_{{ section.id }}"
+      >
+        <div class="flex flex-col items-center max-w-[574px] m-auto">
+          {% render 'icon-v2',
+            icon: 'icon-search-tilt',
+            classAttr: 'w-full h-12 max-w-[48px] mb-8'
+          %}
+        <h3 class="font-gascogne-serial text-[46px] leading-[50.6px] font-light mb-4 text-[#222222] text-center px-4">
+          {{section.settings["no-result-title"]}}
+        </h3>
+        <div data-empty="{{ section.settings.no-result-discription}}" class="font-shape text-[16px] font-light leading-[24px] text-center flex flex-col gap-3">
+          {{ section.settings.no-result-discription | replace : "**searchTerm**" , search.terms}}
+        </div>
+        <div
+          class="w-full mt-8 "
+          data-role="popular"
+        >
+        
+          
+          <div class="flex gap-[11px] overflow-y-auto md:justify-center">
+            {% for block in section.blocks %}
+              {% if block.settings.popular_search != blank %}
+                <div
+                  class="uppercase text-[11px] font-shape p-[6px_11px] leading-[22px] bg-[#F6F3EC] gap-2 h-max rounded-full whitespace-nowrap text-[#222222] cursor-pointer"
+                >
+                 <a href="/search?q={{ block.settings.popular_search }}"> {{ block.settings.popular_search }}</a>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        </div>
+          {% comment %} {%- render 'search-popup-collection-v2' -%} {% endcomment %}
+          <section class="search-sellers-slider mt-[59px] mb-[48px] lg:mt-[96px] lg:mb-[148px]" id="search-recommended-{{ section.id }}">
+            <div class="m-container:mx-auto">
+              <div class="w-full flex items-start justify-between">
+                <h2 class="w-full font-gascogne-serial text-[26px] lg:text-[36px] font-light leading-[120%] capitalize mb-6 lg:mb-8 text-[#222222]">
+                  {{ section.settings['collection-title'] }}
+                </h2>
+              </div>
+              <div class="relative">
+                <div
+                  class="keen-slider flex flex-row {% if section.settings.collection != blank and section.settings.scroll_bar %}pb-9{% endif %}"
+                  id="popular-sellers-{{ section.id }}"
+                >
+                  {% for product in collections[section.settings.collection].products limit: 10 %}
+                    <div class="keen-slider__slide flex-[0_0_100%] lg:flex-[0_0_24%] ">
+                      {%- render 'product-card-v2', product: product -%}
+                    </div>
+                  {% endfor %}
+                </div>
+                <!-- navigation Dots code Start -->
+                  {% if section.settings.collection != blank and section.settings.scroll_bar %}
+                    <div
+                      class="flex relative left-0 w-[calc(100%_-_20px)] bottom-0 h-1 bg-[#F8F8F8] overflow-hidden"
+                      data-role="thumbs-dots"
+                    >
+                      <button
+                        class="bg-[#000] absolute left-[0] transition-[left] [&.active]:bg-[#000] h-full [&.active]:h-1 {% if forloop.index == 1 %} active {% endif %} focus:outline-none "
+                        data-role="scroll-bar"
+                      ></button>
+                    </div>
+                  {% endif %}
+                  <!-- navigation Dots code End -->
+              </div>
+            </div>
+          </section>
+      </div>
+
+  {% endif %}
+
+
+  <script>
+    document.addEventListener('custom:keenLoaded', (e) => {
+      function WheelControls(slider) {
+        var touchTimeout;
+        var position;
+        var wheelActive;
+  
+        function dispatch(e, name) {
+          position.x -= e.deltaX;
+          position.y -= e.deltaY;
+          slider.container.dispatchEvent(
+            new CustomEvent(name, {
+              detail: {
+                x: position.x,
+                y: position.y,
+              },
+            })
+          );
+        }
+  
+        function wheelStart(e) {
+          position = {
+            x: e.pageX,
+            y: e.pageY,
+          };
+          dispatch(e, 'ksDragStart');
+        }
+  
+        function wheel(e) {
+          if (e.deltaY == -0) {
+            dispatch(e, 'ksDrag');
+          }
+        }
+  
+        function wheelEnd(e) {
+          dispatch(e, 'ksDragEnd');
+        }
+  
+        function eventWheel(e) {
+          if (!wheelActive) {
+            wheelStart(e);
+            wheelActive = true;
+          }
+          wheel(e);
+          clearTimeout(touchTimeout);
+          touchTimeout = setTimeout(() => {
+            wheelActive = false;
+            wheelEnd(e);
+          }, 50);
+        }
+  
+        slider.on('created', () => {
+          slider.container.addEventListener(
+            'wheel',
+            (e) => {
+              if (e.deltaY != -0) {
+                slider.container.removeEventListener('wheel', () => {});
+              } else {
+                eventWheel(e);
+              }
+            },
+            { passive: false }
+          );
+        });
+      }
+      let Slider = e.detail.slider;
+      let thumbSlider;
+      let scrollBar = document.querySelector('#search-recommended-{{ section.id }} [data-role="scroll-bar"]');
+      let slide = new Slider(
+        '#popular-sellers-{{ section.id }}',
+        {
+          loop: true,
+          slideChanged: (s) => {
+            s.emit('slideupdated', s.track);
+          },
+          slides: {
+            perView: 1.2,
+            spacing: 2,
+          },
+          breakpoints: {
+            '(min-width: 768px)': {
+              slides: {
+                perView: 2.6,
+                spacing: 10,
+              },
+            },
+            '(min-width: 1024px)': {
+              slides: {
+                perView: 3.6,
+                spacing: 10,
+              },
+            },
+            '(min-width: 1300px)': {
+              slides: {
+                perView: 3.8,
+                spacing: 2,
+              },
+            },
+          },
+        },
+        [
+          (slider) => {
+            slider.on('created', () => {
+              if (scrollBar) {
+                let scrollBarWidth = 100 / slider.track.details.slidesLength;
+                if (scrollBarWidth > 100) {
+                  scrollBar.style.display = 'none';
+                  scrollBar.closest('[data-role="thumbs-dots"]').style.display = 'none';
+                } else {
+                  scrollBar.style.display = 'block';
+                  scrollBar.closest('[data-role="thumbs-dots"]').style.display = 'block';
+                }
+                scrollBar.style.width = `${scrollBarWidth}%`;
+              }
+            });
+            slider.on('dragged', (slide) => {
+              if (scrollBar) {
+                let kSlider = JSON.parse(JSON.stringify(slide));
+                let progress = kSlider.track.details.progress * 100;
+                if (kSlider.track.details.rel === 0) {
+                  progress = 0;
+                }
+                if (kSlider.track.details.rel === kSlider.track.details.slides.length - 1) {
+                  progress = 100;
+                }
+                let offsetWidth = (progress * scrollBar.getBoundingClientRect().width) / 100;
+                scrollBar.style.left = `calc(${progress}% - ${offsetWidth}px)`;
+              }
+            });
+            slider.on('slideupdated', (s) => {
+              if (scrollBar) {
+                let progress = s.track.details.progress * 100;
+                if (s.track.details.rel === 0) {
+                  progress = 0;
+                }
+                if (s.track.details.rel === s.track.details.slides.length - 1) {
+                  progress = 100;
+                }
+                let offsetWidth = (progress * scrollBar.getBoundingClientRect().width) / 100;
+                scrollBar.style.left = `calc(${progress}% - ${offsetWidth}px)`;
+              }
+            });
+          },
+          WheelControls,
+        ]
+      );
+    });
+  </script>
+
+
+
+</section>
+{% schema %}
+{
+  "name": "Search Collection Grid",
+  "settings": [
+    {
+      "type": "range",
+      "label": "No. Of Products To Show",
+      "step": 1,
+      "min": 1,
+      "max": 50,
+      "default": 10,
+      "id": "paginate_count"
+    },
+    {
+      "type": "header",
+      "content": "No Result Found"
+    },
+    {
+      "type": "text",
+      "id": "no-result-title",
+      "label": "No Result Found",
+      "default": "No Result Found"
+    },
+    {
+      "type": "richtext",
+      "id": "no-result-discription",
+      "label": "No Result Discription",
+      "default": "<p>Search was unable to find any results for **searchTerm**, you may have typed your word incorrectly, or are being too specific.</p>",
+      "info": "if you are going to change the content make sure you will add this : for **searchTerm**,"
+    },
+    {
+      "type": "checkbox",
+      "label": "Display Scroll Bar",
+      "id": "scroll_bar",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Select Collection"
+    },
+    {
+      "type": "text",
+      "id": "collection-title",
+      "label": "Most Popular Title",
+      "default": "Our suggestions for you"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "Banner-Grid",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Add Banner Grid position"
+        },
+        {
+          "type": "image_picker",
+          "id": "Mob_image_url",
+          "label": "Mobile Image",
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "text",
+          "id": "banner-title",
+          "label": "Enter Banner Title",
+          "default": "MELISSA KAYE"
+        },
+        {
+          "type": "text",
+          "id": "banner-subdescrption",
+          "label": "Enter Banner subdescrption",
+          "default": "Modern edge to classic shapes"
+        },
+        {
+          "type": "text",
+          "id": "position",
+          "label": "Card position in grid",
+          "default":"4"
+        },
+        {
+          "type": "text",
+          "id": "btn_title",
+          "label": "Btn title",
+          "default":"Shop collection"
+        },
+        {
+          "type": "url",
+          "id": "btn_url",
+          "label": "Btn Link"
+        },
+        {
+          "type": "range",
+          "id": "span_count",
+          "label": "Column span count for image",
+          "default": 1,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "type": "header",
+          "content": "Add Banner Grid position"
+        }
+      ]
+    },
+    {
+      "type": "popular_Search",
+      "name": "Popular Search ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "popular_search",
+          "label": "Popular Search",
+          "default": "Necklaces"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

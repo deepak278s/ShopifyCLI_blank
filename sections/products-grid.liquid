@@ -1,0 +1,45 @@
+<div class="container--xs my-md article__products-grid">
+    {% if section.settings.title != blank %}
+        <h3 class="md fnt-sec uc fw-500 py-lg">{{ section.settings.title }}</h3>
+    {% endif %}
+    <ul class="grid grid--2">
+    {% for block in section.blocks %}
+        {% render 'product-item', product: block.settings.product %}
+    {% endfor %}
+    </ul>
+</div>
+
+{% schema %}
+    {
+        "name": "2.0 Products Grid",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Heading"
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Product",
+                "type": "product",
+                "settings": [
+                  {
+                    "type": "product",
+                    "id": "product",
+                    "label": "Product"
+                  }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "category": "products",
+                "name": "2.0 Products Grid",
+                "settings": {}
+            }
+        ]
+    }
+    
+    {% endschema %}
+    

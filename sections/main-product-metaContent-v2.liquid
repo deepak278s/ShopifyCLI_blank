@@ -1,0 +1,252 @@
+{% render 'vite-tag' with '@modules/product-gallery-v2.js' %}
+{% render 'vite-tag' with '@modules/product-popup-v2.js' %}
+{% style %}
+  #wishlisthero-product-page-button-container {
+    display: none !important;
+  }
+{% endstyle %}
+
+<section>
+  <div class="m-container:max-w-[1660px] m-container:mx-auto">
+    <div class="lg:grid lg:grid-cols-[1fr_0.8fr] lg:gap-[73px] lg:px-[72px]">
+      {% render 'product-gallery-v2', product: product %}
+      {% render 'product-info-metaContent-v2', product: product %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Main Product",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "vendor",
+      "name": "Vendor",
+      "settings": []
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "settings": []
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "settings": [
+        {
+          "type": "checkbox",
+          "label": "Display Sale Price",
+          "id": "sale_price"
+        }
+      ]
+    },
+    {
+      "type": "shipping_text",
+      "name": "Shipping Text",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Shipping Text",
+          "id": "shipping_text",
+          "default": "Shipping calculated at checkout."
+        }
+      ]
+    },
+    {
+      "type": "tags",
+      "name": "Tags",
+      "settings": []
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "settings": [
+        {
+          "type": "select",
+          "label": "Get Description From",
+          "id": "description_content",
+          "options": [
+            {
+              "label": "Product Description",
+              "value": "description"
+            },
+            {
+              "label": "Poduct Metafield",
+              "value": "metafield"
+            }
+          ],
+          "default": "metafield"
+        },
+        {
+          "type": "text",
+          "label": "Product description",
+          "id": "description",
+          "info": "If product description is set to metafield[Please link the dynamic content]"
+        }
+      ]
+    },
+    {
+      "type": "product_form",
+      "name": "Product Form",
+      "settings": [
+        {
+          "type": "range",
+          "label": "Level of options",
+          "id": "options_level",
+          "default": 3,
+          "min": 1,
+          "max": 3,
+          "step": 1
+        },
+        {
+          "type": "checkbox",
+          "label": "Display quantity button",
+          "id": "quantity_button",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Display size guide button",
+          "id": "size_guide",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Display add to cart button",
+          "id": "add_to_cart",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "label": "Display Notify Me Button",
+          "id": "notify_button",
+          "info": "If unchecked, Sold Out Button will be displayed"
+        },
+        {
+          "type": "url",
+          "label": "Notify Success Redirection",
+          "id": "success_redirection"
+        },
+        {
+          "type": "url",
+          "label": "Chat To Shopper Redirection",
+          "id": "shopper_link"
+        },
+        {
+          "type": "checkbox",
+          "label": "Update product gallery on variant change",
+          "id": "update_image",
+          "default": true
+        },
+        {
+          "type": "text",
+          "label": "Image update option name",
+          "id": "option_to_update",
+          "info": "This option values will be responsible for product gallery update Ex - Color",
+          "default": "Color"
+        },
+        {
+          "type": "text",
+          "label": "Out of stock title",
+          "id": "out_stock_title",
+          "default": "This item is currently out of stock"
+        },
+        {
+          "type": "richtext",
+          "label": "Out of stock description",
+          "id": "out_stock_description"
+        },
+        {
+          "type": "checkbox",
+          "label": "Complete Dispatch Message Display",
+          "id": "dispatch_message",
+          "info": "If unchecked only the number would be taken from the metafield",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "stock_text",
+      "name": "Stock Info Text",
+      "settings": [
+        {
+          "type": "checkbox",
+          "label": "Display low inverntory count",
+          "id": "low_inventory_count",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "usp",
+      "name": "USP",
+      "settings": [
+        {
+          "type": "richtext",
+          "label": "Enter USP's",
+          "id": "usp"
+        }
+      ]
+    },
+    {
+      "type": "content_tab",
+      "name": "Content Tab",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Title",
+          "id": "title"
+        },
+        {
+          "type": "richtext",
+          "label": "Enter Content",
+          "id": "content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Main Product",
+      "blocks": [
+        {
+          "type": "vendor"
+        },
+        {
+          "type": "title"
+        },
+        {
+          "type": "price"
+        },
+        {
+          "type": "shipping_text"
+        },
+        {
+          "type": "tags"
+        },
+        {
+          "type": "description"
+        },
+        {
+          "type": "product_form"
+        },
+        {
+          "type": "stock_text"
+        },
+        {
+          "type": "stock_text"
+        },
+        {
+          "type": "stock_text"
+        },
+        {
+          "type": "stock_text"
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

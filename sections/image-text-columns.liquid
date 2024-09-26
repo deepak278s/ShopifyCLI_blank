@@ -1,0 +1,170 @@
+{% assign title_icon_class = "title-icon--small icon--" | append: section.settings.icon_color %}
+{% assign no_of_blocks = 0 %}
+
+{% for block in section.blocks %}
+    {% assign no_of_blocks = forloop.length %}
+{% endfor %}
+
+<div class="popup-section image-text-columns__wrapper container py-lg mt-md">
+    {% if section.settings.title != blank %}
+        <h2 class="sm italic fnt-sec uc fw-300 ml-xs">{{section.settings.title}}</h2>
+    {% endif %}
+
+<div class="popup-section__container flex f-space-between flex-gap--30 {% if no_of_blocks > 3 %}latest-stories{% endif %}">
+        {%- for block in section.blocks -%}  
+        <div class="popup-section__card popup-section__card--{{block.id}} {% if forloop.length > 4 %}mobile__view{% endif %}">
+                    <div class="background-image relative {% unless no_of_blocks > 3 %}my-lg{% endunless %} {% if section.settings.rounded_corners == true %}rounded-corners{% endif %} image-height--large {% if block.settings.end_date != blank or block.settings.image_heading != blank %}inside-border{% endif %}">
+                    {%if block.settings.cta_url != blank %}<a href="{{block.settings.cta_url}}">{% endif %}
+                        {% if block.settings.image != blank %}
+                        <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{block.settings.heading}}" title="{{block.settings.heading}}" loading="lazy" {% if block.settings.blur_image%}class="blur-image"{% endif %}/>
+                            {% else %}
+                                <img src="https://placehold.co/600x500"/>
+                            {% endif %} 
+                            {% if block.settings.end_date != blank %}
+                                <div class="countdown-timer z-index--1 image-heading absolute fnt-sec uc title--md" data-end-date="{{ block.settings.end_date }}"></div>
+                            {% elsif block.settings.image_heading != blank %}
+                                <span class="image-heading z-index--1 absolute fnt-sec uc title--md">
+                                    {{ block.settings.image_heading }}
+                                </span>
+                            {% endif %}
+                    {%if block.settings.cta_url != blank %}</a>{% endif %}
+                    </div>
+                <div class="text__wrapper">
+                    {% if block.settings.heading %}
+                        <h3 class="mt-md mb-sm fnt-sec uc sm fw-400">{{block.settings.heading}}</h3>
+                    {% endif %}
+                    {% if block.settings.description != '' %}
+                        <p class="popup-section__description {% if block.settings.description_style == 'secondary' %}fnt-sec md fw-300{% endif %}">{{block.settings.description}}</p>
+                    {% endif %}
+                    {% if block.settings.cta_text != '' %}
+                        <a class="popup-section__btn btn mt-md" href="{{block.settings.cta_url}}">{{block.settings.cta_text}}</a>
+                    {% endif %}
+                </div>
+            </div>
+        {%- endfor -%}
+    </div>
+</div>
+
+<script> 
+</script>
+
+{% schema %}
+    {
+        "name": "2.0 Image Text Cols",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Heading"
+            },
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title",
+                "default": "New in"
+            },
+            {
+                "type": "header",
+                "content": "Image"
+            },
+            {
+                "type": "checkbox",
+                "id": "rounded_corners",
+                "label": "Rounded corners",
+                "default": true
+            }
+        ],
+        "blocks": [
+            {
+                "name": "Block",
+                "type": "block",
+                "settings": [
+                  {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                  },
+                  {
+                    "type": "checkbox",
+                    "id": "blur_image",
+                    "label": "Blur image",
+                    "default": false
+                  },
+                  {
+                    "type": "url",
+                    "id": "cta_url",
+                    "label": "URL"
+                  },
+                  {
+                    "type": "header",
+                    "content": "Text over image/Countdown"
+                  },
+                  {
+                    "type": "text",
+                    "id": "image_heading",
+                    "label": "Heading"
+                  },
+                  {
+                    "type": "text",
+                    "id": "end_date",
+                    "label": "Countdown",
+                    "info": "Enter the end date and time in the format of YYYY-MM-DD hh:mm:ss (e.g. 2023-03-31 09:00:00), where the time is in 24-hour format."
+                  },
+                  {
+                    "type": "header",
+                    "content": "Text"
+                  },
+                  {
+                    "type": "text",
+                    "id": "heading",
+                    "label": "Heading",
+                    "default": "Lorem ipsum"
+                  },
+                  {
+                    "type": "textarea",
+                    "id": "description",
+                    "label": "Description",
+                    "default": "Vestibulum suscipit, purus quis varius lacinia, urna enim tempus eros, vitae fermentum risus erat eget lacus. Aenean eget tortor vitae quis hendrerit."
+                  },
+                  {
+                    "type": "select",
+                    "id": "description_style",
+                    "label": "Description Font Style",
+                    "options": [
+                        {
+                            "value": "primary",
+                            "label": "Primary"
+                        },
+                        {
+                            "value": "secondary",
+                            "label": "Secondary"
+                        }
+                    ],
+                    "default": "primary"
+                    },
+                  {
+                    "type": "header",
+                    "content": "Button"
+                  },
+                  {
+                    "type": "text",
+                    "id": "cta_text",
+                    "label": "Text"
+                  }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "2.0 Image Text Cols",
+                "blocks": [
+                    {
+                        "type": "block"
+                    },
+                    {
+                        "type": "block"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

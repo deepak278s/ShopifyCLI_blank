@@ -1,0 +1,66 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:46+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            e42232594bfc96d49e78fedf76f0a2e1
+//      Signature:      eyJpdiI6IkhUM2drclBaMCt2R2tEU2VsM1p6YlE9PSIsInZhbHVlIjoiNTRvdmNpcmdWWDE2cXlHdVc0OXB3dG9zY1piSHVJQ0t1K2JQMlBSc0F5bUhyYVMzV2lGQzQxT3hTVHVCUTNVRVhIb25RVEw0M3YyQ3BETGJjNmFQWmJONUI0dmRCdHl6M2M3Yk04ek1GbzhybU0zcXNSTTB6RTRsOXFHb1gzTmxaRjdwWlwvYUNtWFZaUDY5WkJGc1BRa3h0VkxzRW90aGhiZVJWOU1lZW84TjE0RzZZTDJXNHZsZ3Y0UXZVdjdkcERXUmM5eXY4Z1p4TDEyOThPNUdMNnIxUFlOeUlHNmtLZVVueHA3MWtYVjlna1RYK0VtUFB0VWZ3amtxRWlWRmFUM0dBRHVVWGg3alRqRmQ5c25BUER5TEtBdHZBZ1d5dXNVQ3UxXC9KWktQN1NBZkRzeDgwZnA1V2JhOWhGVzQzTXh6UGpzYTFBbGNGQ0pjQ093MXk4ZE83Vm54R3NjMjA4dEFzeDhWeVB2UHBYTk1rNUNEVTB6MTQwcGZQMzhoamY2QjRVa1FQWGVVNXlKaHFFRXNwUkswMjNmdWJpZWFEK284K2RJS2ZYUzQwPSIsIm1hYyI6IjhhMjM4NTgwZjI1MWMwZGNlMmFlNGNhNDgwZWEwODNhZmNmZGZmYTU2OTY0N2U2YWFiMzIzZjg5NzUyNDZhZWIifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<style>
+    {%- for block in section.blocks -%}
+        {%- liquid
+            assign start_color = block.settings.color-start
+            assign end_color = block.settings.color-end | default: start_color
+        -%}
+        .product-option__{{ block.settings.filter | handleize }}--{{ block.settings.title | handleize }}:before {
+            content: '';
+            --start-color: {{ start_color }};
+            --end-color: {{ end_color }};
+        }
+    {%- endfor -%}
+</style>
+
+{% schema %}
+{
+    "name": "Option gradients",
+    "blocks": [
+        {
+            "type": "filter-color",
+            "name": "Filter colour",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "filter",
+                    "label": "Filter"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Filter value"
+                },
+                {
+                    "type": "color",
+                    "id": "color-start",
+                    "label": "Start colour"
+                },
+                {
+                    "type": "color",
+                    "id": "color-end",
+                    "label": "End colour"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,201 @@
+{%- capture section-border -%}
+{% if section.settings.border_top == true -%}border-top{%- endif %}
+{% if section.settings.border_bottom == true -%}border-bottom{%- endif %}
+{%- endcapture %}
+
+{% assign title_icon_class = "title-icon--small icon--" | append: section.settings.icon_color %}
+
+<div class="popup-section image-text-columns__wrapper container py-lg {{ section-border }}">
+{% if section.settings.title != blank %}
+<div class="flex f-vertical-middle mb-lg">
+    {% if section.settings.icon == 'bell' %}
+        {% render 'icons', icon: 'bell-icon', class: title_icon_class %}
+    {% elsif section.settings.icon == 'stars' %}
+        {% render 'icons', icon: 'stars-icon', class: title_icon_class %}
+    {% elsif section.settings.icon == 'eye' %}
+        {% render 'icons', icon: 'eye-icon', class: title_icon_class %}
+    {% endif %}
+    <h2 class="{{ section.settings.title_size }} fnt-sec uc fw-500 ml-xs">{{section.settings.title}}</h2>
+</div>
+{% endif %}
+
+<div>
+    {%- for block in section.blocks -%}  
+        {% case block.type %}
+            {% when 'block' %}
+            <div class="press__block flex py-xs f-vertical-middle">
+                <div class="fnt-sec uc fw-300 sm">{{ block.settings.publisher }}</div>
+                <div class="press__block-text lg">{{ block.settings.text }}</div>
+                <div class="fnt-sec uc fw-300 sm">{{ block.settings.month }} {{ block.settings.year }}</div>
+                <div class="fnt-sec uc fw-300 sm">{% if block.settings.url != blank %}<a class="text-link" href="{{ block.settings.url }}">Read more</a>{% endif %}</div>
+            </div>
+            {% when 'title' %}
+            <h3 class="title--md md fnt-sec uc fw-500 py-md">{{block.settings.title}}</h2>
+        {% endcase %}
+    {%- endfor -%}
+</div>
+</div>
+
+{% schema %}
+{
+    "name": "2.0 Table (List)",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Settings"
+        },
+        {
+            "type": "checkbox",
+            "id": "border_top",
+            "label": "Border Top",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "border_bottom",
+            "label": "Border Bottom",
+            "default": false
+        },
+        {
+            "type": "header",
+            "content": "Heading"
+        },
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "New in"
+        },
+        {
+        "type": "select",
+        "id": "icon",
+        "label": "Icon",
+        "options": [
+            {
+                "value": "none",
+                "label": "None"
+            },
+            {
+                "value": "bell",
+                "label": "Bell"
+            },
+            {
+                "value": "stars",
+                "label": "Stars"
+            },
+            {
+                "value": "eye",
+                "label": "Eye"
+            }
+        ],
+        "default": "bell"
+        },
+        {
+                "type": "select",
+                "id": "icon_color",
+                "label": "Icon color",
+                "options": [
+                    {
+                        "value": "blue",
+                        "label": "Blue"
+                    },
+                    {
+                        "value": "green",
+                        "label": "Green"
+                    }
+                ],
+                "default": "blue"
+            },
+        {
+            "type": "select",
+            "id": "title_size",
+            "label": "Size",
+            "options": [
+                {
+                    "value": "md",
+                    "label": "Medium"
+                },
+                {
+                    "value": "xl",
+                    "label": "Large"
+                }
+            ],
+            "default": "md"
+        }
+    ],
+    "blocks": [
+        {
+            "name": "Press",
+            "type": "block",
+            "settings": [
+                {
+                "type": "header",
+                "content": "Text"
+              },
+              {
+                "type": "text",
+                "id": "publisher",
+                "label": "Category",
+                "default": "Vogue Business"
+              },
+              {
+                "type": "text",
+                "id": "text",
+                "label": "Text",
+                "default": "Next up for Threads Styling: E-commerce and live shopping"
+              },
+            {
+                "type": "header",
+                "content": "Date"
+              },
+              {
+                "type": "text",
+                "id": "month",
+                "label": "Month",
+                "default": "April"
+              },
+              {
+                "type": "text",
+                "id": "year",
+                "label": "Year",
+                "default": "2023"
+              },
+              {
+                "type": "header",
+                "content": "Link"
+              },
+              {
+                "type": "url",
+                "id": "url",
+                "label": "URL"
+              }
+            ]
+        },
+        {
+            "name": "Title",
+            "type": "title",
+            "settings": [
+                {
+                "type": "text",
+                "id": "title",
+                "label": "Title",
+                "default": "2023"
+              }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "2.0 Table (list)",
+            "blocks": [
+                {
+                    "type": "block"
+                },
+                {
+                    "type": "block"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,827 @@
+{% render 'vite-tag' with '@modules/mini-cart-v2.js' %}
+{% style %}
+  .cart-banner{
+    background:{{ section.settings.bg_banner }};
+  }
+  mini-cart [data-role="cart-count"]{
+    display:none;
+  }
+  /* Chrome, Safari, Edge, Opera */
+  input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type='number'] {
+      -moz-appearance: textfield;
+    }
+{% endstyle %}
+
+{% if template contains 'index'
+  or template contains 'collection'
+  or template contains 'product'
+  or template contains 'cart'
+  or template contains '404'
+  or template contains 'static-page-v2'
+  or template contains 'delivery-v2'
+  or template contains 'faq-v2'
+  or template contains 'about-us-v2'
+  or template contains 'contact-v2'
+  or template contains 'our-services-v2'
+  or template contains 'careers-v2'
+  or template contains 'search'
+
+%}
+  <mini-cart
+    class="group/miniCart"
+    data-maxsku-count="{{ settings.sku_number }}"
+    data-section="{{ section.id }}"
+    data-hover="{{ section.settings.cart_hover }}"
+    data-sku-error="{{ settings.sku_error_message }}"
+  >
+    <span data-role="cart-count" class="hidden">{{ cart.item_count }}</span>
+    <div class="fixed max-h-[100vh] translate-x-full group-[&.active]/miniCart:translate-x-0 transition-transform duration-300 overflow-y-auto top-0 right-0 bg-[#fff] w-full max-w-[351px] lg:max-w-[512px] lg:w-[512px] h-full z-[1000] flex flex-col m-containerr:right-[calc(calc(100vw_-_1600px)/2)] m-containerr:translate-x-[100vw] m-containerr:duration-500">
+      <div class="flex justify-between px-4 py-6 lg:p-8 border-b-[1px] border-b-[rgba(213,_213,_213,_0.28)] relative z-[1] bg-white">
+        <h3 class="text-[26px] leading-[29px] font-gascogne-serial font-light">{{ section.settings.mini_heading }}</h3>
+        <button data-role="mini-cart-toggle">
+          {% render 'icon-v2', icon: 'icon-mini-cart-close' %}
+        </button>
+      </div>
+      {% if section.settings.banner %}
+        <div class="cart-banner py-4 px-2">
+          {% if section.settings.banner_title != blank %}
+            <p class="text-[14px] font-shape leading-[21px] font-normal text-center text-[#222222]">
+              {{ section.settings.banner_title }}
+            </p>
+          {% endif %}
+          {% if section.settings.banner_description %}
+            <p class="text-[12px] font-shape leading-[17px] text-[#868B8F] font-normal text-center tracking-[0.06px]">
+              {{ section.settings.banner_description }}
+            </p>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if cart.empty? %}
+        <div data-role="empty-cart" class="px-[22px] mt-[136px] flex flex-col items-center">
+          <span class="mb-6">{% render 'icon-v2', icon: 'icon-mini-cart-bag' %}</span>
+          {% if section.settings.empty_cart_title != blank %}
+            <h3 class="text-[26px] lg:text-[36px] font-gascogne-serial leading-[31px] lg:leading-[40px] font-light mb-4 text-center text-[#222222]">
+              {{ section.settings.empty_cart_title }}
+            </h3>
+          {% endif %}
+          {% if section.settings.empty_cart_subdesc != blank %}
+            <p class="text-[16px] font-shape font-light lg:max-w-[250px] leading-[24px] text-center text-[#222222]">
+              {{ section.settings.empty_cart_subdesc }}
+            </p>
+          {% endif %}
+          {% if section.settings.empty_button_text != blank -%}
+            <a
+              class="mt-[32px] flex justify-center w-max text-center font-shape uppercase text-[13px] bg-[#121212] py-[10.3px] min-w-[310px] text-[#fff] rounded-full font-normal"
+              href="{{ section.settings.redirection_link }}"
+            >
+              {{- section.settings.empty_button_text -}}
+            </a>
+          {%- endif %}
+        </div>
+      {% else %}
+        <div
+          data-role="cart-items"
+          class="pt-[32px] group/items relative pb-[70px] flex flex-col min-h-[248px] overflow-y-auto gap-[35px]"
+        >
+          {% for item in cart.items %}
+            {% render 'mini-cart-item-v2', item: item %}
+          {% endfor %}
+          <div
+            role="status"
+            class="fixed hidden left-0 top-0 w-full h-[100vh] group-[&.loading]/items:flex justify-center items-center bg-[rgba(0,0,0,0.2)]"
+          >
+            {% render 'icon-v2', icon: 'icon-pdp-loader', classAttr: 'absolute top-[33%]' %}
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+
+        <!-- Start You May Also Like -->
+        <div data-role="mini-recommended-product">
+          {% render 'mini-cart-recommended-product-v2' %}
+        </div>
+        <!-- End You May Also Like -->
+
+        <div data-role="cart-footer" class="z-[1] px-5 py-6 lg:p-8 border-t-[1px] mt-auto bg-[#fff] border-t-[#D5D5D5]">
+          <div class="flex justify-between">
+            <h3 class="font-shape text-[18px] leading-[22px] font-normal text-[#222222]">SUBTOTAL</h3>
+            <h3 class="font-shape text-[18px] leading-[27px] font-normal text-[#222222]">
+              {{ cart.total_price | money }}
+            </h3>
+          </div>
+          {% if section.settings.subtotal_desc != blank %}
+            <p class="text-[12px] text-[#4B5259] font-normal lg:max-w-[274px] font-shape leading-[16px] mb-[32px] mr-[37px] tracking-[0.06px]">
+              {{ section.settings.subtotal_desc }}
+            </p>
+          {% endif %}
+          <a
+            class="flex text-[13px] lg:text-[16px] font-shape font-light uppercase leading-[16px] lg:leading-[19px] border-[1px] rounded-full border-[#000] w-full text-center mb-3 py-[13px] justify-center"
+            href="/cart"
+          >
+            View Bag ({{ cart.item_count -}}
+            )
+          </a>
+          <a
+            class="text-[13px] lg:text-[16px] block font-shape font-normal uppercase leading-[16px] lg:leading-[19px] border-[1px] rounded-full bg-[#121212] text-[#fff] border-[#000] w-full text-center mb-3 py-[13px]"
+            href="/checkout"
+            >Checkout</a
+          >
+          {% if section.settings.cart_redirection != blank -%}
+            <a
+              class="font-shape text-[11px] lg:text-[13px] leading-[12px] uppercase font-normal block underline underline-offset-4 w-full text-center text-[#222222]"
+              href="{{ section.settings.cart_redirection_link }}"
+            >
+              {{- section.settings.cart_redirection -}}
+            </a>
+          {%- endif %}
+          {% if section.blocks.size > 0 %}
+            <div class="px-10 mt-6">
+              {% if section.settings.payment_text != blank %}
+                <p class="text-center text-[12px] font-normal leading-[16px] font-shape">
+                  {{ section.settings.payment_text }}
+                </p>
+              {% endif %}
+              <div class="flex gap-2 mt-3 justify-center">
+                {% for block in section.blocks %}
+                  <div>{{ block.settings.icon_svg }}</div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+    <div
+      class="group-[&.active]/miniCart:block m-containerr:max-w-[1600px] m-containerr:left-[50%] m-containerr:translate-x-[-50%] hidden fixed left-0 top-0 bg-[#000] opacity-60 w-full h-full z-[999]"
+      data-role="mini-cart-toggle"
+    ></div>
+  </mini-cart>
+{% else %}
+  <mini-cart
+    class="miniCart"
+    data-section="{{ section.id }}"
+    data-maxsku-count="{{ settings.sku_number }}"
+    data-sku-error="{{ settings.sku_error_message }}"
+  >
+    <span data-role="cart-count" class="hidden">{{ cart.item_count }}</span>
+    <div class="miniCart__wrapper">
+      <div class="miniCart_toggle">
+        <h3>{{ section.settings.mini_heading }}</h3>
+        <button data-role="mini-cart-toggle">{% render 'icon-v2', icon: 'icon-mini-cart-close' %}</button>
+      </div>
+      {% if section.settings.banner %}
+        <div class="cart-banner">
+          {% if section.settings.banner_title != blank %}
+            <p>
+              {{ section.settings.banner_title }}
+            </p>
+          {% endif %}
+          {% if section.settings.banner_description %}
+            <p class="price">
+              {{ section.settings.banner_description }}
+            </p>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if cart.empty? %}
+        <div data-role="empty-cart" class="empty-cart">
+          <span>{% render 'icon-v2', icon: 'icon-mini-cart-bag' %}</span>
+          {% if section.settings.empty_cart_title != blank %}
+            <h3>
+              {{ section.settings.empty_cart_title }}
+            </h3>
+          {% endif %}
+          {% if section.settings.empty_cart_subdesc != blank %}
+            <p>
+              {{ section.settings.empty_cart_subdesc }}
+            </p>
+          {% endif %}
+          {% if section.settings.empty_button_text != blank -%}
+            <a
+              href="{{ section.settings.redirection_link }}"
+            >
+              {{- section.settings.empty_button_text -}}
+            </a>
+          {%- endif %}
+        </div>
+      {% else %}
+        <div
+          data-role="cart-items"
+          class="miniCart-item"
+        >
+          {% for item in cart.items %}
+            {% render 'mini-cart-item-v2', item: item %}
+          {% endfor %}
+          <div
+            role="status"
+            class="miniCart-status"
+          >
+            {% render 'icon-v2', icon: 'icon-pdp-loader', classAttr: 'absolute top-[33%]' %}
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <div data-role="cart-footer" class="cart-footer">
+          <div class="cart-footer__subtotal">
+            <h3>SUBTOTAL</h3>
+            <h3>{{ cart.total_price | money }}</h3>
+          </div>
+          {% if section.settings.subtotal_desc != blank %}
+            <p class="cart-footer__subtotal_desc">
+              {{ section.settings.subtotal_desc }}
+            </p>
+          {% endif %}
+          <a
+            class="viewBag-btn"
+            href="/cart"
+            style="display:none;"
+          >
+            View Bag ({{ cart.item_count -}}
+            )
+          </a>
+          <a
+            class="checkout-btn"
+            href="/checkout"
+            >Checkout</a
+          >
+          {% if section.settings.cart_redirection != blank -%}
+            <a
+              class="continue_shop"
+              href="{{ section.settings.cart_redirection_link }}"
+            >
+              {{- section.settings.cart_redirection -}}
+            </a>
+          {%- endif %}
+          {% if section.blocks.size > 0 %}
+            <div class="payment_text">
+              {% if section.settings.payment_text != blank %}
+                <p>
+                  {{ section.settings.payment_text }}
+                </p>
+              {% endif %}
+              <div class="payment-icon">
+                {% for block in section.blocks %}
+                  <div>{{ block.settings.icon_svg }}</div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+    <div
+      class="overlay"
+      data-role="mini-cart-toggle"
+    ></div>
+  </mini-cart>
+
+  {% style %}
+    .overlay {
+      display: none;
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      background-color: #000;
+      opacity: 0.6;
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+    }
+    .miniCart.active .overlay {
+      display: block;
+    }
+    .miniCart__wrapper {
+      display: flex;
+      overflow-y: auto;
+      position: fixed;
+      top: 0;
+      right: 0;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      transition-property: transform;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 300ms;
+      transition-duration: 300ms;
+      transform: translateX(100%);
+      max-height: 100vh;
+      background: #fff;
+      max-width: 351px;
+      z-index: 1000;
+    }
+    .miniCart.active .miniCart__wrapper {
+      transform: translateX(0%);
+    }
+    .hidden {
+      display: none;
+    }
+    .miniCart_toggle {
+      display: flex;
+      position: relative;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+      justify-content: space-between;
+      background-color: #ffffff;
+      border-bottom: 1px solid rgba(213, 213, 213, 0.28);
+      z-index: 1;
+    }
+    .miniCart_toggle h3 {
+      font-size: 26px;
+      line-height: 29px;
+      font-weight: 300;
+      text-transform: capitalize;
+    }
+    .cart-banner {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    .cart-banner p {
+      font-size: 14px;
+      line-height: 21px;
+      font-weight: 400;
+      font-family: var(--secondary-font);
+      text-align: center;
+    }
+    .cart-banner p.price {
+      font-size: 12px;
+      line-height: 21px;
+      font-weight: 400;
+      font-family: var(--secondary-font);
+      color: #868b8f;
+      text-align: center;
+      letter-spacing: 0.06px;
+    }
+    .empty-cart {
+      padding: 0 22px;
+      margin-top: 136px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .empty-cart span {
+      margin-bottom: 1.5rem;
+    }
+    .empty-cart h3 {
+      font-size: 26px;
+      font-family: Gascogne Serial;
+      line-height: 29px;
+      font-weight: 300;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .empty-cart p {
+      font-size: 16px;
+      font-family: var(--secondary-font);
+      font-weight: 300;
+      line-height: 24px;
+      text-align: center;
+    }
+    .empty-cart a {
+      margin-top: 32px;
+      display: flex;
+      justify-content: center;
+      width: max-content;
+      text-align: center;
+      font-family: var(--secondary-font);
+      text-transform: uppercase;
+      font-size: 13px;
+      background-color: #000;
+      padding-top: 13px;
+      padding-bottom: 13px;
+      min-width: 308px;
+      color: #fff;
+      border-radius: 9999px;
+    }
+    .miniCart-item {
+      padding-top: 32px;
+      position: relative;
+      padding-bottom: 70px;
+      display: flex;
+      overflow-y: auto;
+      flex-direction: column;
+      /* max-height: 248px; */
+      min-height: 248px;
+      gap: 35px;
+    }
+    .miniCart-status {
+      position: fixed;
+      display: none;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+    .miniCart-item.loading .miniCart-status {
+      display: flex;
+    }
+    .cart-footer {
+      z-index: 1;
+      padding: 1.5rem 1.25rem;
+      border-top: 1px solid #d5d5d5;
+      margin-top: auto;
+      background-color: #fff;
+    }
+    .cart-footer__subtotal {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .cart-footer__subtotal h3 {
+      font-family: var(--secondary-font);
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 400;
+    }
+    .cart-footer__subtotal_desc {
+      font-size: 12px;
+      color: #4b5259;
+      font-family: var(--secondary-font);
+      line-height: 16px;
+      margin-bottom: 32px;
+      margin-right: 37px;
+    }
+    .viewBag-btn,
+    .checkout-btn {
+      font-size: 13px;
+      display: block;
+      font-family: var(--secondary-font);
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 16px;
+      border: 1px solid #000;
+      border-radius: 9999px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 0.75rem;
+      padding-top: 13px;
+      padding-bottom: 13px;
+    }
+    .checkout-btn {
+      color: #fff;
+      background-color: #121212;
+      margin-bottom: 0.75rem;
+    }
+    .continue_shop {
+      font-family: var(--secondary-font);
+      font-size: 11px;
+      line-height: 12px;
+      text-transform: uppercase;
+      font-weight: 400;
+      display: block;
+      text-decoration-line: underline;
+      text-underline-offset: 4px;
+      width: 100%;
+      text-align: center;
+    }
+    .payment_text {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+      margin-top: 1.5rem;
+    }
+    .payment_text p {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      font-family: var(--secondary-font);
+    }
+    .payment_text .payment-icon {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      justify-content: center;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .miniCart-status svg {
+      width: 2rem;
+      height: 2rem;
+      fill: #000;
+      animation: spin 1s linear infinite;
+      color: #f0f0f0;
+    }
+    /* media querry */
+    @media (min-width: 1024px) {
+      .cart-footer {
+        padding: 32px;
+      }
+      .continue_shop {
+        font-size: 13px;
+      }
+      .miniCart_toggle {
+        padding: 32px;
+      }
+      .miniCart__wrapper {
+        width: 512px;
+      }
+      .miniCart__wrapper {
+        max-width: 512px;
+      }
+      .empty-cart h3 {
+        font-size: 36px;
+        line-height: 40px;
+      }
+      .empty-cart p {
+        max-width: 308px;
+      }
+      .cart-footer__subtotal_desc {
+        max-width: 274px;
+      }
+      .viewBag-btn {
+        font-size: 16px;
+        line-height: 19px;
+      }
+      .viewBag-btn,
+      .checkout-btn {
+        font-size: 16px;
+      }
+    }
+    @media (min-width: 1600px) {
+      /* .overlay {
+        max-width: 1600px;
+        left: 50%;
+        transform: translateX(-50%);
+      } */
+    }
+  {% endstyle %}
+{% endif %}
+<script>
+  function initializeMiniCartSlider() {
+    function WheelControls(slider) {
+      var touchTimeout;
+      var position;
+      var wheelActive;
+
+      function dispatch(e, name) {
+        position.x -= e.deltaX;
+        position.y -= e.deltaY;
+        slider.container.dispatchEvent(
+          new CustomEvent(name, {
+            detail: {
+              x: position.x,
+              y: position.y,
+            },
+          })
+        );
+      }
+
+      function wheelStart(e) {
+        position = {
+          x: e.pageX,
+          y: e.pageY,
+        };
+        dispatch(e, 'ksDragStart');
+      }
+
+      function wheel(e) {
+        if (e.deltaY == -0) {
+          dispatch(e, 'ksDrag');
+        }
+      }
+
+      function wheelEnd(e) {
+        dispatch(e, 'ksDragEnd');
+      }
+
+      function eventWheel(e) {
+        if (!wheelActive) {
+          wheelStart(e);
+          wheelActive = true;
+        }
+        wheel(e);
+        clearTimeout(touchTimeout);
+        touchTimeout = setTimeout(() => {
+          wheelActive = false;
+          wheelEnd(e);
+        }, 50);
+      }
+
+      slider.on('created', () => {
+        slider.container.addEventListener(
+          'wheel',
+          (e) => {
+            if (e.deltaY != -0) {
+              slider.container.removeEventListener('wheel', () => {});
+            } else {
+              eventWheel(e);
+            }
+          },
+          { passive: false }
+        );
+      });
+    }
+    if (document.querySelector('mini-cart #best-sellers-{{ section.id }}')) {
+      //console.log('initializing slider here');
+      let slide = new Slider(
+        '#best-sellers-{{ section.id }}',
+        {
+          loop: true,
+          slides: {
+            perView: 1.2,
+            spacing: 2,
+          },
+          breakpoints: {
+            '(min-width: 768px)': {
+              slides: {
+                perView: 1.6,
+                spacing: 10,
+              },
+            },
+          },
+        },
+        [WheelControls]
+      );
+    }
+  }
+  document.addEventListener('custom:keenLoaded', initializeMiniCartSlider);
+  document.addEventListener('custom:miniCartSliderInit', initializeMiniCartSlider);
+</script>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": [
+    {
+      "type": "text",
+      "label": "Mini Cart Heading",
+      "id": "mini_heading",
+      "default": "Your Shopping Bag"
+    },
+    {
+      "type": "checkbox",
+      "label": "Display Mini Cart On Hover",
+      "id": "cart_hover",
+      "default": false
+    },
+    {
+      "type": "text",
+      "label": "Empty Mini Cart Title",
+      "id": "empty_cart_title",
+      "default": "Your Bag Is Empty"
+    },
+    {
+      "type": "textarea",
+      "label": "Empty Cart Description",
+      "id": "empty_cart_subdesc",
+      "default": "Add items to your shopping bag to check out"
+    },
+    {
+      "type": "text",
+      "label": "Empty Cart Button Text",
+      "id": "empty_button_text",
+      "default": "Start shopping"
+    },
+    {
+      "type": "url",
+      "label": "Empty Cart Redirection Link",
+      "id": "redirection_link"
+    },
+    {
+      "type": "textarea",
+      "label": "Subtotal Description",
+      "id": "subtotal_desc",
+      "default": "Shipping costs, taxes, and discount codes will be determined at the time of checkout."
+    },
+    {
+      "type": "text",
+      "label": "Cart Redirection Button Text",
+      "id": "cart_redirection",
+      "default": "CONTINUE SHOPPING"
+    },
+    {
+      "type": "url",
+      "label": "Cart Redirection Link",
+      "id": "cart_redirection_link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "label": "Payment text",
+      "id": "payment_text",
+      "default": "We accept these payment methods"
+    },
+    {
+      "type": "checkbox",
+      "label": "Show Cart Text Banner",
+      "id": "banner"
+    },
+    {
+      "type": "color",
+      "label": "Banner Background Color",
+      "id": "bg_banner",
+      "default": "#F6F3EC"
+    },
+    {
+      "type": "text",
+      "label": "Banner Title",
+      "id": "banner_title",
+      "default": "Free delivery on all uk orders over £200"
+    },
+    {
+      "type": "text",
+      "label": "Banner Description",
+      "id": "banner_description",
+      "default": "Lorem ipsum dolor sit amet consectetur"
+    },
+    {
+      "type": "header",
+      "content": "Recommended Product "
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "Show Recommended Product?",
+      "default": true
+    },
+    {
+      "type": "text",
+      "label": "Heading",
+      "id": "heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "collection",
+      "label": "Select your collection",
+      "id": "collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "payment",
+      "name": "Payment Method",
+      "settings": [
+        {
+          "type": "html",
+          "label": "Payment Icon Svg",
+          "id": "icon_svg"
+        }
+      ]
+    }
+  ],
+  "default": {}
+}
+{% endschema %}

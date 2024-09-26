@@ -1,0 +1,45 @@
+{%- if predictive_search.performed -%}
+  {%- if predictive_search.resources.products.size > 0 or predictive_search.resources.articles.size > 0 -%}
+    <div id="predictive-search-results">
+      <ul data-role="suggestion-products">
+        {%- if predictive_search.resources.products.size > 0 -%}
+          {%- for product in predictive_search.resources.products limit: 4 -%}
+            {% render 'search-popup-card-v2', searchPrd: product %}
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+      <div data-role="result-products-btn">
+        <a
+          class="text-[13px] leading-[16px] font-shape font-light border-[1px] border-[#000] rounded-full w-full lg:w-max lg:min-w-[211px] mt-6 lg:mx-auto py-[13px] uppercase flex justify-center"
+          href="/search?q={{ predictive_search.terms }}&type=product"
+          >View all results</a
+        >
+      </div>
+      <span data-role="results-products-count">{{ predictive_search.resources.products.size }}</span>
+      <ul data-role="suggestion-articles">
+        {% if predictive_search.resources.articles.size > 0 %}
+          {%- for article in predictive_search.resources.articles limit: 4 -%}
+            {% render 'search-popup-article-v2', searchArticle: article %}
+          {%- endfor -%}
+        {% endif %}
+      </ul>
+      <div data-role="result-articles-btn">
+        <a
+          class="text-[13px] leading-[16px] font-shape font-light border-[1px] border-[#222222] rounded-full w-full lg:w-max lg:min-w-[211px] mt-6 mb-[58px] lg:mb-8 lg:mx-auto py-[13px] uppercase flex justify-center"
+          href="/search?q={{ predictive_search.terms }}&type=article"
+          >View all results</a
+        >
+      </div>
+      <span data-role="results-articles-count">{{ predictive_search.resources.articles.size }}</span>
+      {% if predictive_search.resources.queries.size > 0 %}
+        <ul data-role="suggestion-text">
+          {% for query in predictive_search.resources.queries %}
+            <li class="text-[14px] font-shape font-light leading-[21px] capitalize text-[#222222]">
+              <a class="color-[#222222]" href="{{ query.url }}">{{ query.styled_text }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  {% endif %}
+{%- endif -%}

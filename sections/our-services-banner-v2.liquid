@@ -1,0 +1,159 @@
+{% style %}
+  .banner-wrapper-{{ section.id }}{
+      background-color:{{ section.settings.banner_bg }};
+  }
+  #collection-banner-{{ section.id }}{
+    margin-top:{{ section.settings.margin_top_mob }}px;
+    margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+  }
+  @media(min-width:768px){
+    #collection-banner-{{ section.id }}{
+     margin-top:{{ section.settings.margin_top_desktop }}px;
+    margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+    }
+  }
+{% endstyle %}
+
+{% assign content = false %}
+
+{% if section.settings.banner_title != blank or section.settings.banner_description != blank %}
+  {% assign content = true %}
+{% endif %}
+
+<div id="collection-banner-{{ section.id }}">
+  <div class="m-container:max-w-[1600px] m-container:mx-auto">
+    <div class=" banner-wrapper-{{ section.id }} aspect-[375/472] lg:aspect-[1440/432] flex items-end lg:items-center">
+      {% if content %}
+        <div class="flex flex-col gap-2 py-6 px-5 w-full max-w-[438px] mx-auto lg:justify-center  {% if section.settings.image == blank %} lg:flex-[0_0_100%] {% else %} lg:flex-[0_0_50%]  max-w-[520px]{% endif %} ">
+          <h2 class="font-gascogne-serial text-[36px] lg:text-[46px] font-light leading-[39.6px] lg:leading-[50.6px] capitalize text-center">
+            {{ section.settings.banner_title }}
+          </h2>
+          <p class="font-shape text-[16px] font-light leading-[21px] text-center  line-clamp-5 lg:line-clamp-4">
+            {{ section.settings.banner_description }}
+          </p>
+          {% if section.settings.cta_title != blank %}
+            <div class="text-center mt-2">
+              <a
+                href="{{ section.settings.cta_url }}"
+                class="border-[1px] border-[#121212] rounded-[20px] py-[13px] px-[32px] text-[13px] font-[400] leading-[120%] font-shape uppercase inline-block"
+              >
+                {{- section.settings.cta_title -}}
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if section.settings.image != blank %}
+        {% liquid
+          if section.index > 1
+            assign loading = 'lazy'
+          else
+            assign loading = 'eager'
+          endif
+        %}
+        <div class="hidden lg:!block {% if content %}lg:flex-[0_0_50%] {% else %} lg:flex-[0_0_100%] {% endif %}">
+          <picture>
+            <source
+              media="(max-width: 1024px)"
+              srcset="
+                {{ section.settings.image | image_url: width: 720 }} ,
+                {{ section.settings.image | image_url: width: 800 }} ,
+              "
+            >
+            {{
+              section.settings.image
+              | image_url: width: 720
+              | image_tag:
+                widths: '720,800',
+                loading: loading,
+                class: 'w-full h-full',
+                sizes: '(min-width: 1000px) 760px, (min-width: 800px) calc(100vw - 380px), (min-width: 400px) 298px, 78.75vw'
+            }}
+          </picture>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Our Service Banner V2",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "color",
+      "label": "Choose Banner Background",
+      "id": "banner_bg",
+      "default": "#F6F3EC"
+    },
+    {
+      "type": "text",
+      "label": "Enter Banner Title",
+      "id": "banner_title",
+      "default": "Our Services"
+    },
+    {
+      "type": "text",
+      "label": "Enter Banner Description",
+      "id": "banner_description",
+      "default": "Lorem ipsum dolor sit amet consectetur. In tempor placerat tempor sit sed"
+    },
+    {
+      "type": "text",
+      "label": "Enter CTA Title",
+      "id": "cta_title"
+    },
+    {
+      "type": "url",
+      "label": "Enter CTA URL",
+      "id": "cta_url"
+    },
+    {
+      "type": "image_picker",
+      "label": "Choose image",
+      "id": "image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Service Banner V2"
+    }
+  ]
+}
+{% endschema %}
