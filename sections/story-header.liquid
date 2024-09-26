@@ -1,0 +1,134 @@
+<div class="story-header__container">
+    <div class="story-header__wrapper flex">
+        {%- for block in section.blocks -%}  
+            <div class="background-image relative story-header__image">
+                {% if block.settings.image != blank %}
+                    <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{block.settings.heading}}" title="{{block.settings.heading}}" loading="lazy"/>
+                {% elsif block.settings.video != blank %}
+                    <div class="video-container">
+                        {{ block.settings.video | video_tag: image_size: '1000x', autoplay: false, loop: true, muted: true, controls: false }}
+                        <button class="play-button">{%- render 'icons', icon: 'play' -%}</button>
+                    </div>
+                {% else %}
+                    <img src="https://placehold.co/700x1200"/>
+                {% endif %} 
+            </div>
+        {%- endfor -%}
+    </div>
+</div>
+
+<script>
+    const container = document.querySelector('.story-header__wrapper');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    
+    container.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+    });
+    
+    container.addEventListener('mouseleave', () => {
+      isDown = false;
+    });
+    
+    container.addEventListener('mouseup', () => {
+      isDown = false;
+    });
+    
+    container.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 3;
+      container.scrollLeft = scrollLeft - walk;
+    });
+    
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      container.scrollLeft += e.deltaY;
+    });
+    // Play Video
+    document.addEventListener("DOMContentLoaded", function() {
+    const videoElements = document.querySelectorAll('.video-container video');
+
+    videoElements.forEach(function(video) {
+        const playButton = video.parentElement.querySelector(".play-button");
+
+        playButton.addEventListener("click", function() {
+        if (video.paused) {
+            video.play();
+            playButton.classList.add("hide");
+        } else {
+            video.pause();
+            playButton.classList.remove("hide");
+        }
+        });
+
+        video.addEventListener("click", function() {
+        if (!video.paused) {
+            video.pause();
+            playButton.classList.remove("hide");
+        }
+        });
+
+        video.addEventListener("play", function() {
+        playButton.classList.add("hide");
+        });
+
+        video.addEventListener("pause", function() {
+        playButton.classList.remove("hide");
+        });
+    });
+    });
+
+
+</script>
+
+{% schema %}
+{
+    "name": "2.0 Story Image Carousel",
+    "settings": [],
+    "blocks": [
+        {
+            "name": "Block",
+            "type": "block",
+            "settings": [
+              {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+              },
+              {
+                "type": "video",
+                "id": "video",
+                "label": "Video"
+              }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "2.0 Story Image Carousel",
+            "blocks": [
+                {
+                    "type": "block"
+                },
+                {
+                    "type": "block"
+                },
+                {
+                    "type": "block"
+                },
+                {
+                    "type": "block"
+                },
+                {
+                    "type": "block"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

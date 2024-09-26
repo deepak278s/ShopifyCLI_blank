@@ -1,0 +1,165 @@
+{% comment %} Check Product Tags to define the right Navigation (based on brand) {% endcomment %}
+{% assign product_tags = product.tags | split: ',' | join: ',' %}
+{% if product_tags contains 'THREADSGEN' %}
+    {% assign gen_product = true %}
+{% elsif product_tags contains 'NON-TSC' %}
+    {% assign jewellery_product = true %}
+{% elsif product_tags contains 'TSC' %}
+    {% assign tsc_product = true %}
+{% endif %}
+
+
+<div class="container flex f-vertical-center f-center text-align-center site-announcement-bar">
+    <div id="close-icon">
+        {%- render 'icons', icon: 'close' -%}
+    </div>
+<div class="site-announcement-bar__announcement flex f-center f-vertical-center">
+            {%- for block in section.blocks -%}
+                {% comment %} Message Section {% endcomment %}
+                {% capture message %}
+                    {% if block.settings.url != blank %}<a href="{{ block.settings.url }}" {% if block.settings.klaviyo_form == true %}class="klaviyo_form_trigger"{% endif %}>{% endif %}
+                        <span class="py-sm block fnt-sec uc fw-300 sm mx-sm px-xs">{{ block.settings.title }}</span>
+                    {% if block.settings.url != blank %}</a>{% endif %}
+                {% endcapture %}
+
+                {% comment %} TSC {% endcomment %}
+                {% if template.suffix contains 'tsc' or collection.metafields.custom.navigation == 'tsc' or tsc_product == true %}
+                    {% if block.settings.brand == 'tsc' %}
+                        {{ message }}
+                    {% endif %}
+                {% comment %} Gen {% endcomment %}
+                {% elsif template.suffix contains 'gen-' or collection.metafields.custom.navigation == 'gen' or gen_product == true %}
+                    {% if block.settings.brand == 'gen' %}
+                        {{ message }}
+                    {% endif %}
+                {% comment %} Jewellery {% endcomment %}
+                {% elsif template.suffix contains 'jewellery' or collection.metafields.custom.navigation == 'jewellery' or jewellery_product == true %}
+                    {% if block.settings.brand == 'jewellery' %}
+                        {{ message }}
+                    {% endif %}
+                {% comment %} Home {% endcomment %}
+                {% else %}
+                    {% if block.settings.brand == 'home' %}
+                        {{ message }}
+                    {% endif %}
+                {% endif %}
+            {%- endfor -%}
+        </div>
+</div>
+
+
+
+<script type="text/javascript">
+    const announcementBar = document.querySelector(".site-announcement-bar");
+    const closeIcon = document.getElementById("close-icon");
+
+    // Display klaviyo form
+    // Check if .klaviyo_form_trigger exists
+    var klaviyoFormTrigger = document.querySelector('.klaviyo_form_trigger');
+    if (klaviyoFormTrigger) {
+        // Add click event listener to .klaviyo_form_trigger
+        klaviyoFormTrigger.addEventListener('click', function(event) {
+            event.preventDefault();
+            console.log('clicked announcement bar');
+            var _klOnsite = window._klOnsite || [];
+            _klOnsite.push(['openForm', 'QP7AbP']);
+        });
+    }
+
+    // Cookie functions
+    function setCookie( c_name, value, exdays ) {
+        var c_value = escape(value);
+        if (exdays) {
+            var exdate = new Date();
+            exdate.setDate( exdate.getDate() + exdays );
+            c_value += '; expires=' + exdate.toUTCString();
+        }
+        document.cookie = c_name + '=' + c_value;
+    }
+
+    function getCookie( c_name ) {
+        var i, x, y, cookies = document.cookie.split( ';' );
+
+        for ( i = 0; i < cookies.length; i++ ) {
+            x = cookies[i].substr( 0, cookies[i].indexOf( '=') );
+            y = cookies[i].substr( cookies[i].indexOf( '=') + 1 );
+            x = x.replace( /^\s+|\s+$/g, '' );
+
+            if ( x === c_name ) {
+                return unescape( y );
+            }
+        }
+    }
+
+    // Check cookie (if geolocation popup was shown before)
+    if (getCookie('announcementbar_cookie')) {
+        announcementBar.style.display = "none";
+    }
+
+    // Hide announcement bar on click and add to cookie
+    closeIcon.addEventListener("click", function() {
+        announcementBar.style.display = "none";
+        setCookie('announcementbar_cookie', 'hide', 1);
+    });
+
+</script>
+
+{% schema %}
+{
+    "name":"Announcement Bar",
+    "blocks":[
+        {
+            "type": "standard",
+            "name": "Message (text + link)",
+            "settings":[
+                {
+                    "type": "radio",
+                    "id": "brand",
+                    "label": "Brand",
+                    "options": [
+                        {
+                        "value": "home",
+                        "label": "Global"
+                        },
+                        {
+                        "value": "jewellery",
+                        "label": "Jewellery"
+                        },
+                        {
+                        "value": "gen",
+                        "label": "Gen"
+                        },
+                        {
+                        "value": "tsc",
+                        "label": "TSC"
+                        }
+                    ],
+                    "default": "jewellery"
+                },
+                {
+                    "type": "header",
+                    "content": "Content"
+                },
+                {
+                    "type": "textarea",
+                    "id": "title",
+                    "label": "Title"
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "Link",
+                    "info": "Link this bar to another page"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "klaviyo_form",
+                    "label": "Open Klaviyo form",
+                    "default": false,
+                    "info": "If ticked, this will open Klaivyo pop up form on click (Klaviyo form id: QP7AbP)"          
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,76 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:54+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            02be2e70a576ad71114c6ac2764ca40a
+//      Signature:      eyJpdiI6IkwxMFZUXC9teVB0REhmR1FsSGI0d0VBPT0iLCJ2YWx1ZSI6Im55RE13bndhVTR1Slwva08rZlwvU3kxek5xdnZSV1pGaG1kMW9yYk5ZZ0xlOU5uTDNFemp6N2hcL3c4VTEzbjRicTU2VUQ0ZUNtN0hTOStBVjltSHUycG9NYVYyenppQWRmbldiME9sbHNpa0JRMDNGdGpRWVBKQWg3OEtsNFNyeksyRFpQYnEyTFZIclFMYkJHY1hwUWp1NVwvdEt5QllkZVg4VlpEUk1OWEhQV3hyakpwWVVcL1dRQjBZYnhQOUxzNDVJdk1KNzI3UEhtejc1cVIwNU9iTXdcL00yemJRSk1BY3ZmcitIcTRlcnVvTklSNkljbHJic05sa1FDNGp0NTQyTHVnYUdaajMyZmZwNG5SUGRkeExcL2ZSMXBOTkNNdFluV0phaUp6andkZ3Q1OURYZ1dtWjZhN2l0a2dCNXQrTzFsMFV2VVBMSDM3bm9NbXBWaUhLdEdEdEtUV2U3TGs3RnVkUUtsSUwySzRcL3I1OWdZdWc1ZFRCQjZEbGplZlFoUWJXcHpkZ1VhVzBWNTJhc0Q5dnFYMDBHbHY1ZFdCU21zdkdrdFg1aU9JekZuZz0iLCJtYWMiOiIyOTFlNmYwOWMzM2MzMmY1MzliYzMyNjdjNmYzNjFkMzVlMzYzMTMyZDJjYjg0MmJmN2I4Y2JmY2VmZDBkZGFmIn0=
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<div class="container pb-md">
+    {%- paginate collection.products by section.settings.paginate_by -%}
+        <p class="collection__product-count fnt-sec xs pb-sm mb-sm text-align-center--tablet">
+            {%- liquid
+                assign current_shown = paginate.current_offset | plus: collection.products.size
+                if current_shown == paginate.items
+                    echo 'collections.general.items_count_simple' | t: count: current_shown
+                else
+                    echo 'collections.general.items_with_count' | t: product_count: current_shown, count: paginate.items
+                endif
+            -%}
+        </p>
+
+        {%- render "collection-active-filters" -%}
+
+        <ul class="collection__product-grid grid--4 grid--2--tablet">
+            {%- liquid
+                for product in collection.products
+                    comment
+                      <locksmith:3c4a> Code added automatically by the Locksmith app. Do not modify or remove.
+                    endcomment
+                    capture var
+                      render 'locksmith-variables', scope: 'subject', subject: product, subject_parent: collection, variable: 'transparent'
+                    endcapture
+                    if var == "true"
+                    else
+                      continue
+                    endif
+                    comment
+                      </locksmith:3c4a> End Locksmith code block.
+                    endcomment
+                    render 'product-item', product: product
+                endfor
+            -%}
+        </ul>
+
+        {%- render 'pagination', load_more: false, paginate: paginate -%}
+    {%- endpaginate -%}
+</div>
+
+
+{% schema %}
+    {
+        "name":"Popup Collection",
+        "settings":[
+            {
+                "type":"range",
+                "id":"paginate_by",
+                "min":4,
+                "max":24,
+                "step":4,
+                "label":"Paginate by",
+                "default":4
+            }
+        ]
+    }
+{% endschema %}

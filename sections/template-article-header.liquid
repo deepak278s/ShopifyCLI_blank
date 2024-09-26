@@ -1,0 +1,31 @@
+<div class="article__header flex flex-gap--10">
+    {% for i in (1..3) %}
+        <div class="background-image relative image-height--large">
+        {% if article.image %}
+            <img src="{{ article.image | img_url: 'master'  }}" alt="{{ article.title }}" />
+        {% else %}
+            <img src="https://placehold.co/600x500"/>
+        {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+<div class="container--xs py-lg mt-lg article__content">
+    <h1 class="xl fnt-sec fw-500 uc">{{ article.title }}</h1>
+</div>
+
+{% schema %}
+    {
+        "name": "2.0 Blog Header",
+        "settings": [],
+        "presets": [
+            {
+                "category": "Image",
+                "name": "2.0 Blog Header",
+                "settings": {}
+            }
+        ]
+    }
+    
+    {% endschema %}
+    

@@ -1,0 +1,50 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:32+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            806b6c4a19a052650be69b380f4ed041
+//      Signature:      eyJpdiI6ImorWXBlZmhvNkJuTkVyUHV4aVwvS1FnPT0iLCJ2YWx1ZSI6IlwvMzd4RWFNeWtCemlpZFFRWDNsd1JKWGZ4dGlxTlJCMmVaSmJTbURSYkhIR2R3S21qNWVCNnpMRTNxV2xSM0tIR0F4OGNEVTVua0x4cHUyQ0IyeDlSNUtKTUdVb1NIMW16QjlmV1dHMTB2bWNpUkdWdzdhTVNhWE1ndDJKNVUzZlFrOUN5TkxhTVVGOUtBQlBSd1liVUFoU0RHV3B3aFpxZWJFNXZXTTlTXC9qZE1Qc2pCdFM4WitqWlpZdGFyV0JVdzFMTHFuUDBCVkJLNEVFdDdTM2t0VGF1UHNTWGVnVWdvKzNVbVBSbXNOTjJcL0RcLzhYYzk3XC9acVRUWDA2YWh1UENnZmdpZ1wvUlNsWXFnZWVxcElHZ2h4M3duNllnWGZLeXNYVGdwZHUyTURxTEZ3dWE4OU1Ed1J5VU1YZmEycHdrQlwvVFJoakZrdmx4R0tGN1E0QVJTUVdUWWIrZGdhMzA5dUlKbnB0RzNKR1wvYnA4NGFKQVBEajZRd1BsZmFiUEFGNHF1K1VGdFlCWko1R3VUZWQ1bkwrUT09IiwibWFjIjoiZGEwY2U1OWNiM2MwZmU4ZDVhMjM0N2Y0MTY0N2E2ZTRmYzc0ZmQ4MjgwZjExNTU2ZTY2NDI3ZmYyODBjZWMwNiJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- paginate blog.articles by section.settings.paginate_by -%}
+    <ul class="blog__grid grid--4">
+        {%- for article in blog.articles -%}
+            {%- comment %}<locksmith:8a1e>{% endcomment -%}
+              {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: article, subject_parent: blog, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+            {%- comment %}</locksmith:8a1e>{% endcomment -%}
+            {%- render 'article-item', article: article -%}
+        {%- endfor -%}
+    </ul>
+    {%- include 'pagination' -%}
+{%- endpaginate -%}
+
+
+{% schema %}
+{
+    "name":"Blog",
+    "tag": "section",
+    "class": "blog container",
+    "settings":[
+        {
+            "type":"range",
+            "id":"paginate_by",
+            "min":2,
+            "max":24,
+            "step":2,
+            "label":"Paginate by",
+            "default":12
+        }
+    ]
+}
+{% endschema %}

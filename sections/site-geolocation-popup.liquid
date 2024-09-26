@@ -1,0 +1,408 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-06T11:01:49+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156244
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            2e4f7cb7623cb7c2695f3e00c419d510
+//      Signature:      eyJpdiI6IlVCT3E0VmsrNlA3cTY2Z2NWcWJXVHc9PSIsInZhbHVlIjoidzZ1Q3VhRWlwdUlUT2NkSmZFQ2VaQ2t0ZWlvcHZhbUR6YVhiQVwvS0xhdnRsdTB3QStNdVdyUWcweVp3QTVMYzVnRjRSUGlsYmN4UEJ0akpMSEwzXC8zS1NLVFY2OTN6OGJoYVBlNExGc3NPcHRaV2xDaUpia3IrMFljbGJNZ3BiSEU0V2xLTEZHZHZvY2QrUmJOWUtjVWVOa3R6ZWRGaFVWVDZ3TUhFc0pFa1wvMFc3MElVN0tyeEJubUFSS2ZycFZ2empNNjY1SnJIU2hFcjJyekdocCtTSXdubHkzd0daXC9oS2wyRm1VQjJOZEI0alYwdmgxaGtzZTUrcllPM21LUDhyXC8zbjZ3MFd0RUljOWlqNUM5RWNFTytFXC95cUo1SERzQlFoWVdDQVJIb2JcL1k0Z3QrVHdhUlFqOThieUNsb3J1dTBGSkdrclphZXRIUGFvUm0rVjdjSGVuaEdKbE02b3ZJNjRTSGZTTUczTnp2UTYzdVZNbm05MDUwUWdlRG51NmpaVW5qNmFJQ1RQaWJPZnNkWXJqVWFrWnJ0b3l6b1NHclwvV3A3akdOV3RNPSIsIm1hYyI6IjIzMTcyNzdmMjA1Y2Y5OWJjYTE3NmYzMDFiZGUxMmI3ZTZiYjI4ODI0MzQ0NDU2MjhhOGRhNDMzOWE0ODg5ZDcifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{% if section.settings.enable == true %}
+<style>
+    .geolocation__bg-overlay {
+        position: fixed;
+        top: 30px;
+        left: 0;
+        right: 30px;
+        /* width: 100%; */
+        /* height: 100%; */
+        /* background: rgba(0,0,0,0.5); */
+        z-index: 9999;
+        display: flex;
+        justify-content: end;
+        align-items: flex-start;
+        visibility: hidden;
+        opacity: 0;
+        transition-duration: 0.4s;
+        transition-property: opacity;
+    }
+    .geolocation__bg-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    .geolocation__content {
+        background: #fff;
+        width: 90%;
+        max-width: 370px;
+        padding: 40px;
+        position: relative;
+        border-radius: 15px;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9;
+        border: 1px solid #F1F0EB;
+    }
+    @keyframes fadeinGeo {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    .center-align .geolocation__content {
+        top: 0;
+        bottom: auto;
+    }
+    .geolocation__content ul {
+        list-style-type: disc;
+        margin-left: 20px;
+    }
+    .geolocation__content li {
+        padding: 4px 0;
+    }
+    @media screen and (max-width: 767px) {
+        .geolocation__content li {
+            padding: 0;
+        } 
+        .geolocation__bg-overlay {
+            justify-content: center;
+            align-items: center;
+        }    
+        .geolocation__content {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            height: fit-content;
+        }
+    }
+    /* #welcomeCountryContent h3,
+    #first-bullet {
+        display: inline;
+    } */
+    .geolocation__text-link {
+        text-decoration: underline;
+        display: block;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+    .geolocation__close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        cursor: pointer;
+    }
+    .geolocation__close svg {
+        width: 30px;
+    }
+    .isHidden {
+        display: none;
+    }
+    .geolocation__content .shopify-localization-form {
+        display: block;
+    }
+    .geolocation__content .shopify-localization-form select {
+        width: 100%;
+        height: 50px;
+        padding: 10px;
+        border-color: #f1f0eb;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background: transparent;
+        background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+        background-repeat: no-repeat;
+        background-position-x: 97%;
+        background-position-y: 11px;
+    }
+    #shipBulletPoints {
+        letter-spacing: 1px;
+        line-height: 1.4;
+        font-size: 13px;
+    }
+    .geolocation__icon {
+        width: 100%;
+        text-align: center;
+    }
+    .geolocation__icon img {
+        margin: 0 auto 20px;
+        max-width: 100px;
+    }
+    #geoModal.center-align .geolocation__content {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+    #changeCountryContent #shipBulletPoints {
+        display: block;
+        margin-top: 20px;
+    }
+</style>
+
+<div id="geoModal">
+    <div class="geolocation__content">
+        <div class="geolocation__close" onclick="document.getElementById('continueShoppingButton').click();">{%- render 'icons', icon: 'close' -%}</div>
+        {% comment %} Welcome content {% endcomment %}
+        <div id="welcomeCountryContent">
+            <h3 class="sm mb-md fnt-sec uc fw-300"><span id="shipMessage">{{ section.settings.we_ship_message }}</span> <span id="countryName"></span>.</h3>
+                <div class="fnt-sec" id="shipBulletPoints">
+                    <span class="title--sm" id="first-bullet">All prices are in GBP. Taxes & duties are included in the final price.</span>
+                </div>
+            <button class="btn btn--full mt-md isHidden" id="continueShoppingButton">{{ section.settings.continue_shop_button }}</button>
+            <a class="btn mt-sm sm fnt-sec" onclick="changeCountry()">{{ section.settings.change_country_link }}</a>    
+        </div>
+       {% comment %} Change country content {% endcomment %}
+       <div id="changeCountryContent" class="isHidden">
+            <h3 class="title--md fnt-sec uc sm title--xl mb-md">{{ section.settings.currency_change_message }}</h3>
+            {% form 'localization' %}
+            <select name="country_code" id="countrySelector" class="fnt-sec uc sm fw-300">
+                {% for country in localization.available_countries %}
+                <option data-country-currency="{{ country.currency.iso_code }}" data-country-name="{{ country.name }}" value="{{ country.iso_code }}" {%- if country==localization.country %} selected="selected" {% endif %}>
+                {{ country.name }} / {{ country.currency.iso_code }} ({{ country.currency.symbol }})
+                </option>
+                {% endfor %}
+            </select>
+            <input type="submit" id="countrySelectorButton" value="{{ section.settings.select_country_button }}" class="btn mt-sm" onclick="document.getElementById('continueShoppingButton').click();">
+            {% endform %}
+        </div>
+    </div>
+</div>
+
+<script>
+// List of variables
+const geoModal = document.getElementById("geoModal");
+const continueShoppingButton = document.getElementById("continueShoppingButton");
+const welcomeCountryContent = document.getElementById("welcomeCountryContent");
+const changeCountryContent = document.getElementById("changeCountryContent");
+const countrySelector = document.getElementById("countrySelector");
+const geolocationIcon = document.getElementById("geolocationIcon");
+const countrySelectorButton = document.getElementById("countrySelectorButton");
+const countryName = document.getElementById("countryName");
+const countryCurrency = document.getElementById("countryCurrency");
+const shipMessage = document.getElementById("shipMessage");
+const shipBulletPoints = document.getElementById("shipBulletPoints");
+const firstBulletPoint = document.getElementById('first-bullet');
+
+// Get a list of countries (iso codes) we ship to (from Shopify Markets) 
+{% capture allAvailableCountries %}
+  {%- for country in localization.available_countries -%}
+    {{ country.iso_code}}
+  {%- endfor -%}
+{% endcapture %}
+
+// List of countries from Shopify Markets (for JS)
+const globallist = [
+  {%- assign jsonAvailableCountries = allAvailableCountries | strip | split: ' '  -%}
+  {%- for country in jsonAvailableCountries -%}
+    "{{ country | strip }}"{%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%} 
+];
+
+
+// Cookie functions
+function setCookie( c_name, value, exdays ) {
+    var c_value = escape(value);
+    if (exdays) {
+        var exdate = new Date();
+        exdate.setDate( exdate.getDate() + exdays );
+        c_value += '; expires=' + exdate.toUTCString();
+    }
+    document.cookie = c_name + '=' + c_value;
+}
+
+function getCookie( c_name ) {
+    var i, x, y, cookies = document.cookie.split( ';' );
+
+    for ( i = 0; i < cookies.length; i++ ) {
+        x = cookies[i].substr( 0, cookies[i].indexOf( '=') );
+        y = cookies[i].substr( cookies[i].indexOf( '=') + 1 );
+        x = x.replace( /^\s+|\s+$/g, '' );
+
+        if ( x === c_name ) {
+            return unescape( y );
+        }
+    }
+}
+
+// Check cookie (if geolocation popup was shown before)
+if (getCookie('geolocation_popup')) {
+	    document.getElementById('geoModal').classList.add("isHidden");
+    } else {
+        runGeoIP();
+}
+
+// Timeout for pop up appearance
+setTimeout(function(){
+    geoModal.classList.add('active');
+}, 1000);
+
+// Add cookie on click
+continueShoppingButton.addEventListener("click", function(){
+    setCookie('geolocation_popup', 'shown', 360);
+    countrySelectorForm.form.submit();
+});
+
+// Change country 
+function changeCountry() {
+    changeCountryContent.classList.remove("isHidden");
+    welcomeCountryContent.classList.add("isHidden");
+    geolocationIcon.classList.add("isHidden");
+}
+
+// Display new country rule
+countrySelector.addEventListener("change", function (event) {
+    let selectedCountry = event.target.options[event.target.selectedIndex].dataset.countryName;
+    {%- for block in section.blocks -%}
+            {%- assign countryjson = block.settings.countries | strip | strip_newlines | split: ','  -%}
+                const firstcont{{forloop.index}} = [
+            {%- for country in countryjson -%}"{{country  | strip | strip_newlines}}"{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+            ];
+            if (firstcont{{forloop.index}}.includes(selectedCountry)) {
+                firstBulletPoint.innerHTML=`{{block.settings.line1}}`;
+            }                                     
+        {%- endfor -%}
+    changeCountryContent.append(shipBulletPoints);
+});
+
+// Update country form
+let countrySelectorForm = countrySelector;
+countrySelectorButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    countrySelectorForm.form.submit();
+});
+
+// Geolocation App to detect country of the customer 
+function runGeoIP(){
+    (async () => {
+        const result = await fetch("//ipwhois.pro/?key=KehDgBi5M21VCC9M");
+        const json = await result.json();
+        console.log('request done');
+
+        // Display visitor's country in the pop up (based on their IP location)
+        let countryNameApp = json.country;
+        let countryCodeApp = json.country_code;
+        
+        countryName.innerHTML = countryNameApp;
+        countryName.dataset.countryCode = countryCodeApp;
+
+        // Find country specific content from Theme Customizer blocks
+        function checkContent(){
+            {%- for block in section.blocks -%}
+                {%- assign countryjson = block.settings.countries | strip | strip_newlines | split: ','  -%}
+                    const firstcont{{forloop.index}} = [
+                {%- for country in countryjson -%}"{{country  | strip | strip_newlines}}"{%- unless forloop.last -%},{%- endunless -%}
+                {%- endfor -%}
+                ];
+                if (firstcont{{forloop.index}}.includes(countryNameApp)) {
+                    firstBulletPoint.innerHTML=`{{block.settings.line1}}`;
+                }                                     
+            {%- endfor -%}
+        }
+
+        // Check if we deliver to customer's country (compare Shopify Markets with Customer's Country)
+        let checkdb = countryName.getAttribute('data-country-code');
+        setTimeout(function(){
+            if (globallist.includes(checkdb)){
+                checkContent();
+                countrySelector.value = checkdb; // Change select value to customer's country (Geo IP)
+            } else {
+                shipMessage.innerHTML = "{{ section.settings.we_dont_ship_message }}";
+                countryName.style.display = 'none';
+                shipBulletPoints.classList.add("isHidden");
+            }
+        }, 100);
+    })();
+}
+</script>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Geolocation Popup",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "enable",
+            "label": "Show popup?",
+            "default": true
+        },
+        { 
+            "type": "header",
+            "content": "Welcome content"
+        },
+  		{
+            "type": "textarea",
+            "id": "we_ship_message",
+            "label": "We ship message",
+            "default": "Good news, we ship to the",
+            "info": "Message that will be shown to all countries you deliver your products to (Shopify Markets). Please note, country name is added automatically to the end of this text."
+        },
+        {
+            "type": "textarea",
+            "id": "we_dont_ship_message",
+            "label": "We don't ship message",
+            "info": "Message that will be shown to countries you don't deliver your product to (Shopify Markets). Please note, country name is added automatically to the end of this text."
+        },
+        {
+            "type": "text",
+            "id": "continue_shop_button",
+            "label": "Button",
+            "default": "Continue shopping",
+            "info": "Main button text (continue shopping)"
+        },
+        {
+            "type": "text",
+            "id": "change_country_link",
+            "label": "Change country",
+            "default": "Change country / currency",
+            "info": "Text link for country/currency change"
+        },
+        { 
+            "type": "header",
+            "content": "Change country/currency content"
+        },
+        {
+            "type": "textarea",
+            "id": "currency_change_message",
+            "label": "Currency/Country change message",
+            "info": "Message shown when visitors select to change country/currency"
+        },
+        {
+            "type": "text",
+            "id": "select_country_button",
+            "label": "Button",
+            "default": "Select",
+            "info": "Button text to confirm selected country"
+        }
+    ],
+    "blocks": [
+ 	{
+            "type": "country",
+            "name": "Country settings",
+            "settings": [
+                {
+                    "type": "html",
+                    "id": "countries",
+                    "label": "Countries via coma"
+                },
+                {
+                    "type": "html",
+                    "id": "line1",
+                    "label": "Message"
+                }
+        ]
+    }
+    ]
+  }
+{% endschema %}                                

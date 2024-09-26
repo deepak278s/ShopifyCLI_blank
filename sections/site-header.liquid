@@ -1,0 +1,940 @@
+{% assign genProduct = false %}
+{% for collection in product.collections %}
+{%- comment %}<locksmith:6651>{% endcomment -%}
+  {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: collection, subject_parent: product, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+{%- comment %}</locksmith:6651>{% endcomment -%}
+{% if collection.title == 'Gen' %}
+    {% assign genProduct = true %}
+{% endif %}
+{% endfor %}
+
+
+{%- liquid
+    assign navigation_menu = linklists[section.settings.navigation_menu]
+    assign gen_navigation_menu = linklists[section.settings.gen_navigation_menu]
+    assign tsc_navigation_menu = linklists[section.settings.tsc_navigation_menu]
+    assign landing_navigation_menu = linklists[section.settings.landing_navigation_menu]
+    capture logo
+        render 'icons', icon: 'logo'
+    endcapture
+-%}
+
+{% comment %} Check Product Tags to define the right Navigation (based on brand) {% endcomment %}
+{% assign product_tags = product.tags | split: ',' | join: ',' %}
+{% if product_tags contains 'THREADSGEN' %}
+    {% assign gen_product = true %}
+{% elsif product_tags contains 'NON-TSC' %}
+    {% assign jewellery_product = true %}
+{% elsif product_tags contains 'TSC' %}
+    {% assign tsc_product = true %}
+{% endif %}
+
+<div class="site-header__main px-sm flex f-stretch f-wrap">
+    {% comment %} Header Icons (My account/Currency Switcher/Mobile Nav/Mobile Search) {% endcomment %}
+    <div class="site-header__icons flex f-vertical-middle f-flex-start">
+        <nav class="site-header__nav flex" role="main">
+            <input id="siteHeaderNav" type="checkbox" hidden/>
+            <label for="siteHeaderNav" class="flex f-vertical-middle f-flex-start hide--above-tablet-lg pr-sm">
+                {%- render 'icons', icon: 'hamburger' -%}
+            </label>
+            {% comment %} <label for="search--header" class="hide--above-tablet-lg block p-sm--above-tablet p-xs--tablet flex f-vertical-middle px-md--above-tablet py-sm--tablet px-xs--tablet">
+                {%- render 'icons', icon: 'search' -%}
+                <span class="sm fnt-sec uc hide--tablet-lg">Search</span>
+            </label> {% endcomment %}
+            <div class="site-header__menu px-md px-xs--tablet">
+                
+                <label for="siteHeaderNav" class="sm btn my-sm--tablet mx-md--tablet site-header__menu--close flex f-vertical-middle f-flex-start hide--above-tablet-lg px-md ">
+                    <span>Close</span>
+                </label>
+    
+                <ul class="flex f-dir-column--tablet pt-sm--tablet mobile-styling__menu">
+                {% comment %} LANDING (HOMEPAGE) Page Menu  {% endcomment %}
+                {% if template contains 'index' %}
+                {%- for link in landing_navigation_menu.links -%}
+
+                    {%- comment %}<locksmith:3efe>{% endcomment -%}
+                      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: landing_navigation_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                    {%- comment %}</locksmith:3efe>{% endcomment -%}
+
+                    {% comment %} Checking if link has a submenu from blocks {% endcomment %}
+                    {% assign navigation_name = 'home' %}
+                    {% assign has_submenu_block = false %}
+                    {% for block in section.blocks %}
+                        {% if block.settings.matching_parent_text == link.title and block.settings.brand == navigation_name %}
+                            {% assign has_submenu_block = true %}
+                        {% endif %}
+                    {% endfor %}
+    
+                    {%- liquid
+                        assign link_text = link.title | split: '[' | first
+                        assign color_blocks = section.blocks | where: 'type', 'color'
+                        assign current_block = false
+                        for block in color_blocks
+                            if block.settings.matching_parent_text == link_text and block.settings.brand == navigation_name
+                                assign current_block = block
+                                break
+                            endif
+                        endfor
+                    -%}
+
+                    {%- if current_block -%}
+                        {%- style -%}
+                            #{{ link_text | handle }}{{ current_block.id }} > a {
+                                color: {{ current_block.settings.color }};
+                            }
+                        {%- endstyle -%}
+                    {%- endif -%}
+
+                    <li class="site-header__nav-link my-xs--tablet mx-sm--tablet{% if link.links.size > 0 or has_submenu_block == true %} parent-link{% endif %}" tabindex="-1"
+                        {% if current_block %}
+                            id="{{ link_text | handle }}{{ current_block.id }}"
+                            {{ current_block.shopify_attributes }}
+                        {% endif %}
+                        >
+                    
+                        {%- liquid
+                            assign link_text = '<span>' | append: link_text | append: '</span>'
+                            assign link_class = 'flex f-vertical-middle md sm--above-tablet fnt-sec uc fw-300 px-sm--above-tablet px-sm--tablet'
+                            if link.links.size > 0 or has_submenu_block == true
+                                assign link_class = link_class | append: ' hide--tablet-lg'
+                            endif
+                            if link.url contains 'http'
+                                echo link_text | link_to: link.url, class: link_class, target: '_blank'
+                            else
+                                echo link_text | link_to: link.url, class: link_class
+                            endif
+                        -%}
+                        {%- liquid
+                            if link.links.size > 0 or has_submenu_block == true 
+                                render 'megamenu', parent_link: link, parent_link_text: link_text, section: section, menu_brand: 'home'
+                            endif
+                        -%}
+
+                    </li>
+
+                {%- endfor -%}
+                {% comment %} TSC Menu  {% endcomment %}
+                {% elsif template.suffix contains 'tsc' or collection.metafields.custom.navigation == 'tsc' or tsc_product == true %}
+                   
+
+                    {%- for link in tsc_navigation_menu.links -%}
+
+                        {%- comment %}<locksmith:0f70>{% endcomment -%}
+                          {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: tsc_navigation_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                        {%- comment %}</locksmith:0f70>{% endcomment -%}
+
+                        {% comment %} Checking if link has a submenu from blocks {% endcomment %}
+                        {% assign navigation_name = 'tsc' %}
+                        {% assign has_submenu_block = false %}
+                        {% for block in section.blocks %}
+                            {% if block.settings.matching_parent_text == link.title and block.settings.brand == navigation_name %}
+                                {% assign has_submenu_block = true %}
+                            {% endif %}
+                        {% endfor %}
+    
+                        {%- liquid
+                            assign link_text = link.title | split: '[' | first
+                            assign color_blocks = section.blocks | where: 'type', 'color'
+                            assign current_block = false
+                            for block in color_blocks
+                                if block.settings.matching_parent_text == link_text and block.settings.brand == navigation_name
+                                    assign current_block = block
+                                    break
+                                endif
+                            endfor
+                        -%}
+    
+                        {%- if current_block -%}
+                            {%- style -%}
+                                #{{ link_text | handle }}{{ current_block.id }} > a {
+                                    color: {{ current_block.settings.color }};
+                                }
+                            {%- endstyle -%}
+                        {%- endif -%}
+    
+                        <li class="site-header__nav-link my-xs--tablet mx-sm--tablet{% if link.links.size > 0 or has_submenu_block == true %} parent-link{% endif %}" tabindex="-1"
+                            {% if current_block %}
+                                id="{{ link_text | handle }}{{ current_block.id }}"
+                                {{ current_block.shopify_attributes }}
+                            {% endif %}
+                            >
+                        
+                            {%- liquid
+                                assign link_text = '<span>' | append: link_text | append: '</span>'
+                                assign link_class = 'flex f-vertical-middle xs sm--above-tablet fnt-sec uc fw-300 px-sm--above-tablet py-md px-sm--tablet'
+                                if link.links.size > 0 or has_submenu_block == true
+                                    assign link_class = link_class | append: ' hide--tablet-lg'
+                                endif
+                                if link.url contains 'http'
+                                    echo link_text | link_to: link.url, class: link_class, target: '_blank'
+                                else
+                                    echo link_text | link_to: link.url, class: link_class
+                                endif
+                            -%}
+                            {%- liquid
+                                if link.links.size > 0 or has_submenu_block == true
+                                    render 'megamenu', parent_link: link, parent_link_text: link_text, section: section, menu_brand: 'tsc'
+                                endif
+                            -%}
+    
+                        </li>
+    
+                    {%- endfor -%}
+
+                    {% comment %} GEN Menu  {% endcomment %}
+                    {% elsif template.suffix contains 'gen-' or collection.metafields.custom.navigation == 'gen' or gen_product == true %}
+                   
+
+                        {%- for link in gen_navigation_menu.links -%}
+    
+                            {%- comment %}<locksmith:4513>{% endcomment -%}
+                              {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: gen_navigation_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                            {%- comment %}</locksmith:4513>{% endcomment -%}
+    
+                            {% comment %} Checking if link has a submenu from blocks {% endcomment %}
+                            {% assign navigation_name = 'gen' %}
+                            {% assign has_submenu_block = false %}
+                            {% for block in section.blocks %}
+                                {% if block.settings.matching_parent_text == link.title and block.settings.brand == navigation_name %}
+                                    {% assign has_submenu_block = true %}
+                                {% endif %}
+                            {% endfor %}
+        
+                            {%- liquid
+                                assign link_text = link.title | split: '[' | first
+                                assign color_blocks = section.blocks | where: 'type', 'color'
+                                assign current_block = false
+                                for block in color_blocks
+                                    if block.settings.matching_parent_text == link_text and block.settings.brand == navigation_name
+                                        assign current_block = block
+                                        break
+                                    endif
+                                endfor
+                            -%}
+        
+                            {%- if current_block -%}
+                                {%- style -%}
+                                    #{{ link_text | handle }}{{ current_block.id }} > a {
+                                        color: {{ current_block.settings.color }};
+                                    }
+                                {%- endstyle -%}
+                            {%- endif -%}
+        
+                            <li class="site-header__nav-link my-xs--tablet mx-sm--tablet{% if link.links.size > 0 or has_submenu_block == true %} parent-link{% endif %}" tabindex="-1"
+                                {% if current_block %}
+                                    id="{{ link_text | handle }}{{ current_block.id }}"
+                                    {{ current_block.shopify_attributes }}
+                                {% endif %}
+                                >
+                            
+                                {%- liquid
+                                    assign link_text = '<span>' | append: link_text | append: '</span>'
+                                    assign link_class = 'flex f-vertical-middle xs sm--above-tablet fnt-sec uc fw-300 px-sm--above-tablet py-md px-sm--tablet'
+                                    if link.links.size > 0 or has_submenu_block == true
+                                        assign link_class = link_class | append: ' hide--tablet-lg'
+                                    endif
+                                    if link.url contains 'http'
+                                        echo link_text | link_to: link.url, class: link_class, target: '_blank'
+                                    else
+                                        echo link_text | link_to: link.url, class: link_class
+                                    endif
+                                -%}
+                                {%- liquid
+                                    if link.links.size > 0 or has_submenu_block == true
+                                        render 'megamenu', parent_link: link, parent_link_text: link_text, section: section, menu_brand: 'gen'
+                                    endif
+                                -%}
+        
+                            </li>
+        
+                        {%- endfor -%}
+
+                {% comment %} Jewellery Menu  {% endcomment %}
+                {% elsif template.suffix contains 'jewellery-' or collection.metafields.custom.navigation == 'jewellery' or jewellery_product == true %}
+
+                    {%- for link in navigation_menu.links -%}
+
+                    {%- comment %}<locksmith:8fab>{% endcomment -%}
+                      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: navigation_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                    {%- comment %}</locksmith:8fab>{% endcomment -%}
+
+                    {% comment %} Checking if link has a submenu from blocks {% endcomment %}
+                    {% assign navigation_name = 'jewellery' %}
+                    {% assign has_submenu_block = false %}
+                    {% for block in section.blocks %}
+                        {% if block.settings.matching_parent_text == link.title and block.settings.brand == navigation_name %}
+                            {% assign has_submenu_block = true %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {%- liquid
+                        assign link_text = link.title | split: '[' | first
+                        assign color_blocks = section.blocks | where: 'type', 'color'
+                        assign current_block = false
+                        for block in color_blocks
+                            if block.settings.matching_parent_text == link_text and block.settings.brand == navigation_name
+                                assign current_block = block
+                                break
+                            endif
+                        endfor
+                    -%}
+
+                    {%- if current_block -%}
+                        {%- style -%}
+                            #{{ link_text | handle }}{{ current_block.id }} > a {
+                                color: {{ current_block.settings.color }};
+                            }
+                        {%- endstyle -%}
+                    {%- endif -%}
+
+                    <li class="site-header__nav-link my-xs--tablet mx-sm--tablet{% if link.links.size > 0 or has_submenu_block == true %} parent-link{% endif %}" tabindex="-1"
+                        {% if current_block %}
+                            id="{{ link_text | handle }}{{ current_block.id }}"
+                            {{ current_block.shopify_attributes }}
+                        {% endif %}
+                        >
+                    
+                        {%- liquid
+                            assign link_text = '<span>' | append: link_text | append: '</span>'
+                            assign link_class = 'flex f-vertical-middle md sm--above-tablet fnt-sec uc fw-300 px-sm--above-tablet px-sm--tablet'
+                            if link.links.size > 0 or has_submenu_block == true
+                                assign link_class = link_class | append: ' hide--tablet-lg'
+                            endif
+                            if link.url contains 'http'
+                                echo link_text | link_to: link.url, class: link_class, target: '_blank'
+                            else
+                                echo link_text | link_to: link.url, class: link_class
+                            endif
+                        -%}
+                        {%- liquid
+                            if link.links.size > 0 or has_submenu_block == true
+                                render 'megamenu', parent_link: link, parent_link_text: link_text, section: section, menu_brand: 'jewellery'
+                            endif
+                        -%}
+
+                    </li>
+
+                {%- endfor -%}
+                {% comment %} Global Menu (for content pages) {% endcomment %}
+                {% else %}
+                    {%- for link in landing_navigation_menu.links -%}
+
+                        {%- comment %}<locksmith:796c>{% endcomment -%}
+                          {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: landing_navigation_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                        {%- comment %}</locksmith:796c>{% endcomment -%}
+
+                        {% comment %} Checking if link has a submenu from blocks {% endcomment %}
+                        {% assign navigation_name = 'home' %}
+                        {% assign has_submenu_block = false %}
+                        {% for block in section.blocks %}
+                            {% if block.settings.matching_parent_text == link.title and block.settings.brand == navigation_name %}
+                                {% assign has_submenu_block = true %}
+                            {% endif %}
+                        {% endfor %}
+    
+                        {%- liquid
+                            assign link_text = link.title | split: '[' | first
+                            assign color_blocks = section.blocks | where: 'type', 'color'
+                            assign current_block = false
+                            for block in color_blocks
+                                if block.settings.matching_parent_text == link_text and block.settings.brand == navigation_name
+                                    assign current_block = block
+                                    break
+                                endif
+                            endfor
+                        -%}
+    
+                        {%- if current_block -%}
+                            {%- style -%}
+                                #{{ link_text | handle }}{{ current_block.id }} > a {
+                                    color: {{ current_block.settings.color }};
+                                }
+                            {%- endstyle -%}
+                        {%- endif -%}
+    
+                        <li class="site-header__nav-link my-xs--tablet mx-sm--tablet{% if link.links.size > 0 or has_submenu_block == true %} parent-link{% endif %}" tabindex="-1"
+                            {% if current_block %}
+                                id="{{ link_text | handle }}{{ current_block.id }}"
+                                {{ current_block.shopify_attributes }}
+                            {% endif %}
+                            >
+                        
+                            {%- liquid
+                                assign link_text = '<span>' | append: link_text | append: '</span>'
+                                assign link_class = 'flex f-vertical-middle md sm--above-tablet fnt-sec uc fw-300 px-sm--above-tablet px-sm--tablet'
+                                if link.links.size > 0 or has_submenu_block == true
+                                    assign link_class = link_class | append: ' hide--tablet-lg'
+                                endif
+                                if link.url contains 'http'
+                                    echo link_text | link_to: link.url, class: link_class, target: '_blank'
+                                else
+                                    echo link_text | link_to: link.url, class: link_class
+                                endif
+                            -%}
+                            {%- liquid
+                                if link.links.size > 0 or has_submenu_block == true
+                                    render 'megamenu', parent_link: link, parent_link_text: link_text, section: section, menu_brand: 'home'
+                                endif
+                            -%}
+    
+                        </li>
+    
+                    {%- endfor -%}
+
+                {% endif %}
+    
+                    <li class="tablet-user-menu tablet-user-menu--first hide--above-tablet-lg my-xs--tablet mx-sm mt-md pt-md">
+                        <h4 class="px-sm fnt-sec sm uc italic fw-300 mb-sm">Client area</h4>    
+                    {%- liquid
+                            if shop.customer_accounts_enabled
+                                assign link = settings.auth0_login_url
+                                if customer
+                                    assign link = routes.account_url
+                                endif
+                                capture link_text
+                                    echo 'Account'
+                                endcapture
+                                echo link_text | link_to: link, class: 'flex md sm--above-tablet fnt-sec uc fw-300 px-md--above-tablet px-sm--tablet'
+                            endif
+                        -%}
+                    </li>
+                    <li class="tablet-user-menu hide--above-tablet-lg mx-sm my-xs--tablet">
+                        <div class="flex f-vertical-middle px-sm fnt-sec currency-switcher__mob">
+                            {%- render "currency-switcher" -%}
+                        </div>
+                    </li>
+                    <li class="tablet-user-menu hide--above-tablet-lg mx-sm my-xs--tablet wishlist-link__mob">
+                        <div class="flex f-vertical-middle px-sm fnt-sec">
+                            {% render 'wishlisthero-header-icon' %}
+                        </div>
+                    </li>
+                    <li class="tablet-user-menu hide--above-tablet-lg mx-sm my-xs--tablet">
+                        {%- liquid
+                            if shop.customer_accounts_enabled
+                                assign link = routes.search_url
+                                capture link_text
+                                    echo 'Search'
+                                endcapture
+                                echo link_text | link_to: link, class: 'flex md sm--above-tablet fnt-sec uc fw-300 px-md--above-tablet px-sm--tablet'
+                            endif
+                        -%}
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    {% comment %} Logo {% endcomment %}
+    <div class="site-header__logo flex f-vertical-middle f-center">
+        {% if template.suffix contains 'gen-' or collection.metafields.custom.navigation == 'gen' or gen_product == true %}
+        <a href="{{ shop.url | append: '/gen' }}" title="{{ shop.name }}" itemscope itemtype="http://schema.org/Organization">
+            {%- render 'icons', icon: 'gen-logo', class: 'gen-logo--size' -%}
+        </a>
+        {% elsif template.suffix contains 'jewellery-' or collection.metafields.custom.navigation == 'jewellery' or jewellery_product == true %}
+            <a href="{{ shop.url | append: '/jewellery' }}" title="{{ shop.name }}" itemscope itemtype="http://schema.org/Organization">
+                <div class="hide--tablet-lg">{%- render 'icons', icon: 'logo' -%}</div>
+                <div class="hide--above-tablet-lg">{%- render 'icons', icon: 'logo-mobile' -%}</div>
+            </a>
+        {% elsif template.suffix contains 'tsc-' or collection.metafields.custom.navigation == 'tsc' or tsc_product == true %}
+                <a href="{{ shop.url | append: '/tsc' }}" title="{{ shop.name }}" itemscope itemtype="http://schema.org/Organization">
+                    <div class="hide--tablet-lg">{%- render 'icons', icon: 'logo' -%}</div>
+                    <div class="hide--above-tablet-lg">{%- render 'icons', icon: 'logo-mobile' -%}</div>
+                </a>
+        {% else %}
+        <a href="{{ routes.root_url }}" title="{{ shop.name }}" itemscope itemtype="http://schema.org/Organization">
+            <div class="hide--tablet-lg">{%- render 'icons', icon: 'logo' -%}</div>
+            <div class="hide--above-tablet-lg">{%- render 'icons', icon: 'logo-mobile' -%}</div>
+        </a>
+        {% endif %}
+    </div>
+    {% comment %} Header Icons (Search/Basket) {% endcomment %}
+    <div class="site-header__icons">{%- render 'user-menu' class: 'site-header__user-menu' -%}</div>
+    {% comment %} Navigation (Desktop only) {% endcomment %}
+</div>
+
+<script>
+    const siteHeaderNav = document.getElementById("siteHeaderNav");
+    const siteHeader = document.querySelector(".site-header");
+
+    siteHeaderNav.addEventListener("click", () => {
+        siteHeader.classList.toggle("mobile-menu__opened");
+    });
+
+
+</script>
+
+{% schema %}
+{
+    "name":"Site Header",
+    "class": "bg-white",
+    "settings":[
+        {
+            "type":"link_list",
+            "id":"landing_navigation_menu",
+            "label":"Global Menu"
+        },
+        {
+            "type":"link_list",
+            "id":"navigation_menu",
+            "label":"Jewellery Menu"
+        },
+        {
+            "type":"link_list",
+            "id":"gen_navigation_menu",
+            "label":"Gen Menu"
+        },
+        {
+            "type":"link_list",
+            "id":"tsc_navigation_menu",
+            "label":"TSC Menu"
+        }
+    ],
+    "blocks":[
+        {
+            "type":"text_block",
+            "name":"Text block",
+            "settings":[
+                {
+                    "type":"text",
+                    "id":"matching_parent_text",
+                    "label":"Matching parent",
+                    "info": "Enter the title of the parent link which this menu belongs to."
+                },
+                {
+                    "type": "radio",
+                    "id": "brand",
+                    "label": "Brand",
+                    "options": [
+                        {
+                        "value": "home",
+                        "label": "Global"
+                        },
+                        {
+                        "value": "jewellery",
+                        "label": "Jewellery"
+                        },
+                        {
+                        "value": "gen",
+                        "label": "Gen"
+                        },
+                        {
+                        "value": "tsc",
+                        "label": "TSC"
+                        }
+                    ],
+                    "default": "jewellery"
+                },
+                {
+                    "type": "header",
+                    "content": "Content"
+                },
+                {
+                    "type":"text",
+                    "id":"text_block_title",
+                    "label":"Heading"
+                },
+                {
+                    "type":"richtext",
+                    "id":"text_block_text",
+                    "label":"Text"
+                }
+            ]
+        },
+        {
+            "type":"image",
+            "name":"Image Banners",
+            "settings":[
+                {
+                    "type":"text",
+                    "id":"matching_parent_text",
+                    "label":"Matching parent",
+                    "info": "Enter the title of the parent link which this menu belongs to."
+                },
+                {
+                    "type": "radio",
+                    "id": "brand",
+                    "label": "Brand",
+                    "options": [
+                        {
+                        "value": "home",
+                        "label": "Global"
+                        },
+                        {
+                        "value": "jewellery",
+                        "label": "Jewellery"
+                        },
+                        {
+                        "value": "gen",
+                        "label": "Gen"
+                        },
+                        {
+                        "value": "tsc",
+                        "label": "TSC"
+                        }
+                    ],
+                    "default": "jewellery"
+                },
+                {
+                    "type": "header",
+                    "content": "Images #1"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_one",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_one",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_one_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "text",
+                    "id": "image_one_button",
+                    "label": "Button"
+                },
+                {
+                    "type": "url",
+                    "id": "image_one_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Images #2"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_two",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_two",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_two_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "text",
+                    "id": "image_two_button",
+                    "label": "Button"
+                },
+                {
+                    "type": "url",
+                    "id": "image_two_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Images #3"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_three",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_three",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_three_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "text",
+                    "id": "image_three_button",
+                    "label": "Button"
+                },
+                {
+                    "type": "url",
+                    "id": "image_three_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Images #4"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_four",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_four",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_four_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "text",
+                    "id": "image_four_button",
+                    "label": "Button"
+                },
+                {
+                    "type": "url",
+                    "id": "image_four_link",
+                    "label": "Link"
+                }
+            ]
+        },
+        {
+            "type":"stories_block",
+            "name":"Stories",
+            "settings":[
+                {
+                    "type":"text",
+                    "id":"matching_parent_text",
+                    "label":"Matching parent",
+                    "info": "Enter the title of the parent link which this menu belongs to."
+                },
+                {
+                    "type": "radio",
+                    "id": "brand",
+                    "label": "Brand",
+                    "options": [
+                        {
+                        "value": "home",
+                        "label": "Global"
+                        },
+                        {
+                        "value": "jewellery",
+                        "label": "Jewellery"
+                        },
+                        {
+                        "value": "gen",
+                        "label": "Gen"
+                        },
+                        {
+                        "value": "tsc",
+                        "label": "TSC"
+                        }
+                    ],
+                    "default": "jewellery"
+                },
+                {
+                    "type": "header",
+                    "content": "Section Title"
+                },
+                {
+                    "type":"text",
+                    "id":"stories_title",
+                    "label":"Title"
+                },
+                {
+                    "type": "header",
+                    "content": "Button"
+                },
+                {
+                    "type":"text",
+                    "id":"button_text",
+                    "label":"Text"
+                },
+                {
+                    "type":"url",
+                    "id":"button_url",
+                    "label":"URL"
+                },
+                {
+                    "type": "header",
+                    "content": "Story #1"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_one",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_one",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_one_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "url",
+                    "id": "image_one_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Story #2"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_two",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_two",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_two_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "url",
+                    "id": "image_two_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Story #3"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_three",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_three",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_three_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "url",
+                    "id": "image_three_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Story #4"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_four",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_four",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_four_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "url",
+                    "id": "image_four_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Story #5"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_five",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_five",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_five_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "url",
+                    "id": "image_five_link",
+                    "label": "Link"
+                },
+                {
+                    "type": "header",
+                    "content": "Story #6"
+                },
+                {
+                    "type":"image_picker",
+                    "id":"image_six",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"matching_text_image_six",
+                    "label":"Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_six_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "url",
+                    "id": "image_six_link",
+                    "label": "Link"
+                }
+            ]
+        },
+        {
+            "type":"color",
+            "name":"Menu link colour",
+            "settings":[
+                {
+                    "type":"text",
+                    "id":"matching_parent_text",
+                    "label":"Matching parent",
+                    "info": "Enter the title of the parent link which this image belongs to."
+                },
+                {
+                    "type": "radio",
+                    "id": "brand",
+                    "label": "Brand",
+                    "options": [
+                        {
+                        "value": "home",
+                        "label": "Global"
+                        },
+                        {
+                        "value": "jewellery",
+                        "label": "Jewellery"
+                        },
+                        {
+                        "value": "gen",
+                        "label": "Gen"
+                        },
+                        {
+                        "value": "tsc",
+                        "label": "TSC"
+                        }
+                    ],
+                    "default": "jewellery"
+                },
+                {
+                    "type":"color",
+                    "id":"color",
+                    "label":"Colour"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

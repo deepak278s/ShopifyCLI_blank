@@ -1,0 +1,422 @@
+{% comment %}
+  <div class="top-[10%]  left-[10%] top-[20%] left-[20%] top-[30%] left-[30%] top-[40%] left-[40%] top-[50%] left-[50%] top-[60%] left-[60%] top-[70%] left-[70%] top-[80%] left-[80%] top-[90%] left-[90%] top-[100%] left-[100%]"></div>
+{% endcomment %}
+{% liquid
+  assign lookData = product.metafields.custom.shop_the_look.value
+  assign desktopImage = lookData.desktop_image
+  assign mobileImage = lookData.mobile_image
+  assign products_data = lookData.products_list.value
+%}
+
+{% style %}
+    #shop-the-look-section-{{ section.id }}{
+      margin-top:{{ section.settings.margin_top_mob }}px;
+      margin-bottom:{{ section.settings.margin_bottom_mob }}px;
+    }
+    {% for data in products_data %}
+    .tooltips_rang[data-index="{{ forloop.index}}"]{
+      top:{{data.dot_position_top_mobile}}%;
+      left:{{data.dot_position_left_mobile}}%;
+    }
+    {% endfor %}
+    @media(min-width:768px){
+      #shop-the-look-section-{{ section.id }}{
+       margin-top:{{ section.settings.margin_top_desktop }}px;
+      margin-bottom:{{ section.settings.margin_bottom_desktop }}px;
+      }
+  i
+      {% for data in products_data %}
+      .tooltips_rang[data-index="{{ forloop.index}}"]{
+         top:{{data.dot_position_top_desktop}}%;
+        left:{{data.dot_position_left_desktop}}%;
+      }
+      {% endfor %}
+    }
+{% endstyle %}
+<section
+  class="flex flex-col shop-the-look items-center md:px-10 md:py-[80px]"
+  id="shop-the-look-section-{{ section.id }}"
+>
+  <div class="m-container:max-w-[1660px] m-container:mx-auto w-full">
+    {% if lookData.title != blank or lookData.description != blank %}
+      <div class="flex justify-center items-center flex-col gap-[18px] {%  if section.settings.mob_hide_text %} hidden md:flex {% endif %}">
+        {% if lookData.title != blank %}
+          <h3 class="text-[36px] font-gascogne-serial leading-[40px] capitalize font-light">{{ lookData.title }}</h3>
+        {% endif %}
+        <p class="font-shape font-normal leading-[24px] text-[16px] text-center max-w-[480px] text-[#595959] mb-[43px]">
+          {{ lookData.description }}
+        </p>
+      </div>
+    {% endif %}
+    <div class="md:flex md:flex-row md:gap-[15px] lg:gap-[50px] lg:items-center xl:gap-[60px]">
+      <div class="keen-slider flex overflow-hidden" id="slider-banner">
+        <div class="relative collection-image flex-[0_0_100%] lg:rounded-[10px] w-full keen-slider__slide transition-all">
+          {% if desktopImage != blank %}
+            <div class="relative">
+              <picture class="relative">
+                <!-- Desktop Background Image -->
+                <source media="(min-width: 768px)" srcset="{{ desktopImage | img_url: 'master' }}">
+                <!-- Mobile Background Image -->
+                <source media="(max-width: 767px)" srcset="{{ mobileImage | img_url: 'master' }}">
+                <!-- Default Image for browsers that don't support the picture element -->
+                <img
+                  src="{{ desktopImage | img_url: 'master' }}"
+                  alt="Background Image"
+                  class="w-full h-[469px] lg:w-full lg:h-[828px] object-cover"
+                  loading="lazy"
+                  style="background-color: #D5D5D5"
+                >
+              </picture>
+            </div>
+            <!-- tooltips html start -->
+            {% for data in products_data %}
+              {% assign card_product = data.product.value %}
+              {% if card_product != blank %}
+                <div
+                  class="absolute max-w-max group tooltips_rang {% if forloop.index == 1 %}active {% endif %}"
+                  data-index="{{ forloop.index}}"
+                >
+                  <button
+                    class="tooltips h-[10px] w-[10px] rounded-full bg-[#D5D5D5]"
+                    data-index="{{ forloop.index}}"
+                  ></button>
+                  {% comment %}
+                    <div class="left-[140%] left-[unset] right-[40px] right-[-11px] transform -translate-y-1/2 -scale-x-[-1] left-auto z-[100]"></div>
+                  {% endcomment %}
+                  <div class="absolute w-full max-w-[172px] min-w-[172px] top-1/2 transform -translate-y-1/2 flex flex-col px-3 py-2 bg-white rounded-[8px] opacity-0 z-[-1] group-hover:opacity-100 group-hover:z-[100] transition duration-300 {% if data.tooltip_alignment_left %} left-[300%] lg:left-[200%] {% endif %} {% if data.tooltip_alignment_left == false  %} left-[unset] right-[24px] lg:right-[30px] {% endif %} group-[&.active]:z-[100] group-[&.active]:opacity-100">
+                    <span
+                      class="absolute left-[-10px] top-1/2 transform -translate-y-1/2 inline-block border-solid border-[transparent_#fff_transparent_transparent;] border-t-[12px] border-r-[12px] border-b-[12px] border-l-0 {% if data.tooltip_alignment_left == false %} right-[-11px] transform -translate-y-1/2 scale-x-[-1] left-auto {% endif %}"
+                    ></span>
+                    <p class="font-shape font-bold text-[12px] tracking-[0.06px] leading-[16.2px]">
+                      {{- data.tooltip_title -}}
+                    </p>
+                    <p class="font-shape font-medium text-[12px] tracking-[0.06px] leading-[16.2px]">
+                      {{ data.tooltip_content }}
+                    </p>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+            <!-- tooltips html End -->
+
+          {% else %}
+            <div class="hidden md:visible bg-[#D5D5D5] relative">
+              <div
+                class="text-center h-[469px] lg:w-[662px] lg:h-[828px] w-full inset-0 flex items-center flex-col pb-[33px] px-[24px] justify-end text-white"
+              ></div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="keen-slider md:relative lg:max-w-[572px]" id="slider-product">
+        {% for data in products_data %}
+          {% assign card_product = data.product.value %}
+          <div class="products-slider h-max lg:!min-h-max flex-[0_0_100%] bg-[#FAFAFA] lg:rounded-[10px] pb-6 md:px-14 lg:px-[67px] keen-slider__slide">
+            {% if card_product != blank %}
+              {%-
+                render 'shop-look-card-v2', product: card_product, mobile_height: 'h-[448px]'
+                , mobile_max_width:'max-w-[100%]',
+                , mobile_info_bg:'bg-[#F6F3EC]',
+                iconClass:"w-8 h-8",
+              -%}
+            {% else %}
+              {%-
+                render 'shop-look-card-v2', title: 'product title', name: 'BRAND NAME', price: '$123.00'
+                , mobile_height: 'h-[448px]'
+                , mobile_max_width:'max-w-[100%]',
+                , mobile_info_bg:'bg-[#F6F3EC]',
+                iconClass:"w-8 h-8",
+              -%}
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <div class="hidden md:block" data-role="navigation">
+          <!-- navigation arrow code start -->
+          <div class="flex w-full h-full justify-between items-center">
+            <button
+              class="bg-[#fff] rounded-full p-[10px] h-max  absolute top-[35%] xl:top-[42.2%] left-3 transform -translate-y-1/2 focus:outline-none [&.disable]:hidden"
+              data-role="nav-arrow"
+              data-behave="prev"
+            >
+              {% render 'icon-v2', icon: 'icon-pdp-nav-left' %}
+            </button>
+            <button
+              class="bg-[#fff] rounded-full p-[10px] h-max absolute top-[35%] xl:top-[42.2%] right-3 transform -translate-y-1/2 focus:outline-none [&.disable]:hidden"
+              data-role="nav-arrow"
+              data-behave="next"
+            >
+              {% render 'icon-v2', icon: 'icon-pdp-nav-right' %}
+            </button>
+          </div>
+          <!-- navigation arrow code End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if true %}
+  <script>
+    window[`image_slider_{{ section.id }}`] = null;
+    window[`card_slider_{{ section.id }}`] = null;
+    document.addEventListener('custom:keenLoaded', (e) => {
+      let Slider = e.detail.slider;
+      window[`image_slider_{{ section.id }}`] = new Slider('#slider-banner', {
+        drag: false,
+        slides: {
+          perView: 1,
+        },
+        defaultAnimation: {
+          duration: 1000,
+        },
+        renderMode: 'custom',
+        detailsChanged: (s) => {
+          s.slides.forEach((element, idx) => {
+            idx == s.track.details.abs ? (element.style.position = 'relative') : (element.style.position = 'absolute');
+            element.style.opacity = s.track.details.slides[idx].portion;
+            element.style.zIndex = s.track.details.slides[idx].portion;
+          });
+        },
+      });
+    });
+
+    document.addEventListener('custom:keenLoaded', (e) => {
+      function WheelControls(slider) {
+      var touchTimeout;
+      var position;
+      var wheelActive;
+
+      function dispatch(e, name) {
+        position.x -= e.deltaX;
+        position.y -= e.deltaY;
+        slider.container.dispatchEvent(
+          new CustomEvent(name, {
+            detail: {
+              x: position.x,
+              y: position.y,
+            },
+          })
+        );
+      }
+
+      function wheelStart(e) {
+        position = {
+          x: e.pageX,
+          y: e.pageY,
+        };
+        dispatch(e, 'ksDragStart');
+      }
+
+      function wheel(e) {
+        if (e.deltaY == -0) {
+          dispatch(e, 'ksDrag');
+        }
+      }
+
+      function wheelEnd(e) {
+        dispatch(e, 'ksDragEnd');
+      }
+
+      function eventWheel(e) {
+        if (!wheelActive) {
+          wheelStart(e);
+          wheelActive = true;
+        }
+        wheel(e);
+        clearTimeout(touchTimeout);
+        touchTimeout = setTimeout(() => {
+          wheelActive = false;
+          wheelEnd(e);
+        }, 50);
+      }
+
+      slider.on('created', () => {
+        slider.container.addEventListener(
+          'wheel',
+          (e) => {
+            if (e.deltaY != -0) {
+              slider.container.removeEventListener('wheel', () => {});
+            } else {
+              eventWheel(e);
+            }
+          },
+          { passive: false }
+        );
+      });
+    }
+      let Slid = e.detail.slider;
+      window[`card_slider_{{ section.id }}`] = new Slid(
+        '#slider-product',
+        {
+          loop: true,
+          slides: {
+            perView: 1,
+          },
+        },
+        [
+          (slider) => {
+            slider.on('created', () => {
+              let toolTips = document.querySelectorAll('#shop-the-look-section-{{ section.id }} .tooltips_rang');
+              let arrows = document.querySelectorAll("#shop-the-look-section-{{ section.id }} [data-role='nav-arrow']");
+              let thumbs = document.querySelectorAll(
+                '#shop-the-look-section-{{ section.id }} [data-role="thumbs-dots"] button'
+              );
+              arrows.forEach((el) => {
+                el.addEventListener('click', () => {
+                  let max = slider.track.details.max;
+                  let current = slider.track.details.abs;
+                  if (el.dataset.behave == 'next') {
+                    slider.next();
+                  } else {
+                     slider.prev();
+                  }
+                });
+              });
+              thumbs.forEach((el, ind) => {
+                el.addEventListener('click', () => {
+                  thumbs.forEach((elem) => elem.classList.remove('active'));
+                  slider.moveToIdx(ind);
+                  el.classList.add('active');
+                });
+              });
+              toolTips.forEach((el, ind) => {
+                el.addEventListener('click', () => {
+                  slider.moveToIdx(ind);
+                });
+              });
+            });
+            slider.on('slideChanged', () => {
+              let arrows = Array.from(
+                document.querySelectorAll("#shop-the-look-section-{{ section.id }} [data-role='nav-arrow']")
+              );
+              let current = slider.track.details.rel;
+              let thumbs = document.querySelectorAll(
+                '#shop-the-look-section-{{ section.id }} [data-role="thumbs-dots"] button'
+              );
+              let toolTips = document.querySelectorAll('#shop-the-look-section-{{ section.id }} .tooltips_rang');
+              thumbs.forEach((el, ind) => {
+                ind == current ? el.classList.add('active') : el.classList.remove('active');
+              });
+              toolTips.forEach((el, ind) => {
+                ind == current ? el.classList.add('active') : el.classList.remove('active');
+              });
+              window[`image_slider_{{ section.id }}`].moveToIdx(current);
+              {% comment %} current == slider.track.details.max
+                ? arrows.find((el) => el.dataset.behave == 'next').classList.add('disable')
+                : arrows.find((el) => el.dataset.behave == 'next').classList.remove('disable');
+              current == slider.track.details.min
+                ? arrows.find((el) => el.dataset.behave == 'prev').classList.add('disable')
+                : arrows.find((el) => el.dataset.behave == 'prev').classList.remove('disable'); {% endcomment %}
+            });
+          },
+          WheelControls
+        ]
+      );
+    });
+  </script>
+{% endif %}
+<style>
+  .overlay {
+    background: #000;
+    position: absolute;
+    opacity: 0.4;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+  }
+  /*small white pulse*/
+
+  @keyframes pulse-white-10 {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+  }
+  .tooltips {
+    background-color: #ffffff;
+    display: inline-block;
+    line-height: 1;
+    transition: all 0.5s;
+    color: #818a91;
+    text-align: center;
+    border-radius: 50%;
+    width: 7.96px;
+    height: 7.96px;
+  }
+  .tooltips_rang.active .tooltips {
+    animation: pulse-white-10 2s infinite;
+  }
+  @media (min-width: 1024px) {
+    .tooltips {
+      width: 14.04px;
+      height: 14.04px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shop Look V2",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top_mob",
+      "label": "Margin From Top Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Margin From Top Desktop",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mob",
+      "label": "Margin From Bottom Mobile",
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Margin From Bottom Desktop",
+      "step": 5,
+      "min": 0,
+      "max": 200,
+      "default": 115
+    },
+    {
+      "type": "checkbox",
+      "label": "Hide title and description on mobile",
+      "id": "mob_hide_text",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop Look V2",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

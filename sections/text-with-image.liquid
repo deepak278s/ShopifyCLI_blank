@@ -1,0 +1,102 @@
+<div class="image-with-text__wrapper text-with-image__wrapper flex" id="{{ section.id }}">
+    <div class="image-with-text__wrapper-text">
+        <div class="image-with-text__wrapper-text--container flex f-space-between f-dir-column hide--tablet">
+            <div class="container py-lg">
+                {% if section.settings.title %}
+                <div class="image-with-text__wrapper-text-title mb-md pr-lg">           
+                <h2 class="{% if section.settings.font_style == 'secondary' %}fnt-sec title--xl uc{% else %}title--xl{% endif %}">
+                        {{ section.settings.title }}
+                    </h2>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if section.settings.cta_text != '' %}
+        <div class="container py-lg hide--tablet">
+            <a class="btn mt-md" href="{{ section.settings.url }}">{{section.settings.cta_text}}</a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="image-with-text__wrapper-image object-fit-cover">
+        <a href="{{ section.settings.url }}">
+                <div class="image-with-text__wrapper-text-title mb-md hide--above-tablet">       
+                    {% if section.settings.title %}    
+                    <h2 class="{% if section.settings.font_style == 'secondary' %}fnt-sec title--xl uc{% else %}title--xl{% endif %}">
+                        {{ section.settings.title }}
+                    </h2>
+                    {% endif %}
+                    {% if section.settings.cta_text != '' %}
+                        <a class="btn mt-md" href="{{ section.settings.url }}">{{section.settings.cta_text}}</a>
+                    {% endif %}
+                </div>
+            {% if section.settings.image %}
+                <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.image.alt }}" title="{{ section.settings.image.alt }}" loading="lazy"/>
+            {% else %}
+                <img src="https://placehold.co/600x1200"/>
+            {% endif %}
+        </a>
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "2.0 Text with image",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Text"
+            },
+            {
+                "type": "textarea",
+                "id": "title",
+                "label": "Title",
+                "default": "Amina Muaddi"
+            },
+            {
+                "type": "select",
+                "id": "font_style",
+                "label": "Font Style",
+                "options": [
+                    {
+                        "value": "primary",
+                        "label": "Primary"
+                    },
+                    {
+                        "value": "secondary",
+                        "label": "Secondary"
+                    }
+                ],
+                "default": "primary"
+            },
+            {
+                "type": "header",
+                "content": "Button"
+            },
+            {
+                "type": "text",
+                "id": "cta_text",
+                "label": "Text"
+            },
+            {
+                "type": "header",
+                "content": "Image"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "url",
+                "id": "url",
+                "label": "URL"
+            }
+        ],
+        "presets": [
+            {
+                "name": "2.0 Text with image",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

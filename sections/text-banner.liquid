@@ -1,0 +1,192 @@
+<div class="text-banner__wrapper {{ section.settings.margin_top }} {{ section.settings.margin_bottom }} {{ section.settings.padding_top }} {{ section.settings.padding_bottom }}">
+        <div class="container">
+            {% for block in section.blocks %}
+                    {% case block.type %}
+                        {% when 'heading' %}
+                            {% liquid 
+                                if block.settings.tag == 'h1'
+                                    assign h_tag = 'h1'
+                                elsif block.settings.tag == 'h2'
+                                    assign h_tag = 'h2'
+                                elsif block.settings.tag == 'h3'
+                                    assign h_tag = 'h3'
+                                endif
+                            %}
+                            <{{ h_tag }} class="py-sm fnt-sec italic sm fw-300 uc">
+                                {{ block.settings.heading }}
+                            </{{ h_tag }}>
+                        {% when 'text' %}
+                            {{ block.settings.text | replace: '<p>', '<p class="fnt-sec title--lg mb-md">' }}
+                        {% when 'button' %}
+                            <a class="btn" href="{{ block.settings.button_url }}">{{ block.settings.button_text }}</a>
+                    {% endcase %}
+            {% endfor %}
+        </div>
+</div>
+
+{% schema %}
+    {
+      "name": "2.0 Text Banenr",
+      "class": "section",
+      "settings": [
+        {
+            "type": "select",
+            "id": "margin_top",
+            "label": "Margin Top",
+            "options": [
+                {
+                    "value": "mt-sm",
+                    "label": "Small"
+                },
+                {
+                    "value": "mt-md",
+                    "label": "Medium"
+                },
+                {
+                    "value": "mt-lg",
+                    "label": "Large"
+                }
+            ],
+            "default": "mt-sm"
+        },
+        {
+            "type": "select",
+            "id": "margin_bottom",
+            "label": "Margin Bottom",
+            "options": [
+                {
+                    "value": "mb-sm",
+                    "label": "Small"
+                },
+                {
+                    "value": "mb-md",
+                    "label": "Medium"
+                },
+                {
+                    "value": "mb-lg",
+                    "label": "Large"
+                }
+            ],
+            "default": "mb-sm"
+        },
+        {
+            "type": "select",
+            "id": "padding_top",
+            "label": "Padding Top",
+            "options": [
+                {
+                    "value": "pt-sm",
+                    "label": "Small"
+                },
+                {
+                    "value": "pt-md",
+                    "label": "Medium"
+                },
+                {
+                    "value": "pt-lg",
+                    "label": "Large"
+                }
+            ],
+            "default": "pt-sm"
+        },
+        {
+            "type": "select",
+            "id": "padding_bottom",
+            "label": "Padding Bottom",
+            "options": [
+                {
+                    "value": "pb-sm",
+                    "label": "Small"
+                },
+                {
+                    "value": "pb-md",
+                    "label": "Medium"
+                },
+                {
+                    "value": "pb-lg",
+                    "label": "Large"
+                }
+            ],
+            "default": "pb-sm"
+        }
+    ],
+    "blocks": [ 
+    {
+      "name": "Heading",
+      "type": "heading",
+      "settings": [
+        {
+                "type": "select",
+                "id": "tag",
+                "label": "Tag",
+                "options": [
+                    {
+                        "value": "h1",
+                        "label": "H1"
+                    },
+                    {
+                        "value": "h2",
+                        "label": "H2"
+                    },
+                    {
+                        "value": "h3",
+                        "label": "H3"
+                    }
+                ],
+                "default": "h1"
+            },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Lorem ipsum"
+        }
+      ]
+    },
+    {
+      "name": "Text",
+      "type": "text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "type": "button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Text",
+          "default": "Learn more"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "URL" 
+        }
+      ]
+    }
+    ],
+    "presets": [
+            {
+                "name": "2.0 Text Banner",
+                "blocks": [
+                    {
+                        "type": "heading"
+                    },
+                    {
+                        "type": "text"
+                    },
+                    {
+                        "type": "button"
+                    }
+                ]
+            }
+        ]
+}
+{% endschema %}

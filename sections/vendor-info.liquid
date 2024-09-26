@@ -1,0 +1,131 @@
+
+
+{% assign vendorTitle = "Private Label London Dubai" %}
+{% assign vendorDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae dolor lacus. Integer a lorem sagittis, venenatis augue vel, lacinia felis. Sed congue neque et elit lacinia, eget auctor purus congue. In pharetra ex in tincidunt vulputate. Nunc dictum leo ut neque aliquam, a convallis mi porttitor. Suspendisse ipsum nulla, tincidunt non lacinia eu, maximus at lacus. In sed nulla ut libero placerat pharetra. Nulla placerat malesuada tincidunt." %}
+
+<div class="vendor-info__wrapper">
+    <header class="collection__header text-align-center flex--tablet f-vertical-middle">
+        <div class="collection__header-content container py-xl--above-tablet px-xl--above-tablet px-xs--tablet">
+            {%- liquid
+                assign title_class = 'collection__title title--lg title--lg--tablet '
+                assign title_class = title_class | append: ' mb-sm'
+                render 'title', title: vendorTitle, tag: 'h1', class: title_class
+                assign description_class = 'lg mt-xs mx-a mb-md more'
+                render 'richtext', content: vendorDescription, class: description_class
+            -%}
+            
+        </div>
+    </header>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Configure/customize these variables.
+        var showChar = 230;  // How many characters are shown by default
+        var ellipsestext = "...";
+        var moretext = "Read more";
+        var lesstext = "Close";
+        
+    
+        $('.more').each(function() {
+            var content = $(this).html();
+     
+            if(content.length > showChar) {
+     
+                var c = content.substr(0, showChar);
+                var h = content.substr(showChar, content.length - showChar);
+     
+                var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink fnt-sec sm uc mt-md">' + moretext + '</a></span>';
+     
+                $(this).html(html);
+            }
+     
+        });
+     
+        $(".morelink").click(function(){
+            if($(this).hasClass("less")) {
+                $(this).removeClass("less");
+                $(this).html(moretext);
+            } else {
+                $(this).addClass("less");
+                $(this).html(lesstext);
+            }
+            $(this).parent().prev().toggle();
+            $(this).prev().toggle();
+            return false;
+        });
+    });
+</script>
+
+{% schema %}
+    {
+        "name": "Vendor info",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Text"
+            },
+            {
+                "type": "textarea",
+                "id": "title",
+                "label": "Title",
+                "default": "Amina Muaddi"
+            },
+            {
+                "type": "range",
+                "id": "font_size",
+                "min": 24,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Font size",
+                "default": 64
+            },
+            {
+                "type": "text",
+                "id": "subtitle",
+                "label": "Subtitle",
+                "default": "New in womenswear"
+            },
+            {
+                "type": "header",
+                "content": "CTA"
+            },
+            {
+                "type": "text",
+                "id": "cta_text",
+                "label": "Text",
+                "default": "Shop the edit"
+            },
+            {
+                "type": "url",
+                "id": "url",
+                "label": "Link"
+            },
+            {
+                "type": "header",
+                "content": "Image"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "header",
+                "content": "Sticker"
+            },
+            {
+                "type": "image_picker",
+                "id": "sticker",
+                "label": "Image"
+            }
+        ],
+        "presets": [
+            {
+                "name": "Vendor info",
+                "settings": {}
+            }
+        ]
+    }
+{% endschema %}

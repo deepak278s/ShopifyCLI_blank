@@ -1,0 +1,80 @@
+{% render 'search-popup-v2' %}
+{% schema %}
+{
+  "name": "Search Popup",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "checkbox",
+      "label": "Display Inspiration Tab",
+      "id": "inspiration"
+    },
+    {
+      "type": "checkbox",
+      "label": "Display Suggestion Text",
+      "id": "suggestion"
+    },
+    {
+      "type": "checkbox",
+      "label": "Display Populary Search",
+      "id": "popular_search"
+    },
+    {
+      "type": "header",
+      "content": "Popular Searches"
+    },
+    {
+      "type": "text",
+      "id": "popular_title",
+      "label": "Popular Searches",
+      "default": "Popular Searches"
+    },
+    {
+      "type": "header",
+      "content": "Select Collection"
+    },
+    {
+      "type": "text",
+      "id": "collection-title",
+      "label": "Most Popular Title",
+      "default": "Most Popular"
+    },
+    {
+      "type": "collection",
+      "id": "collection_url",
+      "label": "Collection Link"
+    },
+    {
+      "type": "header",
+      "content": "No Result Found"
+    },
+    {
+      "type": "text",
+      "id": "no-result-title",
+      "label": "No Result Found",
+      "default": "No Result Found"
+    },
+    {
+      "type": "richtext",
+      "id": "no-result-discription",
+      "label": "No Result Discription",
+      "default": "<p>Search was unable to find any results for **searchTerm**, you may have typed your word incorrectly, or are being too specific.</p>",
+      "info": "if you are going to change the content make sure you will add this : for **searchTerm**,"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "popular_Search",
+      "name": "Popular Search ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "popular_search",
+          "label": "Popular Search",
+          "default": "Necklaces"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

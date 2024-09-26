@@ -1,0 +1,119 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:41+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            fdb3ae5443cbe95c0e491969d03d0ea6
+//      Signature:      eyJpdiI6IkpvcFBLQnZRSmVMSTVzVHFuUVFBVVE9PSIsInZhbHVlIjoiV1wvQ1FGRiszUDZJMEZRWmpoTEZzalRSYmpENGNsaDl4bmUwZmxjNitiOW1SSCsydUZxN1l1SDg0SEVKczZkS0NIVEh1M2xcL3pSODZJTDlGMGd4TEZYMlRkNEh2TU1XQTcwVDByXC9adW5zQnlYaUJKNDdNelR0aTJjQ0hnK29MUWplN0ZoTDNsaWFvNVJwRmljcHFmRTlLZWdZY2toSW1keTRXKzZSMVphanRQbGVsTUE3UUFXdGVHbVV6aGVObE5YcnRwdEpUcmUycXprV0QrN1kzeStxVjk0bVlNMnBXaXd4enJaelBCXC9wWmxkYVFHSlIxTmlDTFFRVDdMQ2pVcmJubjRxNTFINkRXZHA4ejYyOGo2bUJ1S3BCUXhmZUN2Y3JUM0hyXC9DdWgzWXBpNnF0ZVVyRWlrQ2hiUlpYK05YZ3lFOURrXC91OVk0aUkxYVMyM2FtekgrNVNmZmp5ejlcL3Z3d1VGMnFOSXNQWW0za0diRzNjT0xKVmpTQU5LZEZNMjFJYm4zTGFPZit6elcxYm5ET2w5Wm56UE9FckdJMjJnV2YwRkpPdzArZlE9IiwibWFjIjoiNmI1OTJkZTI3N2NmZWY2ZjVkYjg2NTE4OGY2ZmZmNDBiNDY1ZTA3OWMzMjE3MjdiYzEyMDA2M2JhZDM3YTc5OCJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{% assign available = "" | split: "" %}
+{% assign first_letter = vendor | upcase | slice: 0 %}
+{% assign letters = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z" %}
+{% for vendor in shop.vendors %}
+  {% assign firstLetter = vendor | upcase | slice: 0 %}
+  {% unless available contains firstLetter %}
+    {% assign available = available | append: ", " | append: firstLetter %}
+  {% endunless %}
+{% endfor %}
+{% assign available = available | remove_first: "[], " | split: ", " | sort %}
+
+{% include 'page-header', header_title: section.settings.brands_title, header_subtitle: section.settings.brands_sub %}
+
+<div class=" brands-page__list--title">
+  <h2>{{ 'brands.filter_by_letter_mobile' | t }}</h2>
+</div>
+
+<div class="brands-page__wrapper">
+  <div class="brands-page__link">
+    <div class="brands-page__link--text">
+      Top
+    </div>
+  </div>
+
+  <div class="brands-page__list--filter">
+    <p class="brands-page__list--filter-p">{{ 'brands.filter_by_letter' | t }}</p>
+
+    {% assign letters = letters | split: ", " %}
+    {% for letter in letters %}
+      {% assign first_letter = vendor | upcase | slice: 0 %}
+        <a class="brands-page__list--item {% unless available contains letter %}empty{% endunless %}" id="filter_letter" data-brand-filter="{{ letter }}" href="#{{ letter }}">{{ letter }}</a>
+    {% endfor %}
+  </div>
+
+  <div class=" brands-page__list--container">
+    {% for vendor in shop.vendors %}
+      {% assign first_letter = vendor | upcase | slice: 0 %}
+      {% unless current == first_letter %}
+        {% unless forloop.first %}
+          </div>
+          </div>
+        {% endunless %}
+        {% assign current = first_letter %}
+        <div class="brands-page__list" id="{{first_letter}}">
+          <li class="brands-page__list--letter">{{first_letter}}</li>
+          <div class="brands-page__list--name-container">
+      {% endunless %}
+      <li class="brands-page__list--name">
+        {% assign vendor_url = vendor | remove: "." | remove: "+" | replace: " ", "-" %}
+        {% if vendor == "RIANNA + NINA" %}
+          {% assign vendor_url = vendor | remove: "+" | replace: " ", "-" | remove_first: "-" %}
+        {% elsif vendor == "MACH & MACH" %}
+          {% assign vendor_url = vendor | remove: "&" | replace: " ", "-" | remove_first: "-" %}
+        {% elsif vendor == "LARKSPUR & HAWK" %}
+          {% assign vendor_url = vendor | remove: "&" | replace: " ", "-" | remove_first: "-" %}
+        {% elsif vendor == "MASON & BOOKS" %}
+          {% assign vendor_url = vendor | remove: "&" | replace: " ", "-" | remove_first: "-" %}
+        {% endif %}
+        <a href="/collections/{{vendor_url | downcase }}">
+          {{vendor}}
+        </a>
+      </li>
+
+      {% if forloop.last %}
+        </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+
+{
+    "name": "Brands",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Background image"
+        }, {
+            "type": "text",
+            "id": "brands_title",
+            "label": "Title"
+        }, {
+            "type": "text",
+            "id": "brands_sub",
+            "label": "Subtitle"
+        }
+    ],
+    "presets": [
+        {
+            "category": "Image",
+            "name": "Hero",
+            "settings": {}
+        }
+    ]
+}
+
+{% endschema %}

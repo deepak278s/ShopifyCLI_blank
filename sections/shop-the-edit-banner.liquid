@@ -1,0 +1,178 @@
+<div
+  class="shop-the-edit-banner-container"
+  id="{{ section.id }}"
+  style="background-color: {{ section.settings.header_color }}"
+>
+  <div class="hide--tablet shop-the-edit-banner-container">
+    <div class="hide--tablet shop-the-edit-banner-element">
+      <div class="shop-the-edit-banner-title-container">
+        <h2 class="fnt-sec title--md shop-the-edit-title--lg">
+          {{ section.settings.title }}
+        </h2>
+        <div>
+          {% if section.settings.cta_link -%}
+            <a class="btn mt-sm sm fnt-sec" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="shop-the-edit-banner-element">
+      <div class="shop-the-edit-banner__content-picture">
+        <div class="object-fit">
+          {% if section.settings.image %}
+            <img
+              src="{{ section.settings.image | img_url: 'master' }}"
+              alt="{{ section.settings.image.alt }}"
+              title="{{ section.settings.image.alt }}"
+              loading="lazy"
+              width="960"
+              height="800"
+            >
+          {% else %}
+            <img
+              src="https://placehold.co/960x1219"
+              width="960"
+              height="800"
+            >
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hide--above-tablet shop-the-edit-banner-container">
+    <div class="shop-the-edit-banner-element">
+      <div class="shop-the-edit-banner__content-picture">
+        <div class="object-fit">
+          {% if section.settings.image %}
+            <img
+              src="{{ section.settings.image | img_url: 'master' }}"
+              alt="{{ section.settings.image.alt }}"
+              title="{{ section.settings.image.alt }}"
+              loading="lazy"
+              width="390"
+              height="500"
+            >
+          {% else %}
+            <img
+              src="https://placehold.co/960x1219"
+              width="390"
+              height="500"
+            >
+          {% endif %}
+        </div>
+      </div>
+      <div class="shop-the-edit-banner-title-container">
+        <h2 class="fnt-sec title--md shop-the-edit-title--lg">
+          {{ section.settings.title }}
+        </h2>
+        <div>
+          {% if section.settings.cta_link -%}
+            <a class="btn mt-sm sm fnt-sec" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .shop-the-edit-banner-container {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .shop-the-edit-banner-element {
+    display: flex;
+    flex: 1;
+  }
+  @media (max-width: 768px) {
+    .shop-the-edit-banner-element {
+      flex-direction: column;
+    }
+  }
+
+  .shop-the-edit-banner-title-container {
+    display: flex;
+    flex: 1;
+    max-width: 50vw;
+    box-sizing: border-box;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  @media (max-width: 768px) {
+    .shop-the-edit-banner-title-container {
+      max-width: 100%;
+    }
+  }
+
+  .content-editorial-banner-element__picture {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .shop-the-edit-banner__content-picture {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .shop-the-edit-title--lg {
+    max-width: 75%;
+    text-transform: uppercase;
+  }
+  @media (max-width: 768px) {
+    .shop-the-edit-title--lg {
+      max-width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "Shop the edit banner",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Text"
+        },
+        {
+          "type": "color",
+          "id": "header_color",
+          "label": "Header color",
+          "default": "#C3C4C3"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title",
+            "default": "Luxury Loungewear & Lisa Yang Exclusive"
+        },
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA text",
+          "default": "Shop the edit"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "CTA Link"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Shop the edit banner",
+            "settings": {}
+        }
+    ]
+}
+{% endschema %}

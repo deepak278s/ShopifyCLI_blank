@@ -1,0 +1,46 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:48+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            a942eeb1955f5a60221032b2ad98820c
+//      Signature:      eyJpdiI6ImVnZVRWYmtia0N5eCs5ZmRtMWpON1E9PSIsInZhbHVlIjoib0ZXTTc2d2djcDJXeWFtMGtWQ2lubkd0YThHaFpmaXVtb2dEVDc2Yys1OXFlSVwvTGRFTEZveUtcL3VvM3ZpN0JWMHlLQWIzUHVYblIyTFBsM0hRK0JmXC9iRGdZMDVjWkVwMVpLTUVtb0ZxTTMrUEFwcGhMdWlLNVRWdUxcL0VUckJnaGFIdENHaFd4T1lKSHBWSHpwNENhamlUSFdoK0ttNDVaZDhhMERmdXNwV2lNTUFKT0lWWEo3aXNwRDZTQ2tiWmtIMFZZclBwUEtqeFpyRDNiamh2NjRRQzFCOWRHYk1uazBjb3hwRmtDaGRWRzhaS3ZOVTdLMzgwb2hsUTdQZFNyWDJvWmNuOTRHQU1xQkpvcWhaK2g5Qk5KQkJBMkxIQ1BGZEpDUHhpWTh5XC8xWkw2YTBUM1RIdUIwRzJCaFdiS2RKc0Y3bURhWityWkRYWURZWmR4ZFR5Tk9FXC9VSzIwcW9jbndWVlpqakRiQkVmcWp2cmVCbEF5RmJ2M1pvWFZ6bmhQVXVlR2hpQTU5OU4yclQyVjlST1RpQ09uekR4RDFqalwvWVg3UXhjNzA9IiwibWFjIjoiZGJlYmJlODQ2NGJhY2Q0OTBhMWEzZWIzYmNmN2ZiNjlkOTIyMjgwYmYxOTIzYTdiNGIwYWYwM2UxYmM1OGQ4OSJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+<section class="article container">
+    <div class="container">
+        <h1 class="article-title title--md">{{ article.title }} </h1>
+
+        <h2 class="grey-medium light">{{ article.published_at | date: "%d.%m.%Y" }}</h2>
+
+        {%- include 'social-icons', share: true -%}
+
+        <article class="rte">
+            {{ article.content }}
+        </article>
+
+        <h2 class="bold uc text-align-center sx article-share-title">Share article</h2>
+        {%- include 'social-icons', share: true -%}
+        
+    </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Article template",
+  "settings": [
+
+  ]
+}
+{% endschema %}

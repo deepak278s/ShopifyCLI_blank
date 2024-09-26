@@ -1,0 +1,240 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:44+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            6227ce292368111fd5ed7afbdb1a02bb
+//      Signature:      eyJpdiI6IkEyU0thVEg1bEwwc2NRRElQVFhzdnc9PSIsInZhbHVlIjoiR1NtMjl6Q25JZkdrTEpjeFg5Nko1NXd3N1wvZWlVNHIwUVdRbnM0N1d5WE9Ob1pmejhkd1VuYndVaXhmcFpZKzNcL01jZWJESVBseUxJUW82NlIzSHFyamh1WHIzMXBxS2pKZHlYSjBzTGFaZUF2QWticXRkaU9MSkdyNEVNUHFDMDhHWGN6TXZyaXBWZDg4b3MrV1dhcUxTTVJKeHRKbEh6WkVJYU1cL08xVmFRbGp6Q2UrSmN4RVhYK3NIbXNvakdXaFBCT294b3dYXC90bXkwZzBPc2RrTTVGTXd3RXM4aGdZMDk2a0tFTFFLeGl0V2g0KytOZlJ5eWVYdHZFZEJaZjR3OXc0U253WDZPSWVNakIzd2RiS3FhdWFtdThoV29HQTVlTkFhR1VFY1FQS080cUZnQmtCM2RScmx4M0E4V2NDTmlJYXF4d3UxVWNBcWZWNmZ6YmlzQVh6eDBhcGN0ODRWMkhiUlBvc3pyN1NobGpQUUFFVzRzOHlxSXRQeEtjNytja3N0UkN3eVlxUTlIV1Y4emVUQWc9PSIsIm1hYyI6IjNmNmNmMDdiYTVmOWEzYTkxM2M1MWEwZWQyYmY5NzYyNDE1ODExZDA5ZDM0ZWFmZDlmYTZmN2YzNDhkY2E3NTgifQ==
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{%- liquid
+    assign navigation_menu = linklists[section.settings.footer_menu]
+    assign legal_menu = linklists[section.settings.legal_menu]
+    assign current_year = "now" | date: "%Y"
+-%}
+
+<div class="container">
+    <a href="/" title="{{ shop.name }}" class="site-footer__logo mb-lg" itemscope itemtype="http://schema.org/Organization">
+        {%- render 'icons', icon: 'logo' -%}
+    </a>
+    <div class="flex--above-tablet">
+        <div class="footer__newsletter title-dash">
+
+            {%- liquid
+                if section.settings.newsletter_title != ''
+                    assign newsletter_title_class = 'title--sm newsletter__title'
+                    if section.settings.newsletter_content != ''
+                        assign newsletter_title_class = newsletter_title_class | append: ' mb-sm mb-sm--tablet'
+                    else
+                        assign newsletter_title_class = newsletter_title_class | append: ' mb-md mb-sm--tablet pb-sm--tablet'
+                    endif
+                    render 'title', title: section.settings.newsletter_title, tag: 'h2', class: newsletter_title_class
+                endif
+                if section.settings.newsletter_content != ''
+                    render 'richtext', content: section.settings.newsletter_content, class: 'mb-md'
+                endif
+                render 'newsletter-klaviyo'
+            -%}
+
+        </div>
+        <nav class="footer__nav">
+            <ul class="flex--above-tablet f-flex-start f-vertical-top">
+                {% for link in navigation_menu.links %}
+                    {%- comment %}<locksmith:f71c>{% endcomment -%}
+                      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: navigation_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                    {%- comment %}</locksmith:f71c>{% endcomment -%}
+                    <li class="footer__nav-column px-md--above-tablet">
+                        <input type="checkbox" id="footer__nav-column--{{ link.title | handle }}" hidden>
+                        <label for="footer__nav-column--{{ link.title | handle }}" class="flex f-vertical-center f-space-between py-md--tablet">
+                            <h2 class="footer__nav-column-title title--xs mb-xs--above-tablet pb-sm--above-tablet">
+                                {%- liquid
+                                    assign link_text = link.title | split: '[' | first
+                                    if link.url != '#'
+                                        echo link_text | link_to: link.url
+                                    else
+                                        echo link_text
+                                    endif
+                                -%}
+                            </h2>
+                            {%- render 'icons', icon: 'plus', class: 'hide--above-tablet' -%}
+                        </label>
+                        {%- if link.links.size > 0 -%}
+                            <ul class="footer__nav-list">
+                                {%- for link in link.links -%}
+                                    {%- comment %}<locksmith:ce90>{% endcomment -%}
+                                      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: link, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                                    {%- comment %}</locksmith:ce90>{% endcomment -%}
+                                    <li class="footer__nav-list-item">
+                                        {%- liquid
+                                            assign link_text = link.title | split: '[' | first
+                                            if link.url contains 'http'
+                                                echo link_text | link_to: link.url, class: 'footer__nav-link block fnt-sec xs py-sm', target: '_blank'
+                                            else
+                                                echo link_text | link_to: link.url, class: 'footer__nav-link block fnt-sec xs py-sm'
+                                            endif
+                                        -%}
+                                    </li>
+                                {%- endfor -%}
+                            </ul>
+                        {%- endif -%}
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+
+    {%- if section.settings.enable_social_icons -%}
+        <div class="flex--tablet f-space-between f-vertical-middle py-md--tablet">
+            {% comment %} <h2 class="footer__nav-column-title title--xs hide--above-tablet">{{ 'general.footer.social_media_title' | t }}</h2> {% endcomment %}
+            {%- render 'social-icons', class: 'footer__social-icons' -%}
+        </div>
+    {%- endif -%}
+
+    <div class="footer__bottom flex f-space-between f-vertical-center f-dir-column-reverse--tablet fnt-sec py-md mt-lg--above-tablet">
+
+        {%- if legal_menu -%}
+
+            <ul class="footer__bottom-nav flex f-center--tablet">
+
+                {%- for link in legal_menu.links -%}
+
+                    {%- comment %}<locksmith:be93>{% endcomment -%}
+                      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: link, subject_parent: legal_menu, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                    {%- comment %}</locksmith:be93>{% endcomment -%}
+
+                    <li class="footer__bottom-nav-list-item">
+
+                        {%- liquid
+                            assign link_title = link.title | split: '[' | first
+                            echo link_title | link_to: link.url, class: 'footer__bottom-nav--link cta--secondary xs fw-200'
+                        -%}
+                        
+                    </li>
+
+                {%- endfor -%}
+
+            </ul>
+
+        {%- endif -%}
+
+        {%- if section.settings.enable_payment_icons -%}
+
+            <div class="footer__bottom-payment text-align-center flex--tablet f-space-between mb-md--tablet">
+
+                {%- liquid
+                    if section.settings.payment_icons != blank
+                        echo section.settings.payment_icons | image_url: height: 80 | image_url: loading: 'lazy', alt: 'Payment Icons'
+                    else
+                        assign enabled_payment_types = 'visa,master,american_express,paypal' | remove: ' ' | split: ','
+                        assign enabled_payment_types = shop.enabled_payment_types
+                        for type in enabled_payment_types
+                            echo type | payment_type_svg_tag: class: 'icon icon--full-color'
+                        endfor
+                    endif
+                -%}
+
+            </div>
+
+        {%- endif -%}
+
+        <div class="footer__bottom-legal text-align-right hide--tablet">
+            {%- if section.settings.copyright_text != '' -%}
+                <p class="xs fw-200">&copy; {{ section.settings.copyright_text | replace: '[year]', current_year }}</p>
+            {%- endif -%}
+            <p class="xs fw-200">Website Design by <a href="https://eastsideco.com" rel="noreferer" target="_blank">Eastside Co</a></p>
+        </div>
+    </div>
+</div>
+
+
+<div class="flex f-center pt-sm pb-lg">
+    <!-- OneTrust Cookies Settings button start -->
+    <button id="ot-sdk-btn" class="ot-sdk-show-settings">Cookie Settings</button>
+    <!-- OneTrust Cookies Settings button end -->
+</div>
+
+
+{% schema %}
+{
+    "name":"Site Footer",
+    "class":"shopify-section--footer bg-dark-grey white pt-xl--above-tablet pt-lg",
+    "settings":[
+        {
+            "type":"header",
+            "content":"Menus"
+        },
+        {
+            "type":"link_list",
+            "id":"footer_menu",
+            "label":"Footer Menu"
+        },
+        {
+            "type":"link_list",
+            "id":"legal_menu",
+            "label":"Legal Menu"
+        },
+        {
+            "type":"header",
+            "content":"Newsletter"
+        },
+        {
+          "type": "text",
+          "id": "newsletter_title",
+          "label": "Newsletter title",
+          "default": "Join the community"
+        },
+        {
+            "type": "richtext",
+            "id": "newsletter_content",
+            "label": "Newsletter content",
+            "default": "<p>Lorem ipsum dolor imet.</p>"
+        },
+        {
+            "type":"header",
+            "content":"Contact"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_social_icons",
+            "label": "Enable social icons",
+            "default": true
+        },
+        {
+            "type":"header",
+            "content":"Payment"
+        },
+        {
+            "type":"checkbox",
+            "id":"enable_payment_icons",
+            "label":"Enable payment icons",
+            "default":true
+        },
+        {
+            "type": "image_picker",
+            "id": "payment_icons",
+            "label": "Payment icons"
+        },
+        {
+            "type":"header",
+            "content":"Legal"
+        },
+        {
+          "type": "text",
+          "id": "copyright_text",
+          "label": "Copyright text",
+          "default": "[year] All Rights Reserved.",
+          "info": "Enter [year] to insert current calendar year."
+        }
+    ]
+}
+{% endschema %}

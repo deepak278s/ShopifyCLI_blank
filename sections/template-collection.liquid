@@ -1,0 +1,78 @@
+ {%- paginate collection.products by section.settings.paginate_by -%}
+
+        {%- render "collection-active-filters" -%}
+
+        <div class="collection__product-grid">
+          {% if collection.products.size > 0 %}
+            <ul class="grid--4 grid--tablet grid--2--tablet collectionProductsGrid" id="AjaxinateContainer">
+                  {%  for product in collection.products %}
+                    {%- comment %}<locksmith:7861>{% endcomment -%}
+                      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: product, subject_parent: collection, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+                    {%- comment %}</locksmith:7861>{% endcomment -%}
+                    {% render 'product-item', product: product %}
+                  {% endfor %}
+            </ul>
+            {% else %}
+            <span>No products available yet...</span>
+          {% endif %}
+        </div>
+
+        <div id="AjaxinatePagination">
+      {% if paginate.next %}
+        <div class="pagination my-lg flex f-center f-vertical-center fnt-sec{% if class %} {{ class }}{% endif %}">
+          <a href="{{ paginate.next.url }}">Load more</a>
+        </div>
+      {% endif %}
+    </div>
+
+    {%- endpaginate -%}
+
+    <script>
+     
+
+      window.onpopstate = function(event) {
+      if (event.state && event.state.collection) {
+        console.log('URL HAS CHANGED--------');
+      }
+    };
+      
+        const ul = document.getElementById("AjaxinateContainer");
+      
+      function updateCount() {
+        const liElements = ul.getElementsByTagName("li");
+        const count = liElements.length;
+        console.log(`There are currently ${count} li elements in the ul list.`);
+      }
+      
+      ul.addEventListener("DOMNodeInserted", updateCount);
+      ul.addEventListener("DOMNodeRemoved", updateCount);
+      
+      updateCount();
+
+      // Collection Filters
+
+      const filterButton = document.querySelector('.filters-controller__filter-button');
+      const filterOptions = document.querySelector('.filters-content__filter-options');
+      const collectionProductsGrid = document.querySelector('.collectionProductsGrid');
+      const closeMobileFilters = document.getElementById('closeMobileFilters');
+      const bgOverlayDark = document.querySelector('.bg-overlay--dark');
+      
+      function toggleClasses() {
+        bgOverlayDark.classList.toggle('active');
+        filterOptions.classList.toggle('active');
+        filterButton.classList.toggle('active');
+      }
+      
+      filterButton.addEventListener('click', toggleClasses);
+      closeMobileFilters.addEventListener('click', toggleClasses);
+      
+      </script>
+      
+{% schema %}
+{
+    "name":"Collection",
+    "tag": "section",
+    "class": "collection",
+    "settings":[]
+}
+{% endschema %}

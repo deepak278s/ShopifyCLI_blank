@@ -1,0 +1,150 @@
+{%- comment -%}
+//    !!!! - DO NOT MODIFY - !!!!
+//    THIS FILE IS DEPLOYED AUTOMATICALLY BY MATTv2.
+//    CHANGES YOU MAKE MAY BE AUTOMATICALLY OVERWRITTEN AT ANY TIME.
+//
+//    Deployment info:
+//      Updated at:     2022-05-12T15:00:55+00:00
+//      Cause:          Manual deployment.
+//      Deployment ID:  156650
+//      Project:        418
+//      Environment:    1228 - master
+//      MD5:            59a22e3036a53caca07c01b4960e4ede
+//      Signature:      eyJpdiI6IjRYb3d5b0w2ancrbmcwRlRXY205MUE9PSIsInZhbHVlIjoiT1pNRFZxWjNwRkFaUTYxdzJjbXFnbnBHN1wvdGp1RjlsTGwwcmwxcEhtWmVNcUt3dW5kOW13K3BHNkF5NlJ6R0lLdUd2Z3hTcjJjYlZQZzhKNUdDMG4zVDBmYXZvbUtZQ0grb01Qb0NYVWd2ZytRdGVtMENVc0xjK1ZlajFwZm9HT090S2p6MjlXMzV3R0J0aVp5eTlYanB6c2lsaGpsQ1YxSWRcL0xwOTUzeU5wZVwvXC9henZQeW10dDJwd0xtbHBGSXJoMWxycUh3SElNdDZRMWw3c2QwYVB3RlU3aHhXM21RYWllUjNGd2lRTVE5dUpMaVVsaUxKK1MwMVNYWGlFNlZWYURtUHppSG5PcEhHRTV2ZWIzc2lwa1RybkdVanRwOG5IejZxalpBS2JwTU1KSXFuVXRVcWtUNFRseFhraFJoUVo1UzZDU25CTU1teGFFSGJ3YXkxSFNhKytEOHRhalA0b3BQRTVjQktWckdWajZjaVMydnhNMk5BOVU0ampEazQ3cTdJTklYWVd4MFpxckcrclZBbHlUZkJJVUg1b0tYcjJtQlVTNUxxQ3c9IiwibWFjIjoiMWE3M2M3NDU0NDllZWY0ZjVlNzEzNTY5MTdmNmM0NWNiOWU3NmUwNDQ5ZThjYzA0MWQ3NWY3MmVjYzY5MjZhZCJ9
+//
+//    MATT is an automated theme deployment pipeline for Shopify, built by Eastside Co.
+//    It is used to provide version control and reliable deployment environments.
+//
+//    If you need to modify this file, please contact Eastside Co.
+{%- endcomment -%}
+{% assign popupcollection_references_string = '' %}
+{% assign seperator = '|###|' %}
+
+{% comment %}Creates string of Popup Collections{% endcomment %}
+{%- for collection in collections -%}
+    {%- comment %}<locksmith:9495>{% endcomment -%}
+      {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: collection, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+    {%- comment %}</locksmith:9495>{% endcomment -%}
+    {% if collection.metafields.collection.is_popup_collection %}
+        {% assign popupcollection_references_string = popupcollection_references_string | append: collection.handle | append: seperator %}
+    {% endif %}
+{%- endfor -%}
+
+{% if popupcollection_references_string != '' %}
+    {% assign collection_references_array = popupcollection_references_string | split: seperator %}
+    {% assign collection_references_array_length = collection_references_array | size %}
+
+    {% assign collection_reference_date_earliest = collections[collection_references_array[0]] %}
+
+    {% comment %}Checks for Popup Collection ending earliest{% endcomment %}
+    {%- for item in collection_references_array -%}
+        {% assign item_obj = collections[item] %}
+        {% if item_obj.metafields.popup.end_date == blank %}
+            {% continue %}
+        {% endif %}
+        {% assign item_date = item_obj.metafields.popup.end_date | date: '%s' %}
+        {% assign comparison_date = collection_reference_date_earliest.metafields.popup.end_date | date: '%s' %}
+
+        {% if collection_reference_date_earliest.metafields.popup.end_date == blank %}
+            {% assign collection_reference_date_earliest = item_obj %}
+        {% elsif item_date < comparison_data %}
+            {% assign collection_reference_date_earliest = item_obj %}
+        {% endif %}
+    {%- endfor -%}
+{% endif %}
+
+<div class="template-popup">
+    <div class="template-popup__header">
+        <div class="template-popup__header-container">
+            <h1 class="template-popup__header-title title--lg">{{page.title}}</h1>
+            {% if page.content != '' %}
+                <p class="template-popup__header-description">{{page.content}}</p>
+            {% endif %} 
+        </div>
+    </div>
+
+    {% if popupcollection_references_string != '' %}
+        <div class="template-popup__featured flex">
+            <div class="template-popup__featured-image" style="background-image: url({{collection_reference_date_earliest.image | img_url: '590x'}})">
+                {% if collection_reference_date_earliest.metafields.popup.homepage_badge != blank and section.settings.hide_badge == false %}
+                    <span class="template-popup__featured-badge">{{collection_reference_date_earliest.metafields.popup.homepage_badge}}</span>
+                {% endif %}
+            </div>
+            <div class="template-popup__featured-content flex f-vertical-center">
+                <div class="template-popup__featured-container">
+                    <h3 class="template-popup__featured-title title--md">{{collection_reference_date_earliest.title}}</h3>
+                    {% if section.settings.hide_date == false %}
+                        <div class="template-popup__featured-date">
+                            <p class="template-popup__featured-date-ends">Ends:</p>
+                            <span class="template-popup__featured-date-date">{{collection_reference_date_earliest.metafields.popup.end_date | date: '%d/%m/%y'}}</span>
+                        </div>
+                    {% endif %} 
+                    {% if collection_reference_date_earliest.description != '' %}
+                        <p class="template-popup__featured-description">{{collection_reference_date_earliest.description}}</p>
+                    {% endif %} 
+                    <a class="template-popup__featured-btn btn btn--white" href="{{collection_reference_date_earliest.url}}">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="template-popup__collections">
+        <div class="template-popup__collections-header flex f-space-between">
+            <h2 class="template-popup__collections-title title--md">Shop collections</h2>
+            <div class="template-popup__collections-filter-container">
+                <div class="template-popup__collections-filter btn btn--white active" data-filter="all">All Popups</div>
+                <div class="template-popup__collections-filter btn btn--white" data-filter="available">Available Now</div>
+                <div class="template-popup__collections-filter btn btn--white" data-filter="upcoming">Upcoming</div>
+            </div>
+        </div>
+        <div class="template-popup__collections-container flex f-space-between">
+            {%- for collection in section.settings.collection_list -%}
+                {% render 'popup-collection-card', collection: collection, index: forloop.index %}
+            {%- endfor -%}  
+        </div>
+        <div class="templates-popup__collections-loadmore visually-hidden" data-load-amount="0">
+            <div class="btn">Load More</div>
+        </div>
+    </div>
+</div>
+
+{% style %}
+    .template-popup__featured .template-popup__featured-badge {
+        background-color: {{collection_reference_date_earliest.metafields.popup.homepage_badge_colour}};
+    }
+{% endstyle %}
+
+{% schema %}
+    {
+        "name": "Popup Page Template",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Featured Collection"
+            },
+            {
+                "type": "paragraph",
+                "content": "The featured collection section displays the popup collection with the earliest ending date."
+            },
+            {
+                "type": "checkbox",
+                "id": "hide_date",
+                "label": "Hide Date?"
+            },
+            {
+                "type": "checkbox",
+                "id": "hide_badge",
+                "label": "Hide Collection Badge?"
+            },
+            {
+                "type": "header",
+                "content": "Collections"
+            },
+            {
+                "type": "collection_list",
+                "id": "collection_list",
+                "label": "Collections"
+            }
+        ]
+    }
+{% endschema %}
